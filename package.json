@@ -13,11 +13,17 @@
     "url": "https://github.com/LikeJasper/elm-boilerplate/issues"
   },
   "scripts": {
-    "test": "./node_modules/.bin/cucumber-js features",
+    "lint": "./node_modules/.bin/eslint ./features",
+    "test": "./node_modules/.bin/cucumber-js ./features",
     "ncu": "ncu"
   },
   "devDependencies": {
     "cucumber": "^1.0.0",
+    "eslint": "^2.12.0",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.8.1",
+    "eslint-plugin-jsx-a11y": "^1.4.2",
+    "eslint-plugin-react": "^5.1.1",
     "npm-check-updates": "^2.6.7"
   }
 }
