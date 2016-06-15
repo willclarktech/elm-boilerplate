@@ -1,0 +1,51 @@
+var _elm_community$elm_test$ElmTest_Runner_Console$runDisplay = function (tests) {
+	var _p0 = _elm_community$elm_test$ElmTest_Runner_String$run(tests);
+	if ((_p0.ctor === '::') && (_p0._0.ctor === '_Tuple2')) {
+		var out = A2(
+			_elm_lang$core$Basics_ops['++'],
+			_p0._0._0,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'\n\n',
+				function (_p1) {
+					return _elm_lang$core$String$concat(
+						A2(
+							_elm_lang$core$List$intersperse,
+							'\n',
+							A2(_elm_lang$core$List$map, _elm_lang$core$Basics$fst, _p1)));
+				}(_p0._1)));
+		var _p2 = _elm_community$elm_test$ElmTest_Run$pass(_p0._0._1);
+		if (_p2 === true) {
+			return A2(_elm_lang$core$Debug$log, out, '');
+		} else {
+			return _elm_lang$core$Native_Utils.crashCase(
+				'ElmTest.Runner.Console',
+				{
+					start: {line: 28, column: 9},
+					end: {line: 33, column: 34}
+				},
+				_p2)(out);
+		}
+	} else {
+		return _elm_lang$core$Native_Utils.crashCase(
+			'ElmTest.Runner.Console',
+			{
+				start: {line: 22, column: 3},
+				end: {line: 36, column: 21}
+			},
+			_p0)('');
+	}
+};
+var _elm_community$elm_test$ElmTest_Runner_Console$runSuite = function (consoleTests) {
+	return _elm_lang$html$Html_App$beginnerProgram(
+		{
+			model: _elm_community$elm_test$ElmTest_Runner_Console$runDisplay(consoleTests),
+			view: function (x) {
+				return _elm_lang$html$Html$text('');
+			},
+			update: F2(
+				function (x, y) {
+					return y;
+				})
+		});
+};

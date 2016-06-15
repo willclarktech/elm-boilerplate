@@ -1,0 +1,46 @@
+var _elm_community$random_extra$Random_Float$normal = F3(
+	function (start, end, standardDeviation) {
+		var normalDistribution = F3(
+			function (mean, stdDev, x) {
+				if (_elm_lang$core$Native_Utils.eq(stdDev, 0)) {
+					return x;
+				} else {
+					var exponent = ((x - mean) * (x - mean)) / ((2 * stdDev) * stdDev);
+					var scale = 1 / (stdDev * _elm_lang$core$Basics$sqrt(2 * _elm_lang$core$Basics$pi));
+					return scale * Math.pow(_elm_lang$core$Basics$e, 0 - exponent);
+				}
+			});
+		return A2(
+			_elm_lang$core$Random$map,
+			A2(normalDistribution, (end - start) / 2, standardDeviation),
+			A2(_elm_lang$core$Random$float, start, end));
+	});
+var _elm_community$random_extra$Random_Float$standardNormal = A3(
+	_elm_community$random_extra$Random_Float$normal,
+	_elm_lang$core$Basics$toFloat(_elm_lang$core$Random$minInt) + 1,
+	_elm_lang$core$Basics$toFloat(_elm_lang$core$Random$maxInt),
+	1);
+var _elm_community$random_extra$Random_Float$floatLessThan = function (value) {
+	return A2(
+		_elm_lang$core$Random$float,
+		_elm_lang$core$Basics$toFloat(_elm_lang$core$Random$minInt),
+		value);
+};
+var _elm_community$random_extra$Random_Float$floatGreaterThan = function (value) {
+	return A2(
+		_elm_lang$core$Random$float,
+		value,
+		_elm_lang$core$Basics$toFloat(_elm_lang$core$Random$maxInt));
+};
+var _elm_community$random_extra$Random_Float$negativeFloat = A2(
+	_elm_lang$core$Random$float,
+	_elm_lang$core$Basics$toFloat(_elm_lang$core$Random$minInt),
+	0);
+var _elm_community$random_extra$Random_Float$positiveFloat = A2(
+	_elm_lang$core$Random$float,
+	0,
+	_elm_lang$core$Basics$toFloat(_elm_lang$core$Random$maxInt));
+var _elm_community$random_extra$Random_Float$anyFloat = A2(
+	_elm_lang$core$Random$float,
+	_elm_lang$core$Basics$toFloat(_elm_lang$core$Random$minInt),
+	_elm_lang$core$Basics$toFloat(_elm_lang$core$Random$maxInt));

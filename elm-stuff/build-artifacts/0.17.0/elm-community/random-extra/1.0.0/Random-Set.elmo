@@ -1,0 +1,30 @@
+var _elm_community$random_extra$Random_Set$set = F2(
+	function (maxLength, generator) {
+		var helper = F3(
+			function (set, remaining, strikes) {
+				return ((_elm_lang$core$Native_Utils.cmp(remaining, 0) < 1) || _elm_lang$core$Native_Utils.eq(strikes, 10)) ? _elm_community$random_extra$Random_Extra$constant(set) : A2(
+					_elm_lang$core$Random$andThen,
+					generator,
+					function (val) {
+						var newSet = A2(_elm_lang$core$Set$insert, val, set);
+						return _elm_lang$core$Native_Utils.eq(
+							_elm_lang$core$Set$size(newSet),
+							_elm_lang$core$Set$size(set)) ? A3(helper, set, remaining, strikes + 1) : A3(helper, newSet, remaining - 1, 0);
+					});
+			});
+		return A3(helper, _elm_lang$core$Set$empty, maxLength, 0);
+	});
+var _elm_community$random_extra$Random_Set$sample = function (set) {
+	return _elm_community$random_extra$Random_Extra$sample(
+		_elm_lang$core$Set$toList(set));
+};
+var _elm_community$random_extra$Random_Set$notInSet = F2(
+	function (set, generator) {
+		return A2(
+			_elm_community$random_extra$Random_Extra$filter,
+			function (_p0) {
+				return _elm_lang$core$Basics$not(
+					A3(_elm_lang$core$Basics$flip, _elm_lang$core$Set$member, set, _p0));
+			},
+			generator);
+	});

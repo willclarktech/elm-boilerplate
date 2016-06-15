@@ -1,0 +1,19 @@
+var _elm_community$random_extra$Random_Dict$dict = F3(
+	function (dictLength, keyGenerator, valueGenerator) {
+		return A2(
+			_elm_lang$core$Random$map,
+			_elm_lang$core$Dict$fromList,
+			A2(
+				_elm_lang$core$Random$list,
+				dictLength,
+				A2(_elm_lang$core$Random$pair, keyGenerator, valueGenerator)));
+	});
+var _elm_community$random_extra$Random_Dict$rangeLengthDict = F4(
+	function (minLength, maxLength, keyGenerator, valueGenerator) {
+		return A2(
+			_elm_community$random_extra$Random_Extra$flatMap,
+			function (len) {
+				return A3(_elm_community$random_extra$Random_Dict$dict, len, keyGenerator, valueGenerator);
+			},
+			A2(_elm_lang$core$Random$int, minLength, maxLength));
+	});

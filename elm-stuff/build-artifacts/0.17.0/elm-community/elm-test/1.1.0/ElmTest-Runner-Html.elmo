@@ -1,0 +1,47 @@
+var _elm_community$elm_test$ElmTest_Runner_Html$runDisplay = function (tests) {
+	var _p0 = _elm_community$elm_test$ElmTest_Runner_String$run(tests);
+	if ((_p0.ctor === '::') && (_p0._0.ctor === '_Tuple2')) {
+		var out = A2(
+			_elm_lang$core$Basics_ops['++'],
+			_p0._0._0,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'\n\n',
+				function (_p1) {
+					return _elm_lang$core$String$concat(
+						A2(
+							_elm_lang$core$List$intersperse,
+							'\n',
+							A2(_elm_lang$core$List$map, _elm_lang$core$Basics$fst, _p1)));
+				}(_p0._1)));
+		return out;
+	} else {
+		return _elm_lang$core$Native_Utils.crashCase(
+			'ElmTest.Runner.Html',
+			{
+				start: {line: 23, column: 3},
+				end: {line: 31, column: 21}
+			},
+			_p0)('');
+	}
+};
+var _elm_community$elm_test$ElmTest_Runner_Html$runSuite = function (consoleTests) {
+	return _elm_lang$html$Html_App$beginnerProgram(
+		{
+			model: _elm_community$elm_test$ElmTest_Runner_Html$runDisplay(consoleTests),
+			view: function (x) {
+				return A2(
+					_elm_lang$html$Html$pre,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text(x)
+						]));
+			},
+			update: F2(
+				function (x, y) {
+					return x;
+				})
+		});
+};

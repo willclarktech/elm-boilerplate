@@ -1,0 +1,55 @@
+var _elm_community$random_extra$Random_Color$blue = A2(
+	_elm_lang$core$Random$map,
+	function (blue) {
+		return A3(_elm_lang$core$Color$rgb, 0, 0, blue);
+	},
+	A2(_elm_lang$core$Random$int, 0, 255));
+var _elm_community$random_extra$Random_Color$green = A2(
+	_elm_lang$core$Random$map,
+	function (green) {
+		return A3(_elm_lang$core$Color$rgb, 0, green, 0);
+	},
+	A2(_elm_lang$core$Random$int, 0, 255));
+var _elm_community$random_extra$Random_Color$red = A2(
+	_elm_lang$core$Random$map,
+	function (red) {
+		return A3(_elm_lang$core$Color$rgb, red, 0, 0);
+	},
+	A2(_elm_lang$core$Random$int, 0, 255));
+var _elm_community$random_extra$Random_Color$greyscale = A2(
+	_elm_lang$core$Random$map,
+	_elm_lang$core$Color$greyscale,
+	A2(_elm_lang$core$Random$float, 0, 1));
+var _elm_community$random_extra$Random_Color$grayscale = _elm_community$random_extra$Random_Color$greyscale;
+var _elm_community$random_extra$Random_Color$hsla = A5(
+	_elm_lang$core$Random$map4,
+	_elm_lang$core$Color$hsla,
+	A2(
+		_elm_lang$core$Random$map,
+		_elm_lang$core$Basics$degrees,
+		A2(_elm_lang$core$Random$float, 0, 360)),
+	A2(_elm_lang$core$Random$float, 0, 1),
+	A2(_elm_lang$core$Random$float, 0, 1),
+	A2(_elm_lang$core$Random$float, 0, 1));
+var _elm_community$random_extra$Random_Color$hsl = A4(
+	_elm_lang$core$Random$map3,
+	_elm_lang$core$Color$hsl,
+	A2(
+		_elm_lang$core$Random$map,
+		_elm_lang$core$Basics$degrees,
+		A2(_elm_lang$core$Random$float, 0, 360)),
+	A2(_elm_lang$core$Random$float, 0, 1),
+	A2(_elm_lang$core$Random$float, 0, 1));
+var _elm_community$random_extra$Random_Color$rgba = A5(
+	_elm_lang$core$Random$map4,
+	_elm_lang$core$Color$rgba,
+	A2(_elm_lang$core$Random$int, 0, 255),
+	A2(_elm_lang$core$Random$int, 0, 255),
+	A2(_elm_lang$core$Random$int, 0, 255),
+	A2(_elm_lang$core$Random$float, 0, 1));
+var _elm_community$random_extra$Random_Color$rgb = A4(
+	_elm_lang$core$Random$map3,
+	_elm_lang$core$Color$rgb,
+	A2(_elm_lang$core$Random$int, 0, 255),
+	A2(_elm_lang$core$Random$int, 0, 255),
+	A2(_elm_lang$core$Random$int, 0, 255));

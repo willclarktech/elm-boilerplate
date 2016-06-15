@@ -1,0 +1,331 @@
+var _elm_community$elm_check$Check_Producer$Producer = F2(
+	function (a, b) {
+		return {generator: a, shrinker: b};
+	});
+var _elm_community$elm_check$Check_Producer$unit = A2(
+	_elm_community$elm_check$Check_Producer$Producer,
+	_elm_community$random_extra$Random_Extra$constant(
+		{ctor: '_Tuple0'}),
+	_elm_community$shrink$Shrink$noShrink);
+var _elm_community$elm_check$Check_Producer$bool = A2(_elm_community$elm_check$Check_Producer$Producer, _elm_lang$core$Random$bool, _elm_community$shrink$Shrink$bool);
+var _elm_community$elm_check$Check_Producer$order = A2(_elm_community$elm_check$Check_Producer$Producer, _elm_community$random_extra$Random_Order$order, _elm_community$shrink$Shrink$order);
+var _elm_community$elm_check$Check_Producer$int = function () {
+	var generator = _elm_community$random_extra$Random_Extra$frequency(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{
+				ctor: '_Tuple2',
+				_0: 3,
+				_1: A2(_elm_lang$core$Random$int, -50, 50)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: 0.2,
+				_1: _elm_community$random_extra$Random_Extra$constant(0)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: 1,
+				_1: A2(_elm_lang$core$Random$int, 0, _elm_lang$core$Random$maxInt - _elm_lang$core$Random$minInt)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: 1,
+				_1: A2(_elm_lang$core$Random$int, _elm_lang$core$Random$minInt - _elm_lang$core$Random$maxInt, 0)
+			}
+			]));
+	return A2(_elm_community$elm_check$Check_Producer$Producer, generator, _elm_community$shrink$Shrink$int);
+}();
+var _elm_community$elm_check$Check_Producer$rangeInt = F2(
+	function (min, max) {
+		return A2(
+			_elm_community$elm_check$Check_Producer$Producer,
+			A2(_elm_lang$core$Random$int, min, max),
+			A2(
+				_elm_community$shrink$Shrink$keepIf,
+				function (i) {
+					return (_elm_lang$core$Native_Utils.cmp(i, min) > -1) && (_elm_lang$core$Native_Utils.cmp(i, max) < 1);
+				},
+				_elm_community$shrink$Shrink$int));
+	});
+var _elm_community$elm_check$Check_Producer$float = function () {
+	var generator = _elm_community$random_extra$Random_Extra$frequency(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{
+				ctor: '_Tuple2',
+				_0: 3,
+				_1: A2(_elm_lang$core$Random$float, -50, 50)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: 0.5,
+				_1: _elm_community$random_extra$Random_Extra$constant(0)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: 1,
+				_1: A2(_elm_lang$core$Random$float, -1, 1)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: 1,
+				_1: A2(
+					_elm_lang$core$Random$float,
+					0,
+					_elm_lang$core$Basics$toFloat(_elm_lang$core$Random$maxInt - _elm_lang$core$Random$minInt))
+			},
+				{
+				ctor: '_Tuple2',
+				_0: 1,
+				_1: A2(
+					_elm_lang$core$Random$float,
+					_elm_lang$core$Basics$toFloat(_elm_lang$core$Random$minInt - _elm_lang$core$Random$maxInt),
+					0)
+			}
+			]));
+	return A2(_elm_community$elm_check$Check_Producer$Producer, generator, _elm_community$shrink$Shrink$float);
+}();
+var _elm_community$elm_check$Check_Producer$rangeFloat = F2(
+	function (min, max) {
+		return A2(
+			_elm_community$elm_check$Check_Producer$Producer,
+			A2(_elm_lang$core$Random$float, min, max),
+			A2(
+				_elm_community$shrink$Shrink$keepIf,
+				function (i) {
+					return (_elm_lang$core$Native_Utils.cmp(i, min) > -1) && (_elm_lang$core$Native_Utils.cmp(i, max) < 1);
+				},
+				_elm_community$shrink$Shrink$float));
+	});
+var _elm_community$elm_check$Check_Producer$percentage = function () {
+	var generator = _elm_community$random_extra$Random_Extra$frequency(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{
+				ctor: '_Tuple2',
+				_0: 8,
+				_1: A2(_elm_lang$core$Random$float, 0, 1)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: 1,
+				_1: _elm_community$random_extra$Random_Extra$constant(0)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: 1,
+				_1: _elm_community$random_extra$Random_Extra$constant(1)
+			}
+			]));
+	return A2(_elm_community$elm_check$Check_Producer$Producer, generator, _elm_community$shrink$Shrink$float);
+}();
+var _elm_community$elm_check$Check_Producer$ascii = A2(_elm_community$elm_check$Check_Producer$Producer, _elm_community$random_extra$Random_Char$ascii, _elm_community$shrink$Shrink$char);
+var _elm_community$elm_check$Check_Producer$char = A2(
+	_elm_community$elm_check$Check_Producer$Producer,
+	A2(_elm_community$random_extra$Random_Char$char, 32, 126),
+	_elm_community$shrink$Shrink$character);
+var _elm_community$elm_check$Check_Producer$upperCaseChar = A2(_elm_community$elm_check$Check_Producer$Producer, _elm_community$random_extra$Random_Char$upperCaseLatin, _elm_community$shrink$Shrink$character);
+var _elm_community$elm_check$Check_Producer$lowerCaseChar = A2(_elm_community$elm_check$Check_Producer$Producer, _elm_community$random_extra$Random_Char$lowerCaseLatin, _elm_community$shrink$Shrink$character);
+var _elm_community$elm_check$Check_Producer$unicode = A2(_elm_community$elm_check$Check_Producer$Producer, _elm_community$random_extra$Random_Char$unicode, _elm_community$shrink$Shrink$char);
+var _elm_community$elm_check$Check_Producer$string = A2(
+	_elm_community$elm_check$Check_Producer$Producer,
+	A3(_elm_community$random_extra$Random_String$rangeLengthString, 0, 10, _elm_community$elm_check$Check_Producer$char.generator),
+	_elm_community$shrink$Shrink$string);
+var _elm_community$elm_check$Check_Producer$maybe = function (prod) {
+	var genBool = A2(
+		_elm_lang$core$Random$map,
+		_elm_lang$core$Basics$not,
+		_elm_community$random_extra$Random_Extra$oneIn(4));
+	return A2(
+		_elm_community$elm_check$Check_Producer$Producer,
+		A2(_elm_community$random_extra$Random_Extra$maybe, genBool, prod.generator),
+		_elm_community$shrink$Shrink$maybe(prod.shrinker));
+};
+var _elm_community$elm_check$Check_Producer$result = F2(
+	function (errProd, valProd) {
+		return A2(
+			_elm_community$elm_check$Check_Producer$Producer,
+			A3(_elm_community$random_extra$Random_Extra$result, _elm_lang$core$Random$bool, errProd.generator, valProd.generator),
+			A2(_elm_community$shrink$Shrink$result, errProd.shrinker, valProd.shrinker));
+	});
+var _elm_community$elm_check$Check_Producer$list = function (prod) {
+	return A2(
+		_elm_community$elm_check$Check_Producer$Producer,
+		_elm_community$random_extra$Random_Extra$frequency(
+			_elm_lang$core$Native_List.fromArray(
+				[
+					{
+					ctor: '_Tuple2',
+					_0: 1,
+					_1: _elm_community$random_extra$Random_Extra$constant(
+						_elm_lang$core$Native_List.fromArray(
+							[]))
+				},
+					{
+					ctor: '_Tuple2',
+					_0: 1,
+					_1: A2(
+						_elm_lang$core$Random$map,
+						function (x) {
+							return _elm_lang$core$Native_List.fromArray(
+								[x]);
+						},
+						prod.generator)
+				},
+					{
+					ctor: '_Tuple2',
+					_0: 3,
+					_1: A3(_elm_community$random_extra$Random_Extra$rangeLengthList, 2, 10, prod.generator)
+				},
+					{
+					ctor: '_Tuple2',
+					_0: 2,
+					_1: A3(_elm_community$random_extra$Random_Extra$rangeLengthList, 10, 100, prod.generator)
+				},
+					{
+					ctor: '_Tuple2',
+					_0: 0.5,
+					_1: A3(_elm_community$random_extra$Random_Extra$rangeLengthList, 100, 400, prod.generator)
+				}
+				])),
+		_elm_community$shrink$Shrink$list(prod.shrinker));
+};
+var _elm_community$elm_check$Check_Producer$array = function (prod) {
+	return A2(
+		_elm_community$elm_check$Check_Producer$Producer,
+		_elm_community$random_extra$Random_Extra$frequency(
+			_elm_lang$core$Native_List.fromArray(
+				[
+					{
+					ctor: '_Tuple2',
+					_0: 1,
+					_1: _elm_community$random_extra$Random_Extra$constant(_elm_lang$core$Array$empty)
+				},
+					{
+					ctor: '_Tuple2',
+					_0: 1,
+					_1: A2(
+						_elm_lang$core$Random$map,
+						_elm_lang$core$Array$repeat(1),
+						prod.generator)
+				},
+					{
+					ctor: '_Tuple2',
+					_0: 3,
+					_1: A3(_elm_community$random_extra$Random_Array$rangeLengthArray, 2, 10, prod.generator)
+				},
+					{
+					ctor: '_Tuple2',
+					_0: 2,
+					_1: A3(_elm_community$random_extra$Random_Array$rangeLengthArray, 10, 100, prod.generator)
+				},
+					{
+					ctor: '_Tuple2',
+					_0: 0.5,
+					_1: A3(_elm_community$random_extra$Random_Array$rangeLengthArray, 100, 400, prod.generator)
+				}
+				])),
+		_elm_community$shrink$Shrink$array(prod.shrinker));
+};
+var _elm_community$elm_check$Check_Producer$tuple = function (_p0) {
+	var _p1 = _p0;
+	var _p3 = _p1._1;
+	var _p2 = _p1._0;
+	return A2(
+		_elm_community$elm_check$Check_Producer$Producer,
+		A3(
+			_elm_lang$core$Random$map2,
+			F2(
+				function (v0, v1) {
+					return {ctor: '_Tuple2', _0: v0, _1: v1};
+				}),
+			_p2.generator,
+			_p3.generator),
+		_elm_community$shrink$Shrink$tuple(
+			{ctor: '_Tuple2', _0: _p2.shrinker, _1: _p3.shrinker}));
+};
+var _elm_community$elm_check$Check_Producer$tuple3 = function (_p4) {
+	var _p5 = _p4;
+	var _p8 = _p5._2;
+	var _p7 = _p5._1;
+	var _p6 = _p5._0;
+	return A2(
+		_elm_community$elm_check$Check_Producer$Producer,
+		A4(
+			_elm_lang$core$Random$map3,
+			F3(
+				function (v0, v1, v2) {
+					return {ctor: '_Tuple3', _0: v0, _1: v1, _2: v2};
+				}),
+			_p6.generator,
+			_p7.generator,
+			_p8.generator),
+		_elm_community$shrink$Shrink$tuple3(
+			{ctor: '_Tuple3', _0: _p6.shrinker, _1: _p7.shrinker, _2: _p8.shrinker}));
+};
+var _elm_community$elm_check$Check_Producer$tuple4 = function (_p9) {
+	var _p10 = _p9;
+	var _p14 = _p10._3;
+	var _p13 = _p10._2;
+	var _p12 = _p10._1;
+	var _p11 = _p10._0;
+	return A2(
+		_elm_community$elm_check$Check_Producer$Producer,
+		A5(
+			_elm_lang$core$Random$map4,
+			F4(
+				function (v0, v1, v2, v3) {
+					return {ctor: '_Tuple4', _0: v0, _1: v1, _2: v2, _3: v3};
+				}),
+			_p11.generator,
+			_p12.generator,
+			_p13.generator,
+			_p14.generator),
+		_elm_community$shrink$Shrink$tuple4(
+			{ctor: '_Tuple4', _0: _p11.shrinker, _1: _p12.shrinker, _2: _p13.shrinker, _3: _p14.shrinker}));
+};
+var _elm_community$elm_check$Check_Producer$tuple5 = function (_p15) {
+	var _p16 = _p15;
+	var _p21 = _p16._4;
+	var _p20 = _p16._3;
+	var _p19 = _p16._2;
+	var _p18 = _p16._1;
+	var _p17 = _p16._0;
+	return A2(
+		_elm_community$elm_check$Check_Producer$Producer,
+		A6(
+			_elm_lang$core$Random$map5,
+			F5(
+				function (v0, v1, v2, v3, v4) {
+					return {ctor: '_Tuple5', _0: v0, _1: v1, _2: v2, _3: v3, _4: v4};
+				}),
+			_p17.generator,
+			_p18.generator,
+			_p19.generator,
+			_p20.generator,
+			_p21.generator),
+		_elm_community$shrink$Shrink$tuple5(
+			{ctor: '_Tuple5', _0: _p17.shrinker, _1: _p18.shrinker, _2: _p19.shrinker, _3: _p20.shrinker, _4: _p21.shrinker}));
+};
+var _elm_community$elm_check$Check_Producer$filter = F2(
+	function (predicate, prod) {
+		return A2(
+			_elm_community$elm_check$Check_Producer$Producer,
+			A2(_elm_community$random_extra$Random_Extra$filter, predicate, prod.generator),
+			A2(_elm_community$shrink$Shrink$keepIf, predicate, prod.shrinker));
+	});
+var _elm_community$elm_check$Check_Producer$convert = F3(
+	function (f, g, prod) {
+		return A2(
+			_elm_community$elm_check$Check_Producer$Producer,
+			A2(_elm_lang$core$Random$map, f, prod.generator),
+			A3(_elm_community$shrink$Shrink$convert, f, g, prod.shrinker));
+	});
+var _elm_community$elm_check$Check_Producer$map = F2(
+	function (f, prod) {
+		return A2(
+			_elm_community$elm_check$Check_Producer$Producer,
+			A2(_elm_lang$core$Random$map, f, prod.generator),
+			_elm_community$shrink$Shrink$noShrink);
+	});

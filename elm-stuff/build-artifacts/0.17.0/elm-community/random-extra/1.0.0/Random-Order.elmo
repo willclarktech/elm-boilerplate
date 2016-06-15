@@ -1,0 +1,6 @@
+var _elm_community$random_extra$Random_Order$order = A2(
+	_elm_lang$core$Random$map,
+	_elm_lang$core$Maybe$withDefault(_elm_lang$core$Basics$EQ),
+	_elm_community$random_extra$Random_Extra$sample(
+		_elm_lang$core$Native_List.fromArray(
+			[_elm_lang$core$Basics$LT, _elm_lang$core$Basics$EQ, _elm_lang$core$Basics$GT])));

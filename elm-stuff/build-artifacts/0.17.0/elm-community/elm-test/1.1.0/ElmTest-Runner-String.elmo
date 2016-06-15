@@ -1,0 +1,180 @@
+var _elm_community$elm_test$ElmTest_Runner_String$replicate = F2(
+	function (n, c) {
+		var go = function (n) {
+			return (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) ? _elm_lang$core$Native_List.fromArray(
+				[]) : A2(
+				_elm_lang$core$List_ops['::'],
+				c,
+				go(n - 1));
+		};
+		return function (_p0) {
+			return _elm_lang$core$String$fromList(
+				go(_p0));
+		}(n);
+	});
+var _elm_community$elm_test$ElmTest_Runner_String$vcat = function (_p1) {
+	return _elm_lang$core$String$concat(
+		A2(_elm_lang$core$List$intersperse, '\n', _p1));
+};
+var _elm_community$elm_test$ElmTest_Runner_String$indent = function (n) {
+	var indents = A2(
+		_elm_community$elm_test$ElmTest_Runner_String$replicate,
+		n,
+		_elm_lang$core$Native_Utils.chr(' '));
+	return function (_p2) {
+		return _elm_community$elm_test$ElmTest_Runner_String$vcat(
+			A2(
+				_elm_lang$core$List$map,
+				_elm_lang$core$String$append(indents),
+				_elm_lang$core$String$lines(_p2)));
+	};
+};
+var _elm_community$elm_test$ElmTest_Runner_String$pretty = F2(
+	function (n, result) {
+		var passed = _elm_community$elm_test$ElmTest_Run$pass(result);
+		var _p3 = result;
+		switch (_p3.ctor) {
+			case 'Pass':
+				return _elm_lang$core$Native_List.fromArray(
+					[
+						{
+						ctor: '_Tuple2',
+						_0: A2(
+							_elm_community$elm_test$ElmTest_Runner_String$indent,
+							n,
+							A2(_elm_lang$core$Basics_ops['++'], _p3._0, ': passed.')),
+						_1: result
+					}
+					]);
+			case 'Fail':
+				return _elm_lang$core$Native_List.fromArray(
+					[
+						{
+						ctor: '_Tuple2',
+						_0: A2(
+							_elm_community$elm_test$ElmTest_Runner_String$indent,
+							n,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_p3._0,
+								A2(_elm_lang$core$Basics_ops['++'], ': FAILED. ', _p3._1))),
+						_1: result
+					}
+					]);
+			default:
+				var allPassed = _elm_lang$core$Native_Utils.eq(
+					_elm_community$elm_test$ElmTest_Run$failedTests(result),
+					0);
+				var subResults = allPassed ? _elm_lang$core$Native_List.fromArray(
+					[]) : A2(
+					_elm_lang$core$List$concatMap,
+					_elm_community$elm_test$ElmTest_Runner_String$pretty(n + 2),
+					_p3._1.results);
+				var msg = A2(
+					_elm_lang$core$Basics_ops['++'],
+					'Test Suite: ',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_p3._0,
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							': ',
+							passed ? 'all tests passed' : 'FAILED')));
+				return A2(
+					_elm_lang$core$List_ops['::'],
+					{
+						ctor: '_Tuple2',
+						_0: A2(_elm_community$elm_test$ElmTest_Runner_String$indent, n, msg),
+						_1: result
+					},
+					subResults);
+		}
+	});
+var _elm_community$elm_test$ElmTest_Runner_String$run = function (t) {
+	var tests = function () {
+		var _p4 = t;
+		if (_p4.ctor === 'TestCase') {
+			return _elm_lang$core$Native_List.fromArray(
+				[
+					A2(_elm_community$elm_test$ElmTest_Test$TestCase, _p4._0, _p4._1)
+				]);
+		} else {
+			return _p4._1;
+		}
+	}();
+	var result = _elm_community$elm_test$ElmTest_Run$run(t);
+	var passedTests$ = _elm_community$elm_test$ElmTest_Run$passedTests(result);
+	var passedSuites$ = _elm_community$elm_test$ElmTest_Run$passedSuites(result);
+	var failedTests$ = _elm_community$elm_test$ElmTest_Run$failedTests(result);
+	var allPassed = _elm_lang$core$Native_Utils.eq(failedTests$, 0) ? _elm_community$elm_test$ElmTest_Run$Pass('') : A2(_elm_community$elm_test$ElmTest_Run$Fail, '', '');
+	var failedSuites$ = _elm_community$elm_test$ElmTest_Run$failedSuites(result);
+	var summary = function (_p5) {
+		return _elm_community$elm_test$ElmTest_Runner_String$vcat(
+			A2(
+				_elm_lang$core$List$map,
+				_elm_community$elm_test$ElmTest_Runner_String$indent(2),
+				_p5));
+	}(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(
+					_elm_community$elm_test$ElmTest_Test$numberOfSuites(t)),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					' suites run, containing ',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(
+							_elm_community$elm_test$ElmTest_Test$numberOfTests(t)),
+						' tests'))),
+				_elm_lang$core$Native_Utils.eq(failedTests$, 0) ? 'All tests passed' : A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(passedSuites$),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					' suites and ',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(passedTests$),
+						' tests passed'))),
+				_elm_lang$core$Native_Utils.eq(failedTests$, 0) ? '' : A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(failedSuites$),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					' suites and ',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(failedTests$),
+						' tests failed')))
+			]));
+	var results$ = function () {
+		var _p6 = allPassed;
+		if (_p6.ctor === 'Pass') {
+			return _elm_lang$core$Native_List.fromArray(
+				[
+					{ctor: '_Tuple2', _0: '', _1: allPassed}
+				]);
+		} else {
+			return A2(_elm_community$elm_test$ElmTest_Runner_String$pretty, 0, result);
+		}
+	}();
+	return A2(
+		_elm_lang$core$List_ops['::'],
+		{ctor: '_Tuple2', _0: summary, _1: allPassed},
+		results$);
+};
+var _elm_community$elm_test$ElmTest_Runner_String$runDisplay = function (t) {
+	var _p7 = _elm_community$elm_test$ElmTest_Runner_String$run(t);
+	if ((_p7.ctor === '::') && (_p7._0.ctor === '_Tuple2')) {
+		return _elm_community$elm_test$ElmTest_Runner_String$vcat(
+			A2(
+				_elm_lang$core$List_ops['::'],
+				A2(_elm_lang$core$Basics_ops['++'], _p7._0._0, '\n'),
+				A2(_elm_lang$core$List$map, _elm_lang$core$Basics$fst, _p7._1)));
+	} else {
+		return '';
+	}
+};

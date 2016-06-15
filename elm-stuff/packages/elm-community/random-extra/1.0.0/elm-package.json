@@ -1,0 +1,26 @@
+{
+    "version": "1.0.0",
+    "summary": "Extra functions for the core Random library",
+    "repository": "https://github.com/elm-community/random-extra.git",
+    "license": "MIT",
+    "source-directories": [
+        "src"
+    ],
+    "exposed-modules": [
+        "Random.Array",
+        "Random.Char",
+        "Random.Color",
+        "Random.Date",
+        "Random.Dict",
+        "Random.Extra",
+        "Random.Float",
+        "Random.Int",
+        "Random.Order",
+        "Random.Set",
+        "Random.String"
+    ],
+    "dependencies": {
+        "elm-lang/core": "4.0.0 <= v < 5.0.0"
+    },
+    "elm-version": "0.17.0 <= v < 0.18.0"
+}

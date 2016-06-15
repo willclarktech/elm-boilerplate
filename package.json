@@ -15,7 +15,12 @@
   "scripts": {
     "serve:test": "./node_modules/.bin/http-server dist -a localhost -p 7357 -c -1",
     "lint": "./node_modules/.bin/eslint ./features",
-    "test": "./node_modules/.bin/cucumber-js ./features",
+    "test:e2e": "./node_modules/.bin/cucumber-js ./features --tags @now || true",
+    "test:e2e:now": "./node_modules/.bin/cucumber-js ./features || true",
+    "test:e2e:single": "npm run serve:test & npm run test:e2e",
+    "test:e2e:watch": "npm run serve:test & ./node_modules/.bin/nodemon --watch dist --watch features --ext js,html --exec 'npm run test:e2e:now'",
+    "test:elm:single": "FILE=$(mktemp $(uuidgen).js) && elm-make elm-test/TestRunner.elm --output $FILE && node $FILE; RESULT=$?; rm -f $FILE;",
+    "test:elm:watch": "./node_modules/.bin/nodemon --watch 'elm/' --watch 'elm-test/' --ext elm --exec 'npm run test:elm:single'",
     "ncu": "ncu"
   },
   "devDependencies": {

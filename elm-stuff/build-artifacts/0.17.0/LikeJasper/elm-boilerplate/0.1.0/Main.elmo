@@ -1,0 +1,4 @@
+var _LikeJasper$elm_boilerplate$Main$main = {
+	main: _elm_lang$html$Html_App$program(
+		{init: _LikeJasper$elm_boilerplate$App_Banking$init, view: _LikeJasper$elm_boilerplate$App_Banking$view, update: _LikeJasper$elm_boilerplate$App_Banking$update, subscriptions: _LikeJasper$elm_boilerplate$App_Banking$subscriptions})
+};

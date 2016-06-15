@@ -1,0 +1,98 @@
+var _elm_community$random_extra$Random_Array$choose = function (arr) {
+	if (_elm_lang$core$Array$isEmpty(arr)) {
+		return _elm_community$random_extra$Random_Extra$constant(
+			{ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: arr});
+	} else {
+		var front = function (i) {
+			return A3(_elm_lang$core$Array$slice, 0, i, arr);
+		};
+		var lastIndex = _elm_lang$core$Array$length(arr) - 1;
+		var back = function (i) {
+			return _elm_lang$core$Native_Utils.eq(i, lastIndex) ? _elm_lang$core$Array$empty : A3(_elm_lang$core$Array$slice, i + 1, lastIndex + 1, arr);
+		};
+		var gen = A2(_elm_lang$core$Random$int, 0, lastIndex);
+		return A2(
+			_elm_lang$core$Random$map,
+			function (index) {
+				return {
+					ctor: '_Tuple2',
+					_0: A2(_elm_lang$core$Array$get, index, arr),
+					_1: A2(
+						_elm_lang$core$Array$append,
+						front(index),
+						back(index))
+				};
+			},
+			gen);
+	}
+};
+var _elm_community$random_extra$Random_Array$shuffle = function (arr) {
+	if (_elm_lang$core$Array$isEmpty(arr)) {
+		return _elm_community$random_extra$Random_Extra$constant(arr);
+	} else {
+		var helper = function (_p0) {
+			var _p1 = _p0;
+			var _p6 = _p1._0;
+			return A2(
+				_elm_lang$core$Random$andThen,
+				_elm_community$random_extra$Random_Array$choose(_p1._1),
+				function (_p2) {
+					var _p3 = _p2;
+					var _p5 = _p3._1;
+					var _p4 = _p3._0;
+					if (_p4.ctor === 'Nothing') {
+						return _elm_community$random_extra$Random_Extra$constant(
+							{ctor: '_Tuple2', _0: _p6, _1: _p5});
+					} else {
+						return helper(
+							{
+								ctor: '_Tuple2',
+								_0: A2(_elm_lang$core$List_ops['::'], _p4._0, _p6),
+								_1: _p5
+							});
+					}
+				});
+		};
+		return A2(
+			_elm_lang$core$Random$map,
+			function (_p7) {
+				return _elm_lang$core$Array$fromList(
+					_elm_lang$core$Basics$fst(_p7));
+			},
+			helper(
+				{
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_List.fromArray(
+						[]),
+					_1: arr
+				}));
+	}
+};
+var _elm_community$random_extra$Random_Array$sample = function (arr) {
+	var gen = A2(
+		_elm_lang$core$Random$int,
+		0,
+		_elm_lang$core$Array$length(arr) - 1);
+	return A2(
+		_elm_lang$core$Random$map,
+		function (index) {
+			return A2(_elm_lang$core$Array$get, index, arr);
+		},
+		gen);
+};
+var _elm_community$random_extra$Random_Array$array = F2(
+	function (arrayLength, generator) {
+		return A2(
+			_elm_lang$core$Random$map,
+			_elm_lang$core$Array$fromList,
+			A2(_elm_lang$core$Random$list, arrayLength, generator));
+	});
+var _elm_community$random_extra$Random_Array$rangeLengthArray = F3(
+	function (minLength, maxLength, generator) {
+		return A2(
+			_elm_community$random_extra$Random_Extra$flatMap,
+			function (len) {
+				return A2(_elm_community$random_extra$Random_Array$array, len, generator);
+			},
+			A2(_elm_lang$core$Random$int, minLength, maxLength));
+	});

@@ -1,0 +1,74 @@
+var _elm_community$elm_test$ElmTest_Test$numberOfSuites = function (test) {
+	var _p0 = test;
+	if (_p0.ctor === 'TestCase') {
+		return 0;
+	} else {
+		return 1 + function (_p1) {
+			return _elm_lang$core$List$sum(
+				A2(_elm_lang$core$List$map, _elm_community$elm_test$ElmTest_Test$numberOfSuites, _p1));
+		}(_p0._1);
+	}
+};
+var _elm_community$elm_test$ElmTest_Test$numberOfTests = function (test) {
+	var _p2 = test;
+	if (_p2.ctor === 'TestCase') {
+		return 1;
+	} else {
+		return function (_p3) {
+			return _elm_lang$core$List$sum(
+				A2(_elm_lang$core$List$map, _elm_community$elm_test$ElmTest_Test$numberOfTests, _p3));
+		}(_p2._1);
+	}
+};
+var _elm_community$elm_test$ElmTest_Test$nameOf = function (test) {
+	var _p4 = test;
+	if (_p4.ctor === 'TestCase') {
+		return _p4._0;
+	} else {
+		return _p4._0;
+	}
+};
+var _elm_community$elm_test$ElmTest_Test$Suite = F2(
+	function (a, b) {
+		return {ctor: 'Suite', _0: a, _1: b};
+	});
+var _elm_community$elm_test$ElmTest_Test$suite = _elm_community$elm_test$ElmTest_Test$Suite;
+var _elm_community$elm_test$ElmTest_Test$TestCase = F2(
+	function (a, b) {
+		return {ctor: 'TestCase', _0: a, _1: b};
+	});
+var _elm_community$elm_test$ElmTest_Test$test = F2(
+	function (name, a) {
+		return A2(_elm_community$elm_test$ElmTest_Test$TestCase, name, a);
+	});
+var _elm_community$elm_test$ElmTest_Test$defaultTest = function (a) {
+	var name = function () {
+		var _p5 = a;
+		switch (_p5.ctor) {
+			case 'AssertTrue':
+				return 'True';
+			case 'AssertFalse':
+				return 'False';
+			case 'AssertEqual':
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					_p5._1,
+					A2(_elm_lang$core$Basics_ops['++'], ' == ', _p5._2));
+			case 'AssertNotEqual':
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					_p5._1,
+					A2(_elm_lang$core$Basics_ops['++'], ' /= ', _p5._2));
+			case 'AlwaysPass':
+				return 'Always passes';
+			default:
+				return 'Always fails';
+		}
+	}();
+	return A2(_elm_community$elm_test$ElmTest_Test$test, name, a);
+};
+var _elm_community$elm_test$ElmTest_Test$equals = F2(
+	function (a, b) {
+		return _elm_community$elm_test$ElmTest_Test$defaultTest(
+			A2(_elm_community$elm_test$ElmTest_Assertion$assertEqual, a, b));
+	});

@@ -1,0 +1,500 @@
+var _elm_community$elm_lazy_list$Lazy_List$toArray = function (list) {
+	var _p0 = _elm_lang$lazy$Lazy$force(list);
+	if (_p0.ctor === 'Nil') {
+		return _elm_lang$core$Array$empty;
+	} else {
+		return A2(
+			_elm_lang$core$Array$append,
+			A2(_elm_lang$core$Array$push, _p0._0, _elm_lang$core$Array$empty),
+			_elm_community$elm_lazy_list$Lazy_List$toArray(_p0._1));
+	}
+};
+var _elm_community$elm_lazy_list$Lazy_List$toList = function (list) {
+	var _p1 = _elm_lang$lazy$Lazy$force(list);
+	if (_p1.ctor === 'Nil') {
+		return _elm_lang$core$Native_List.fromArray(
+			[]);
+	} else {
+		return A2(
+			_elm_lang$core$List_ops['::'],
+			_p1._0,
+			_elm_community$elm_lazy_list$Lazy_List$toList(_p1._1));
+	}
+};
+var _elm_community$elm_lazy_list$Lazy_List$foldr = F3(
+	function (reducer, b, list) {
+		return A3(
+			_elm_lang$core$Array$foldr,
+			reducer,
+			b,
+			_elm_community$elm_lazy_list$Lazy_List$toArray(list));
+	});
+var _elm_community$elm_lazy_list$Lazy_List$reduce = F3(
+	function (reducer, b, list) {
+		reduce:
+		while (true) {
+			var _p2 = _elm_lang$lazy$Lazy$force(list);
+			if (_p2.ctor === 'Nil') {
+				return b;
+			} else {
+				var _v3 = reducer,
+					_v4 = A2(reducer, _p2._0, b),
+					_v5 = _p2._1;
+				reducer = _v3;
+				b = _v4;
+				list = _v5;
+				continue reduce;
+			}
+		}
+	});
+var _elm_community$elm_lazy_list$Lazy_List$foldl = _elm_community$elm_lazy_list$Lazy_List$reduce;
+var _elm_community$elm_lazy_list$Lazy_List$sum = A2(
+	_elm_community$elm_lazy_list$Lazy_List$reduce,
+	F2(
+		function (x, y) {
+			return x + y;
+		}),
+	0);
+var _elm_community$elm_lazy_list$Lazy_List$product = A2(
+	_elm_community$elm_lazy_list$Lazy_List$reduce,
+	F2(
+		function (x, y) {
+			return x * y;
+		}),
+	1);
+var _elm_community$elm_lazy_list$Lazy_List$length = A2(
+	_elm_community$elm_lazy_list$Lazy_List$reduce,
+	F2(
+		function (_p3, n) {
+			return n + 1;
+		}),
+	0);
+var _elm_community$elm_lazy_list$Lazy_List$member = F2(
+	function (a, list) {
+		var _p4 = _elm_lang$lazy$Lazy$force(list);
+		if (_p4.ctor === 'Nil') {
+			return false;
+		} else {
+			return _elm_lang$core$Native_Utils.eq(_p4._0, a) || A2(_elm_community$elm_lazy_list$Lazy_List$member, a, _p4._1);
+		}
+	});
+var _elm_community$elm_lazy_list$Lazy_List$tail = function (list) {
+	var _p5 = _elm_lang$lazy$Lazy$force(list);
+	if (_p5.ctor === 'Nil') {
+		return _elm_lang$core$Maybe$Nothing;
+	} else {
+		return _elm_lang$core$Maybe$Just(_p5._1);
+	}
+};
+var _elm_community$elm_lazy_list$Lazy_List$head = function (list) {
+	var _p6 = _elm_lang$lazy$Lazy$force(list);
+	if (_p6.ctor === 'Nil') {
+		return _elm_lang$core$Maybe$Nothing;
+	} else {
+		return _elm_lang$core$Maybe$Just(_p6._0);
+	}
+};
+var _elm_community$elm_lazy_list$Lazy_List$isEmpty = function (list) {
+	var _p7 = _elm_lang$lazy$Lazy$force(list);
+	if (_p7.ctor === 'Nil') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var _elm_community$elm_lazy_list$Lazy_List$Cons = F2(
+	function (a, b) {
+		return {ctor: 'Cons', _0: a, _1: b};
+	});
+var _elm_community$elm_lazy_list$Lazy_List$cons = F2(
+	function (a, list) {
+		return _elm_lang$lazy$Lazy$lazy(
+			function (_p8) {
+				var _p9 = _p8;
+				return A2(_elm_community$elm_lazy_list$Lazy_List$Cons, a, list);
+			});
+	});
+var _elm_community$elm_lazy_list$Lazy_List_ops = _elm_community$elm_lazy_list$Lazy_List_ops || {};
+_elm_community$elm_lazy_list$Lazy_List_ops[':::'] = _elm_community$elm_lazy_list$Lazy_List$cons;
+var _elm_community$elm_lazy_list$Lazy_List$append = F2(
+	function (list1, list2) {
+		return _elm_lang$lazy$Lazy$lazy(
+			function (_p10) {
+				var _p11 = _p10;
+				var _p12 = _elm_lang$lazy$Lazy$force(list1);
+				if (_p12.ctor === 'Nil') {
+					return _elm_lang$lazy$Lazy$force(list2);
+				} else {
+					return _elm_lang$lazy$Lazy$force(
+						A2(
+							_elm_community$elm_lazy_list$Lazy_List_ops[':::'],
+							_p12._0,
+							A2(_elm_community$elm_lazy_list$Lazy_List_ops['+++'], _p12._1, list2)));
+				}
+			});
+	});
+var _elm_community$elm_lazy_list$Lazy_List_ops = _elm_community$elm_lazy_list$Lazy_List_ops || {};
+_elm_community$elm_lazy_list$Lazy_List_ops['+++'] = _elm_community$elm_lazy_list$Lazy_List$append;
+var _elm_community$elm_lazy_list$Lazy_List$cycle = function (list) {
+	return A2(
+		_elm_community$elm_lazy_list$Lazy_List_ops['+++'],
+		list,
+		_elm_lang$lazy$Lazy$lazy(
+			function (_p13) {
+				var _p14 = _p13;
+				return _elm_lang$lazy$Lazy$force(
+					_elm_community$elm_lazy_list$Lazy_List$cycle(list));
+			}));
+};
+var _elm_community$elm_lazy_list$Lazy_List$interleave = F2(
+	function (list1, list2) {
+		return _elm_lang$lazy$Lazy$lazy(
+			function (_p15) {
+				var _p16 = _p15;
+				var _p17 = _elm_lang$lazy$Lazy$force(list1);
+				if (_p17.ctor === 'Nil') {
+					return _elm_lang$lazy$Lazy$force(list2);
+				} else {
+					var _p18 = _elm_lang$lazy$Lazy$force(list2);
+					if (_p18.ctor === 'Nil') {
+						return _elm_lang$lazy$Lazy$force(list1);
+					} else {
+						return _elm_lang$lazy$Lazy$force(
+							A2(
+								_elm_community$elm_lazy_list$Lazy_List_ops[':::'],
+								_p17._0,
+								A2(
+									_elm_community$elm_lazy_list$Lazy_List_ops[':::'],
+									_p18._0,
+									A2(_elm_community$elm_lazy_list$Lazy_List$interleave, _p17._1, _p18._1))));
+					}
+				}
+			});
+	});
+var _elm_community$elm_lazy_list$Lazy_List$repeat = function (a) {
+	return _elm_lang$lazy$Lazy$lazy(
+		function (_p19) {
+			var _p20 = _p19;
+			return A2(
+				_elm_community$elm_lazy_list$Lazy_List$Cons,
+				a,
+				_elm_community$elm_lazy_list$Lazy_List$repeat(a));
+		});
+};
+var _elm_community$elm_lazy_list$Lazy_List$iterate = F2(
+	function (f, a) {
+		return _elm_lang$lazy$Lazy$lazy(
+			function (_p21) {
+				var _p22 = _p21;
+				return A2(
+					_elm_community$elm_lazy_list$Lazy_List$Cons,
+					a,
+					A2(
+						_elm_community$elm_lazy_list$Lazy_List$iterate,
+						f,
+						f(a)));
+			});
+	});
+var _elm_community$elm_lazy_list$Lazy_List$numbers = A2(
+	_elm_community$elm_lazy_list$Lazy_List$iterate,
+	F2(
+		function (x, y) {
+			return x + y;
+		})(1),
+	1);
+var _elm_community$elm_lazy_list$Lazy_List$Nil = {ctor: 'Nil'};
+var _elm_community$elm_lazy_list$Lazy_List$empty = _elm_lang$lazy$Lazy$lazy(
+	function (_p23) {
+		var _p24 = _p23;
+		return _elm_community$elm_lazy_list$Lazy_List$Nil;
+	});
+var _elm_community$elm_lazy_list$Lazy_List$singleton = function (a) {
+	return A2(_elm_community$elm_lazy_list$Lazy_List$cons, a, _elm_community$elm_lazy_list$Lazy_List$empty);
+};
+var _elm_community$elm_lazy_list$Lazy_List$reverse = A2(_elm_community$elm_lazy_list$Lazy_List$reduce, _elm_community$elm_lazy_list$Lazy_List$cons, _elm_community$elm_lazy_list$Lazy_List$empty);
+var _elm_community$elm_lazy_list$Lazy_List$fromList = A2(_elm_lang$core$List$foldr, _elm_community$elm_lazy_list$Lazy_List$cons, _elm_community$elm_lazy_list$Lazy_List$empty);
+var _elm_community$elm_lazy_list$Lazy_List$fromArray = A2(_elm_lang$core$Array$foldr, _elm_community$elm_lazy_list$Lazy_List$cons, _elm_community$elm_lazy_list$Lazy_List$empty);
+var _elm_community$elm_lazy_list$Lazy_List$intersperse = F2(
+	function (a, list) {
+		return _elm_lang$lazy$Lazy$lazy(
+			function (_p25) {
+				var _p26 = _p25;
+				var _p27 = _elm_lang$lazy$Lazy$force(list);
+				if (_p27.ctor === 'Nil') {
+					return _elm_community$elm_lazy_list$Lazy_List$Nil;
+				} else {
+					var _p32 = _p27._0;
+					var _p28 = _elm_lang$lazy$Lazy$force(_p27._1);
+					if (_p28.ctor === 'Nil') {
+						return _elm_lang$lazy$Lazy$force(
+							A2(_elm_community$elm_lazy_list$Lazy_List_ops[':::'], _p32, _elm_community$elm_lazy_list$Lazy_List$empty));
+					} else {
+						var _p31 = _p28._1;
+						var _p30 = _p28._0;
+						var _p29 = _elm_lang$lazy$Lazy$force(_p31);
+						if (_p29.ctor === 'Nil') {
+							return _elm_lang$lazy$Lazy$force(
+								A2(
+									_elm_community$elm_lazy_list$Lazy_List_ops[':::'],
+									_p32,
+									A2(
+										_elm_community$elm_lazy_list$Lazy_List_ops[':::'],
+										a,
+										A2(_elm_community$elm_lazy_list$Lazy_List_ops[':::'], _p30, _elm_community$elm_lazy_list$Lazy_List$empty))));
+						} else {
+							return _elm_lang$lazy$Lazy$force(
+								A2(
+									_elm_community$elm_lazy_list$Lazy_List_ops[':::'],
+									_p32,
+									A2(
+										_elm_community$elm_lazy_list$Lazy_List_ops[':::'],
+										a,
+										A2(
+											_elm_community$elm_lazy_list$Lazy_List_ops[':::'],
+											_p30,
+											A2(
+												_elm_community$elm_lazy_list$Lazy_List_ops[':::'],
+												a,
+												A2(_elm_community$elm_lazy_list$Lazy_List$intersperse, a, _p31))))));
+						}
+					}
+				}
+			});
+	});
+var _elm_community$elm_lazy_list$Lazy_List$take = F2(
+	function (n, list) {
+		return _elm_lang$lazy$Lazy$lazy(
+			function (_p33) {
+				var _p34 = _p33;
+				if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
+					return _elm_community$elm_lazy_list$Lazy_List$Nil;
+				} else {
+					var _p35 = _elm_lang$lazy$Lazy$force(list);
+					if (_p35.ctor === 'Nil') {
+						return _elm_community$elm_lazy_list$Lazy_List$Nil;
+					} else {
+						return A2(
+							_elm_community$elm_lazy_list$Lazy_List$Cons,
+							_p35._0,
+							A2(_elm_community$elm_lazy_list$Lazy_List$take, n - 1, _p35._1));
+					}
+				}
+			});
+	});
+var _elm_community$elm_lazy_list$Lazy_List$takeWhile = F2(
+	function (predicate, list) {
+		return _elm_lang$lazy$Lazy$lazy(
+			function (_p36) {
+				var _p37 = _p36;
+				var _p38 = _elm_lang$lazy$Lazy$force(list);
+				if (_p38.ctor === 'Nil') {
+					return _elm_community$elm_lazy_list$Lazy_List$Nil;
+				} else {
+					var _p39 = _p38._0;
+					return predicate(_p39) ? A2(
+						_elm_community$elm_lazy_list$Lazy_List$Cons,
+						_p39,
+						A2(_elm_community$elm_lazy_list$Lazy_List$takeWhile, predicate, _p38._1)) : _elm_community$elm_lazy_list$Lazy_List$Nil;
+				}
+			});
+	});
+var _elm_community$elm_lazy_list$Lazy_List$drop = F2(
+	function (n, list) {
+		return _elm_lang$lazy$Lazy$lazy(
+			function (_p40) {
+				var _p41 = _p40;
+				if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
+					return _elm_lang$lazy$Lazy$force(list);
+				} else {
+					var _p42 = _elm_lang$lazy$Lazy$force(list);
+					if (_p42.ctor === 'Nil') {
+						return _elm_community$elm_lazy_list$Lazy_List$Nil;
+					} else {
+						return _elm_lang$lazy$Lazy$force(
+							A2(_elm_community$elm_lazy_list$Lazy_List$drop, n - 1, _p42._1));
+					}
+				}
+			});
+	});
+var _elm_community$elm_lazy_list$Lazy_List$dropWhile = F2(
+	function (predicate, list) {
+		return _elm_lang$lazy$Lazy$lazy(
+			function (_p43) {
+				var _p44 = _p43;
+				var _p45 = _elm_lang$lazy$Lazy$force(list);
+				if (_p45.ctor === 'Nil') {
+					return _elm_community$elm_lazy_list$Lazy_List$Nil;
+				} else {
+					return predicate(_p45._0) ? _elm_lang$lazy$Lazy$force(
+						A2(_elm_community$elm_lazy_list$Lazy_List$dropWhile, predicate, _p45._1)) : _elm_lang$lazy$Lazy$force(list);
+				}
+			});
+	});
+var _elm_community$elm_lazy_list$Lazy_List$unique = function (list) {
+	return _elm_lang$lazy$Lazy$lazy(
+		function (_p46) {
+			var _p47 = _p46;
+			var _p48 = _elm_lang$lazy$Lazy$force(list);
+			if (_p48.ctor === 'Nil') {
+				return _elm_community$elm_lazy_list$Lazy_List$Nil;
+			} else {
+				var _p50 = _p48._1;
+				var _p49 = _p48._0;
+				return A2(_elm_community$elm_lazy_list$Lazy_List$member, _p49, _p50) ? _elm_lang$lazy$Lazy$force(
+					_elm_community$elm_lazy_list$Lazy_List$unique(_p50)) : A2(
+					_elm_community$elm_lazy_list$Lazy_List$Cons,
+					_p49,
+					_elm_community$elm_lazy_list$Lazy_List$unique(_p50));
+			}
+		});
+};
+var _elm_community$elm_lazy_list$Lazy_List$keepIf = F2(
+	function (predicate, list) {
+		return _elm_lang$lazy$Lazy$lazy(
+			function (_p51) {
+				var _p52 = _p51;
+				var _p53 = _elm_lang$lazy$Lazy$force(list);
+				if (_p53.ctor === 'Nil') {
+					return _elm_community$elm_lazy_list$Lazy_List$Nil;
+				} else {
+					var _p55 = _p53._1;
+					var _p54 = _p53._0;
+					return predicate(_p54) ? A2(
+						_elm_community$elm_lazy_list$Lazy_List$Cons,
+						_p54,
+						A2(_elm_community$elm_lazy_list$Lazy_List$keepIf, predicate, _p55)) : _elm_lang$lazy$Lazy$force(
+						A2(_elm_community$elm_lazy_list$Lazy_List$keepIf, predicate, _p55));
+				}
+			});
+	});
+var _elm_community$elm_lazy_list$Lazy_List$dropIf = function (predicate) {
+	return _elm_community$elm_lazy_list$Lazy_List$keepIf(
+		function (n) {
+			return _elm_lang$core$Basics$not(
+				predicate(n));
+		});
+};
+var _elm_community$elm_lazy_list$Lazy_List$flatten = function (list) {
+	return _elm_lang$lazy$Lazy$lazy(
+		function (_p56) {
+			var _p57 = _p56;
+			var _p58 = _elm_lang$lazy$Lazy$force(list);
+			if (_p58.ctor === 'Nil') {
+				return _elm_community$elm_lazy_list$Lazy_List$Nil;
+			} else {
+				return _elm_lang$lazy$Lazy$force(
+					A2(
+						_elm_community$elm_lazy_list$Lazy_List_ops['+++'],
+						_p58._0,
+						_elm_community$elm_lazy_list$Lazy_List$flatten(_p58._1)));
+			}
+		});
+};
+var _elm_community$elm_lazy_list$Lazy_List$map = F2(
+	function (f, list) {
+		return _elm_lang$lazy$Lazy$lazy(
+			function (_p59) {
+				var _p60 = _p59;
+				var _p61 = _elm_lang$lazy$Lazy$force(list);
+				if (_p61.ctor === 'Nil') {
+					return _elm_community$elm_lazy_list$Lazy_List$Nil;
+				} else {
+					return A2(
+						_elm_community$elm_lazy_list$Lazy_List$Cons,
+						f(_p61._0),
+						A2(_elm_community$elm_lazy_list$Lazy_List$map, f, _p61._1));
+				}
+			});
+	});
+var _elm_community$elm_lazy_list$Lazy_List$flatMap = function (f) {
+	return function (_p62) {
+		return _elm_community$elm_lazy_list$Lazy_List$flatten(
+			A2(_elm_community$elm_lazy_list$Lazy_List$map, f, _p62));
+	};
+};
+var _elm_community$elm_lazy_list$Lazy_List$andThen = _elm_lang$core$Basics$flip(_elm_community$elm_lazy_list$Lazy_List$flatMap);
+var _elm_community$elm_lazy_list$Lazy_List$map2 = F3(
+	function (f, list1, list2) {
+		return _elm_lang$lazy$Lazy$lazy(
+			function (_p63) {
+				var _p64 = _p63;
+				var _p65 = _elm_lang$lazy$Lazy$force(list1);
+				if (_p65.ctor === 'Nil') {
+					return _elm_community$elm_lazy_list$Lazy_List$Nil;
+				} else {
+					var _p66 = _elm_lang$lazy$Lazy$force(list2);
+					if (_p66.ctor === 'Nil') {
+						return _elm_community$elm_lazy_list$Lazy_List$Nil;
+					} else {
+						return A2(
+							_elm_community$elm_lazy_list$Lazy_List$Cons,
+							A2(f, _p65._0, _p66._0),
+							A3(_elm_community$elm_lazy_list$Lazy_List$map2, f, _p65._1, _p66._1));
+					}
+				}
+			});
+	});
+var _elm_community$elm_lazy_list$Lazy_List$andMap = _elm_community$elm_lazy_list$Lazy_List$map2(
+	F2(
+		function (x, y) {
+			return x(y);
+		}));
+var _elm_community$elm_lazy_list$Lazy_List$map3 = F4(
+	function (f, l1, l2, l3) {
+		return A2(
+			_elm_community$elm_lazy_list$Lazy_List$andMap,
+			A2(
+				_elm_community$elm_lazy_list$Lazy_List$andMap,
+				A2(_elm_community$elm_lazy_list$Lazy_List$map, f, l1),
+				l2),
+			l3);
+	});
+var _elm_community$elm_lazy_list$Lazy_List$zip3 = _elm_community$elm_lazy_list$Lazy_List$map3(
+	F3(
+		function (v0, v1, v2) {
+			return {ctor: '_Tuple3', _0: v0, _1: v1, _2: v2};
+		}));
+var _elm_community$elm_lazy_list$Lazy_List$map4 = F5(
+	function (f, l1, l2, l3, l4) {
+		return A2(
+			_elm_community$elm_lazy_list$Lazy_List$andMap,
+			A2(
+				_elm_community$elm_lazy_list$Lazy_List$andMap,
+				A2(
+					_elm_community$elm_lazy_list$Lazy_List$andMap,
+					A2(_elm_community$elm_lazy_list$Lazy_List$map, f, l1),
+					l2),
+				l3),
+			l4);
+	});
+var _elm_community$elm_lazy_list$Lazy_List$zip4 = _elm_community$elm_lazy_list$Lazy_List$map4(
+	F4(
+		function (v0, v1, v2, v3) {
+			return {ctor: '_Tuple4', _0: v0, _1: v1, _2: v2, _3: v3};
+		}));
+var _elm_community$elm_lazy_list$Lazy_List$map5 = F6(
+	function (f, l1, l2, l3, l4, l5) {
+		return A2(
+			_elm_community$elm_lazy_list$Lazy_List$andMap,
+			A2(
+				_elm_community$elm_lazy_list$Lazy_List$andMap,
+				A2(
+					_elm_community$elm_lazy_list$Lazy_List$andMap,
+					A2(
+						_elm_community$elm_lazy_list$Lazy_List$andMap,
+						A2(_elm_community$elm_lazy_list$Lazy_List$map, f, l1),
+						l2),
+					l3),
+				l4),
+			l5);
+	});
+var _elm_community$elm_lazy_list$Lazy_List$zip5 = _elm_community$elm_lazy_list$Lazy_List$map5(
+	F5(
+		function (v0, v1, v2, v3, v4) {
+			return {ctor: '_Tuple5', _0: v0, _1: v1, _2: v2, _3: v3, _4: v4};
+		}));
+var _elm_community$elm_lazy_list$Lazy_List$zip = _elm_community$elm_lazy_list$Lazy_List$map2(
+	F2(
+		function (v0, v1) {
+			return {ctor: '_Tuple2', _0: v0, _1: v1};
+		}));

@@ -1,0 +1,11 @@
+var _LikeJasper$elm_boilerplate$App_BankingTest$testSuite = A2(
+	_elm_community$elm_test$ElmTest$suite,
+	'App.BankingTest',
+	_elm_lang$core$Native_List.fromArray(
+		[
+			A2(
+			_elm_community$elm_test$ElmTest$suite,
+			'check deposit',
+			_elm_lang$core$Native_List.fromArray(
+				[]))
+		]));

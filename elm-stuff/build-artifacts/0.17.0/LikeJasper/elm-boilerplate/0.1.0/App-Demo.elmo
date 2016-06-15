@@ -1,0 +1,25 @@
+var _LikeJasper$elm_boilerplate$App_Demo$noFx = function (model) {
+	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+};
+var _LikeJasper$elm_boilerplate$App_Demo$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _LikeJasper$elm_boilerplate$App_Demo$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$h1,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('Example App')
+			]));
+};
+var _LikeJasper$elm_boilerplate$App_Demo$update = F2(
+	function (action, model) {
+		return _LikeJasper$elm_boilerplate$App_Demo$noFx(model);
+	});
+var _LikeJasper$elm_boilerplate$App_Demo$init = _LikeJasper$elm_boilerplate$App_Demo$noFx(
+	{});
+var _LikeJasper$elm_boilerplate$App_Demo$Model = {};
+var _LikeJasper$elm_boilerplate$App_Demo$HideDemo = {ctor: 'HideDemo'};
+var _LikeJasper$elm_boilerplate$App_Demo$ShowDemo = {ctor: 'ShowDemo'};

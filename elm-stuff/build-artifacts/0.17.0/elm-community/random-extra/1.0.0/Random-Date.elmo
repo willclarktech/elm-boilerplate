@@ -1,0 +1,28 @@
+var _elm_community$random_extra$Random_Date$date = F2(
+	function (startDate, endDate) {
+		return A2(
+			_elm_lang$core$Random$map,
+			_elm_lang$core$Date$fromTime,
+			A2(
+				_elm_lang$core$Random$float,
+				_elm_lang$core$Date$toTime(startDate),
+				_elm_lang$core$Date$toTime(endDate)));
+	});
+var _elm_community$random_extra$Random_Date$second = A2(_elm_lang$core$Random$int, 0, 59);
+var _elm_community$random_extra$Random_Date$minute = A2(_elm_lang$core$Random$int, 0, 59);
+var _elm_community$random_extra$Random_Date$hour12 = A2(_elm_lang$core$Random$int, 0, 11);
+var _elm_community$random_extra$Random_Date$hour24 = A2(_elm_lang$core$Random$int, 0, 23);
+var _elm_community$random_extra$Random_Date$hour = A2(_elm_lang$core$Random$int, 0, 23);
+var _elm_community$random_extra$Random_Date$year = _elm_lang$core$Random$int;
+var _elm_community$random_extra$Random_Date$month = A2(
+	_elm_lang$core$Random$map,
+	_elm_lang$core$Maybe$withDefault(_elm_lang$core$Date$Jan),
+	_elm_community$random_extra$Random_Extra$sample(
+		_elm_lang$core$Native_List.fromArray(
+			[_elm_lang$core$Date$Jan, _elm_lang$core$Date$Feb, _elm_lang$core$Date$Mar, _elm_lang$core$Date$Apr, _elm_lang$core$Date$May, _elm_lang$core$Date$Jun, _elm_lang$core$Date$Jul, _elm_lang$core$Date$Aug, _elm_lang$core$Date$Sep, _elm_lang$core$Date$Oct, _elm_lang$core$Date$Nov, _elm_lang$core$Date$Dec])));
+var _elm_community$random_extra$Random_Date$day = A2(
+	_elm_lang$core$Random$map,
+	_elm_lang$core$Maybe$withDefault(_elm_lang$core$Date$Mon),
+	_elm_community$random_extra$Random_Extra$sample(
+		_elm_lang$core$Native_List.fromArray(
+			[_elm_lang$core$Date$Mon, _elm_lang$core$Date$Tue, _elm_lang$core$Date$Wed, _elm_lang$core$Date$Thu, _elm_lang$core$Date$Fri, _elm_lang$core$Date$Sat, _elm_lang$core$Date$Sun])));

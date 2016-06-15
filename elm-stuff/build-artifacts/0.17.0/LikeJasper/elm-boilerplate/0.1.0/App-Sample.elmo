@@ -1,0 +1,8 @@
+var _LikeJasper$elm_boilerplate$App_Sample$product = F2(
+	function (a, b) {
+		return a * b;
+	});
+var _LikeJasper$elm_boilerplate$App_Sample$sum = F2(
+	function (a, b) {
+		return a + b;
+	});

@@ -1,0 +1,9 @@
+var _elm_community$random_extra$Random_Int$intLessThan = function (value) {
+	return A2(_elm_lang$core$Random$int, _elm_lang$core$Random$minInt, value - 1);
+};
+var _elm_community$random_extra$Random_Int$intGreaterThan = function (value) {
+	return A2(_elm_lang$core$Random$int, value + 1, _elm_lang$core$Random$maxInt);
+};
+var _elm_community$random_extra$Random_Int$negativeInt = A2(_elm_lang$core$Random$int, _elm_lang$core$Random$minInt, -1);
+var _elm_community$random_extra$Random_Int$positiveInt = A2(_elm_lang$core$Random$int, 1, _elm_lang$core$Random$maxInt);
+var _elm_community$random_extra$Random_Int$anyInt = A2(_elm_lang$core$Random$int, _elm_lang$core$Random$minInt, _elm_lang$core$Random$maxInt);

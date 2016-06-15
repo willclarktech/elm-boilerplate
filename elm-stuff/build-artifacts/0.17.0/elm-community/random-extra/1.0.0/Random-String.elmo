@@ -1,0 +1,16 @@
+var _elm_community$random_extra$Random_String$string = F2(
+	function (stringLength, charGenerator) {
+		return A2(
+			_elm_lang$core$Random$map,
+			_elm_lang$core$String$fromList,
+			A2(_elm_lang$core$Random$list, stringLength, charGenerator));
+	});
+var _elm_community$random_extra$Random_String$rangeLengthString = F3(
+	function (minLength, maxLength, charGenerator) {
+		return A2(
+			_elm_community$random_extra$Random_Extra$flatMap,
+			function (len) {
+				return A2(_elm_community$random_extra$Random_String$string, len, charGenerator);
+			},
+			A2(_elm_lang$core$Random$int, minLength, maxLength));
+	});

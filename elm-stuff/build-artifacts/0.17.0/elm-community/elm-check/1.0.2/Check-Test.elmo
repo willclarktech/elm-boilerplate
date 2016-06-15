@@ -1,0 +1,55 @@
+var _elm_community$elm_check$Check_Test$nChecks = function (n) {
+	return _elm_lang$core$Native_Utils.eq(n, 1) ? '1 check' : A2(
+		_elm_lang$core$Basics_ops['++'],
+		_elm_lang$core$Basics$toString(n),
+		' checks');
+};
+var _elm_community$elm_check$Check_Test$evidenceToTest = function (evidence) {
+	var _p0 = evidence;
+	if (_p0.ctor === 'Multiple') {
+		return A2(
+			_elm_community$elm_test$ElmTest$suite,
+			_p0._0,
+			A2(_elm_lang$core$List$map, _elm_community$elm_check$Check_Test$evidenceToTest, _p0._1));
+	} else {
+		if (_p0._0.ctor === 'Ok') {
+			return A2(
+				_elm_community$elm_test$ElmTest$test,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_p0._0._0.name,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						' [',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_community$elm_check$Check_Test$nChecks(_p0._0._0.numberOfChecks),
+							']'))),
+				_elm_community$elm_test$ElmTest$pass);
+		} else {
+			return A2(
+				_elm_community$elm_test$ElmTest$test,
+				_p0._0._0.name,
+				_elm_community$elm_test$ElmTest$fail(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'\nOn check ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(_p0._0._0.numberOfChecks),
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								', found counterexample: ',
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									_p0._0._0.counterExample,
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										'\nExpected:   ',
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											_p0._0._0.expected,
+											A2(_elm_lang$core$Basics_ops['++'], '\nBut It Was: ', _p0._0._0.actual)))))))));
+		}
+	}
+};

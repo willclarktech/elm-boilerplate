@@ -1,0 +1,161 @@
+var _elm_community$elm_check$Check$false = F2(
+	function (f, pred) {
+		return A2(
+			f,
+			pred,
+			_elm_lang$core$Basics$always(false));
+	});
+var _elm_community$elm_check$Check$true = F2(
+	function (f, pred) {
+		return A2(
+			f,
+			pred,
+			_elm_lang$core$Basics$always(true));
+	});
+var _elm_community$elm_check$Check$for = F2(
+	function (f, x) {
+		return f(x);
+	});
+var _elm_community$elm_check$Check$is = F2(
+	function (f, x) {
+		return f(x);
+	});
+var _elm_community$elm_check$Check$that = F2(
+	function (f, x) {
+		return f(x);
+	});
+var _elm_community$elm_check$Check$SuccessOptions = F3(
+	function (a, b, c) {
+		return {name: a, seed: b, numberOfChecks: c};
+	});
+var _elm_community$elm_check$Check$FailureOptions = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {name: a, counterExample: b, actual: c, expected: d, original: e, seed: f, numberOfChecks: g, numberOfShrinks: h};
+	});
+var _elm_community$elm_check$Check$Suite = F2(
+	function (a, b) {
+		return {ctor: 'Suite', _0: a, _1: b};
+	});
+var _elm_community$elm_check$Check$suite = F2(
+	function (name, claims) {
+		return A2(_elm_community$elm_check$Check$Suite, name, claims);
+	});
+var _elm_community$elm_check$Check$Claim = F2(
+	function (a, b) {
+		return {ctor: 'Claim', _0: a, _1: b};
+	});
+var _elm_community$elm_check$Check$Multiple = F2(
+	function (a, b) {
+		return {ctor: 'Multiple', _0: a, _1: b};
+	});
+var _elm_community$elm_check$Check$check = F3(
+	function (n, seed, claim) {
+		var _p0 = claim;
+		if (_p0.ctor === 'Claim') {
+			return A2(_p0._1, n, seed);
+		} else {
+			return A2(
+				_elm_community$elm_check$Check$Multiple,
+				_p0._0,
+				A2(
+					_elm_lang$core$List$map,
+					A2(_elm_community$elm_check$Check$check, n, seed),
+					_p0._1));
+		}
+	});
+var _elm_community$elm_check$Check$quickCheck = A2(
+	_elm_community$elm_check$Check$check,
+	100,
+	_elm_lang$core$Random$initialSeed(1));
+var _elm_community$elm_check$Check$Unit = function (a) {
+	return {ctor: 'Unit', _0: a};
+};
+var _elm_community$elm_check$Check$claim = F4(
+	function (name, actualStatement, expectedStatement, producer) {
+		return A2(
+			_elm_community$elm_check$Check$Claim,
+			name,
+			F2(
+				function (numberOfChecks, seed) {
+					var originalCounterExample$ = F2(
+						function (seed, currentNumberOfChecks) {
+							if (_elm_lang$core$Native_Utils.cmp(currentNumberOfChecks, numberOfChecks) > -1) {
+								return _elm_lang$trampoline$Trampoline$done(
+									_elm_lang$core$Result$Ok(numberOfChecks));
+							} else {
+								var _p1 = A2(_elm_lang$core$Random$step, producer.generator, seed);
+								var value = _p1._0;
+								var nextSeed = _p1._1;
+								var actual = actualStatement(value);
+								var expected = expectedStatement(value);
+								return _elm_lang$core$Native_Utils.eq(actual, expected) ? _elm_lang$trampoline$Trampoline$jump(
+									function (_p2) {
+										var _p3 = _p2;
+										return A2(originalCounterExample$, nextSeed, currentNumberOfChecks + 1);
+									}) : _elm_lang$trampoline$Trampoline$done(
+									_elm_lang$core$Result$Err(
+										{ctor: '_Tuple5', _0: value, _1: actual, _2: expected, _3: nextSeed, _4: currentNumberOfChecks + 1}));
+							}
+						});
+					var originalCounterExample = _elm_lang$trampoline$Trampoline$evaluate(
+						A2(originalCounterExample$, seed, 0));
+					var _p4 = originalCounterExample;
+					if (_p4.ctor === 'Ok') {
+						return _elm_community$elm_check$Check$Unit(
+							_elm_lang$core$Result$Ok(
+								{
+									name: name,
+									seed: seed,
+									numberOfChecks: A2(_elm_lang$core$Basics$max, 0, _p4._0)
+								}));
+					} else {
+						var _p9 = _p4._0._0;
+						var shrink = F2(
+							function (counterExample, currentNumberOfShrinks) {
+								var shrunkenCounterExamples = producer.shrinker(counterExample);
+								var failingShrunkenCounterExamples = A2(
+									_elm_community$elm_lazy_list$Lazy_List$keepIf,
+									function (shrunk) {
+										return _elm_lang$core$Basics$not(
+											_elm_lang$core$Native_Utils.eq(
+												actualStatement(shrunk),
+												expectedStatement(shrunk)));
+									},
+									shrunkenCounterExamples);
+								var _p5 = _elm_community$elm_lazy_list$Lazy_List$head(failingShrunkenCounterExamples);
+								if (_p5.ctor === 'Nothing') {
+									return _elm_lang$trampoline$Trampoline$done(
+										{ctor: '_Tuple2', _0: counterExample, _1: currentNumberOfShrinks});
+								} else {
+									return _elm_lang$trampoline$Trampoline$jump(
+										function (_p6) {
+											var _p7 = _p6;
+											return A2(shrink, _p5._0, currentNumberOfShrinks + 1);
+										});
+								}
+							});
+						var _p8 = _elm_lang$trampoline$Trampoline$evaluate(
+							A2(shrink, _p9, 0));
+						var minimal = _p8._0;
+						var numberOfShrinks = _p8._1;
+						var actual = actualStatement(minimal);
+						var expected = expectedStatement(minimal);
+						return _elm_community$elm_check$Check$Unit(
+							_elm_lang$core$Result$Err(
+								{
+									name: name,
+									seed: _p4._0._3,
+									counterExample: _elm_lang$core$Basics$toString(minimal),
+									expected: _elm_lang$core$Basics$toString(expected),
+									actual: _elm_lang$core$Basics$toString(actual),
+									original: {
+										counterExample: _elm_lang$core$Basics$toString(_p9),
+										actual: _elm_lang$core$Basics$toString(_p4._0._1),
+										expected: _elm_lang$core$Basics$toString(_p4._0._2)
+									},
+									numberOfChecks: _p4._0._4,
+									numberOfShrinks: numberOfShrinks
+								}));
+					}
+				}));
+	});
