@@ -13,6 +13,7 @@
     "url": "https://github.com/LikeJasper/elm-boilerplate/issues"
   },
   "scripts": {
+    "serve:test": "./node_modules/.bin/http-server dist -a localhost -p 7357 -c -1",
     "lint": "./node_modules/.bin/eslint ./features",
     "test": "./node_modules/.bin/cucumber-js ./features",
     "ncu": "ncu"
@@ -24,6 +25,7 @@
     "eslint-plugin-import": "^1.8.1",
     "eslint-plugin-jsx-a11y": "^1.4.2",
     "eslint-plugin-react": "^5.1.1",
+    "http-server": "^0.9.0",
     "npm-check-updates": "^2.6.7",
     "zombie": "^4.2.1"
   }
