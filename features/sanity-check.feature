@@ -4,7 +4,6 @@ Feature: Sanity check
   I want to check that the app loads
   So that I can be confident in basic matters of sanity
 
-  @now
   @critical
   Scenario: App loads
     When I visit the homepage
