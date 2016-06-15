@@ -1,0 +1,15 @@
+{
+    "version": "0.1.0",
+    "summary": "A boilerplate for elm apps",
+    "repository": "https://github.com/LikeJasper/elm-boilerplate.git",
+    "license": "MIT",
+    "source-directories": [
+        "elm",
+        "elm-test"
+    ],
+    "exposed-modules": [],
+    "dependencies": {
+        "elm-lang/core": "4.0.1 <= v < 5.0.0"
+    },
+    "elm-version": "0.17.0 <= v < 0.18.0"
+}
