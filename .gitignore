@@ -1,4 +1,7 @@
+# npm
 /node_modules/
 /npm-debug.log
 
+# elm
 /elm-stuff/
+/dev/
