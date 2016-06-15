@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "cucumber": "^1.0.0",
+    "elm": "^0.17.0",
     "eslint": "^2.12.0",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.8.1",
