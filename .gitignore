@@ -5,3 +5,11 @@
 # elm
 /elm-stuff/
 /dev/
+
+# semantic-ui
+/semantic/src/definitions/
+/semantic/src/themes/
+/semantic/src/theme.less
+/semantic/src/semantic.less
+/semantic/tasks/
+/semantic/gulpfile.js
