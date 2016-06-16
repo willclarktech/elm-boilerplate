@@ -7,8 +7,7 @@ module.exports = function thenSteps() {
     return this.browser.assert.text('h1', 'Example App');
   });
 
-  this.Then(/^my account balance should be \$(\d+)$/, function (arg1, callback) {
-    // Write code here that turns the phrase above into concrete actions
-    callback(null, 'pending');
+  this.Then(/^my account balance should be \$(\d+)$/, function (expectedBalance) {
+    return this.browser.assert.text('.account-summary .balance', expectedBalance);
   });
 };

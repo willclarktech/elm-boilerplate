@@ -22,7 +22,17 @@ view model =
   h1
     []
     [ text "Example App"
+    , viewAccountSummary
     , viewDepositCheck
+    ]
+
+viewAccountSummary : Html Msg
+viewAccountSummary =
+  div
+    [ class "account-summary" ]
+    [ p
+      [ class "balance" ]
+      [ text "110" ]
     ]
 
 viewDepositCheck : Html Msg

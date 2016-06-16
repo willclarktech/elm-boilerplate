@@ -1,5 +1,5 @@
 function depositCheck(browser) {
-  return browser
+  browser
     .fill('.bank-deposit .from-account-number', '987')
     .fill('.bank-deposit .branch-number', '12345')
     .fill('.bank-deposit .amount', '10')
@@ -13,6 +13,6 @@ module.exports = function () {
 
   this.When(/^I deposit the check into my account$/, function () {
     return this.browser.visit('/')
-      .then(depositCheck.bind(this, this.browser));
+      .then(() => depositCheck(this.browser));
   });
 };
