@@ -33,3 +33,33 @@ npm run test:elm:watch
 1. Cucumber will give you boilerplate code to put as your step definitions in `features/step_definitions`. Double check the regular expressions, then implement the steps. End-to-end tests should fail.
 1. Add an elm test suite for the feature in `elm-test/App`. Write tests which will help you pass the currently failing aspect of the end-to-end tests. Tests should fail.
 1. Write elm code in `elm/App` to pass the tests.
+
+## Scripts
+
+### `validate-commit-message.js`
+
+This project uses [husky](https://github.com/typicode/husky) to enforce certain requirements on git commit messages. Commit messages should be 76 characters or less, and conform the following structure:
+```
+<type> <scope>: <subject>
+```
+where `<subject>` begins with a lowercase imperative verb, and `<type>` is one of the following:
+
+- `chore` for setup-like tasks, e.g. adding dependencies
+- `test` for tests, including specs
+- `feat` for work on new features
+- `refactor` for refactors
+- `fix` for bug fixes
+- `style` for changes to code style
+- `docs` for stuff like this document
+
+The validation script converts these to emoji as follows:
+
+- `chore` -> :house_with_garden:
+- `test` -> :vertical_traffic_light:
+- `feat` -> :seedling:
+- `refactor` -> :scissors:
+- `fix` -> :wrench:
+- `style` -> :lipstick:
+- `docs` -> :books:
+
+So it looks nice in GitHub, and on your command line if you use something like [emojify](https://github.com/mrowa44/emojify).
