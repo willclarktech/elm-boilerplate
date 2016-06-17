@@ -15,6 +15,7 @@
   "scripts": {
     "dev": "elm-server elm/Main.elm --output dev/app.js",
     "lint": "eslint ./features",
+    "lint:fix": "npm run lint -- --fix",
     "test:e2e": "cucumber-js ./features || true",
     "test:e2e:now": "cucumber-js ./features --compiler js:babel-core/register --tags @now || true",
     "test:e2e:single": "npm run test:e2e",
