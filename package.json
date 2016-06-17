@@ -14,7 +14,7 @@
   },
   "scripts": {
     "dev": "elm-server elm/Main.elm --output dev/app.js",
-    "lint": "eslint ./features",
+    "lint": "eslint ./features ./scripts",
     "lint:fix": "npm run lint -- --fix",
     "test:e2e": "cucumber-js ./features || true",
     "test:e2e:now": "cucumber-js ./features --compiler js:babel-core/register --tags @now || true",
@@ -29,7 +29,8 @@
     "dev:prepare:html": "cp skeleton.html dev/index.html",
     "dev:prepare:ui": "npm run build:ui",
     "ncu": "ncu",
-    "postinstall": "elm package install -y"
+    "postinstall": "elm package install -y",
+    "commitmsg": "babel-node ./scripts/validate-commit-msg.js"
   },
   "devDependencies": {
     "babel-cli": "^6.10.1",
