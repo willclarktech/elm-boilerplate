@@ -1,9 +1,0 @@
-var _LikeJasper$elm_boilerplate$Repl$t_s_o_l = {ctor: '_Tuple0'};
-var _LikeJasper$elm_boilerplate$Repl$hello = function (a) {
-	return 'hello';
-};
-var _LikeJasper$elm_boilerplate$Repl$hello2 = function (_p0) {
-	return _LikeJasper$elm_boilerplate$Repl$hello(
-		_LikeJasper$elm_boilerplate$Repl$hello(_p0));
-};
-var _LikeJasper$elm_boilerplate$Repl$d_e_l_t_r_o_n_3_0_3_0 = _LikeJasper$elm_boilerplate$Repl$hello2(5);

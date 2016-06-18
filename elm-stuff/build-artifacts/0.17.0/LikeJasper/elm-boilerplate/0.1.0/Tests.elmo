@@ -1,5 +1,0 @@
-var _LikeJasper$elm_boilerplate$Tests$testSuite = A2(
-	_elm_community$elm_test$ElmTest$suite,
-	'All tests',
-	_elm_lang$core$Native_List.fromArray(
-		[_LikeJasper$elm_boilerplate$App_SampleTest$testSuite, _LikeJasper$elm_boilerplate$App_BankingTest$testSuite]));
