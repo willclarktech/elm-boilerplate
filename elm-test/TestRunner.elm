@@ -1,6 +1,9 @@
+module Main exposing (..)
+
 import ElmTest exposing (runSuite)
 import Tests exposing (testSuite)
 
+
 main : Program Never
 main =
-  runSuite testSuite
+    runSuite testSuite
