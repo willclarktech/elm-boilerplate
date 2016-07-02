@@ -20,7 +20,7 @@
     "test:e2e:now": "cucumber-js ./features --compiler js:babel-core/register -r e2e/support -r e2e/step_definitions --tags @now || true",
     "test:e2e:single": "npm run test:e2e",
     "test:e2e:watch": "nodemon --watch dev --watch features --watch e2e --ext js,html --exec 'npm run test:e2e:now'",
-    "test:elm:single": "FILE=$(mktemp $(uuidgen).js) && elm-make elm-test/TestRunner.elm --output $FILE && node $FILE; RESULT=$?; rm -f $FILE;",
+    "test:elm:single": "FILE=$(uuidgen).js && elm-make elm-test/TestRunner.elm --output $FILE && node $FILE; RESULT=$?; rm -f $FILE;",
     "test:elm:watch": "nodemon --watch 'elm/' --watch 'elm-test/' --ext elm --exec 'npm run test:elm:single'",
     "clean:dev": "rm -r dev",
     "clean:ui": "rm -r dev/ui",
