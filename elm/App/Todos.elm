@@ -36,6 +36,11 @@ initialModel =
     }
 
 
+noFx : Model -> ( Model, Cmd a )
+noFx model =
+    ( model, Cmd.none )
+
+
 init : ( Model, Cmd a )
 init =
     noFx initialModel
@@ -64,7 +69,7 @@ updateText text model =
 createTodo : Model -> Model
 createTodo model =
     { model
-        | todos = model.todos ++ [ model.currentText ]
+        | todos = model.currentText :: model.todos
         , currentText = ""
     }
 
@@ -90,16 +95,6 @@ viewTodo todo =
         [ label [] [ text todo ] ]
 
 
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
-
-
-noFx : Model -> ( Model, Cmd a )
-noFx model =
-    ( model, Cmd.none )
-
-
 handleKeyUp : Int -> Msg
 handleKeyUp keyCode =
     case isEnter keyCode of
@@ -115,6 +110,6 @@ isEnter keyCode =
     keyCode == 13
 
 
-isDelete : Int -> Bool
-isDelete keyCode =
-    keyCode == 8
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
