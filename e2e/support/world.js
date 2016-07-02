@@ -1,16 +1,15 @@
-const Browser = require('zombie');
-Browser.prototype.keyUp = function (targetSelector, keyCode) {
-  const event = this.window.document.createEvent('HTMLEvents');
-  event.initEvent('keyup', true, true);
-  event.which = keyCode;
-  const target = this.window.document.querySelector(targetSelector);
-  if (target) { target.dispatchEvent(event); }
-  return this;
-};
-Browser.localhost('example.com', 3000);
+import Browser from 'nightmare';
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+
+chai.use(chaiAsPromised);
 
 function World() {
-  this.browser = new Browser();
+  this.browser = Browser({
+
+  });
+  this.expect = chai.expect;
+  this.baseUrl = 'http://localhost:3000';
   this.ctx = {};
 }
 
