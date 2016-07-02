@@ -43,34 +43,22 @@ testSuite =
             ]
         , describe "handleKeyUp"
             [ it "should update the current text"
-                <| expect (UpdateText 80) toBe (handleKeyUp 80)
+                <| expect (UpdateText "Incomplete tod") toBe (handleKeyUp "Incomplete tod" 80)
             , it "should create a Todo on Enter"
-                <| expect (CreateTodo) toBe (handleKeyUp 13)
+                <| expect (CreateTodo) toBe (handleKeyUp "Full todo" 13)
             ]
         , describe "updateText"
             [ it "should add a character to the current text"
                 <| let
-                    keyCode =
-                        84
+                    newText =
+                        "New text"
 
                     fixture =
-                        { initialModel | currentText = "tes" }
+                        { initialModel | currentText = "old text" }
 
                     expectedResult =
-                        "test"
+                        newText
                    in
-                    expect expectedResult toBe (.currentText <| updateText keyCode fixture)
-            , it "should remove a character from the current text"
-                <| let
-                    keyCode =
-                        8
-
-                    fixture =
-                        { initialModel | currentText = "tes" }
-
-                    expectedResult =
-                        "te"
-                   in
-                    expect expectedResult toBe (.currentText <| updateText keyCode fixture)
+                    expect expectedResult toBe (.currentText <| updateText newText fixture)
             ]
         ]
