@@ -7,7 +7,7 @@ module.exports = function thenSteps() {
     return this.browser.assert.text('h1', 'Example App');
   });
 
-  this.Then(/^my account balance should be \$(\d+)$/, function (expectedBalance) {
-    return this.browser.assert.text('.account-summary .balance', expectedBalance);
+  this.Then(/^I should see the Todo$/, function () {
+    return this.browser.assert.text('li label', this.ctx.todoText);
   });
 };
