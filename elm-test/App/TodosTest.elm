@@ -19,15 +19,30 @@ import ElmTestBDDStyle
         )
 
 
-type alias CreateTodoCtx =
+type alias TodoCtx =
     { model : Model
     , result : Maybe Model
+    , newText : Maybe String
     , existingTodo : Maybe String
     }
 
 
-type alias HandleKeyUpCtx =
+initialTodoCtx : TodoCtx
+initialTodoCtx =
+    { model = initialModel
+    , result = Nothing
+    , newText = Nothing
+    , existingTodo = Nothing
+    }
+
+
+type alias KeyPressCtx =
     { result : Maybe Msg }
+
+
+initialKeyPressCtx : KeyPressCtx
+initialKeyPressCtx =
+    { result = Nothing }
 
 
 type alias PreStepDefinition ctx =
@@ -46,7 +61,17 @@ type alias ThenStepDefinition ctx =
     ctx -> Test
 
 
-givenACurrentText : GivenStepDefinition CreateTodoCtx
+runTestWithCtx : a -> (a -> b) -> b
+runTestWithCtx ctx test =
+    test ctx
+
+
+runTestsWithCtx : a -> List (a -> b) -> List b
+runTestsWithCtx ctx tests =
+    List.map (runTestWithCtx ctx) tests
+
+
+givenACurrentText : GivenStepDefinition TodoCtx
 givenACurrentText tests oldCtx =
     describe "Given a current text"
         <| let
@@ -55,14 +80,11 @@ givenACurrentText tests oldCtx =
                     | model =
                         { initialModel | currentText = "Buy milk" }
                 }
-
-            runTest test =
-                test ctx
            in
-            List.map runTest tests
+            runTestsWithCtx ctx tests
 
 
-givenAnExistingTodo : GivenStepDefinition CreateTodoCtx
+givenAnExistingTodo : GivenStepDefinition TodoCtx
 givenAnExistingTodo tests oldCtx =
     describe "And an existing todo"
         <| let
@@ -80,14 +102,11 @@ givenAnExistingTodo tests oldCtx =
                         }
                     , existingTodo = Just existingTodo
                 }
-
-            runTest test =
-                test ctx
            in
-            List.map runTest tests
+            runTestsWithCtx ctx tests
 
 
-whenATodoIsCreated : WhenStepDefinition CreateTodoCtx
+whenATodoIsCreated : WhenStepDefinition TodoCtx
 whenATodoIsCreated tests oldCtx =
     describe "When a todo is created"
         <| let
@@ -95,14 +114,11 @@ whenATodoIsCreated tests oldCtx =
                 { oldCtx
                     | result = Just (createTodo oldCtx.model)
                 }
-
-            runTest test =
-                test ctx
            in
-            List.map runTest tests
+            runTestsWithCtx ctx tests
 
 
-thenATodoShouldBeCreatedWithTheCurrentText : ThenStepDefinition CreateTodoCtx
+thenATodoShouldBeCreatedWithTheCurrentText : ThenStepDefinition TodoCtx
 thenATodoShouldBeCreatedWithTheCurrentText ctx =
     it "Then a todo should be created with the current text"
         <| let
@@ -117,7 +133,7 @@ thenATodoShouldBeCreatedWithTheCurrentText ctx =
                     expect True toBe False
 
 
-thenTheCurrentTextShouldBeReset : ThenStepDefinition CreateTodoCtx
+thenTheCurrentTextShouldBeReset : ThenStepDefinition TodoCtx
 thenTheCurrentTextShouldBeReset ctx =
     it "Then the current text should be reset"
         <| let
@@ -132,7 +148,7 @@ thenTheCurrentTextShouldBeReset ctx =
                     expect True toBe False
 
 
-thenTheExistingTodoShouldStillExist : ThenStepDefinition CreateTodoCtx
+thenTheExistingTodoShouldStillExist : ThenStepDefinition TodoCtx
 thenTheExistingTodoShouldStillExist ctx =
     it "And the existing todo should still exist"
         <| case ( ctx.result, ctx.existingTodo ) of
@@ -157,14 +173,11 @@ createTodoSuite =
                 ]
             ]
         ]
-        { model = initialModel
-        , result = Nothing
-        , existingTodo = Nothing
-        }
+        initialTodoCtx
     ]
 
 
-whenTheEnterKeyIsPressed : WhenStepDefinition HandleKeyUpCtx
+whenTheEnterKeyIsPressed : WhenStepDefinition KeyPressCtx
 whenTheEnterKeyIsPressed tests oldCtx =
     describe "When the ENTER key is pressed"
         <| let
@@ -172,14 +185,11 @@ whenTheEnterKeyIsPressed tests oldCtx =
                 { oldCtx
                     | result = Just <| handleKeyUp 13
                 }
-
-            runTest test =
-                test ctx
            in
-            List.map runTest tests
+            runTestsWithCtx ctx tests
 
 
-whenTheTKeyIsPressed : WhenStepDefinition HandleKeyUpCtx
+whenTheTKeyIsPressed : WhenStepDefinition KeyPressCtx
 whenTheTKeyIsPressed tests oldCtx =
     describe "When the T key is pressed"
         <| let
@@ -187,20 +197,17 @@ whenTheTKeyIsPressed tests oldCtx =
                 { oldCtx
                     | result = Just <| handleKeyUp 84
                 }
-
-            runTest test =
-                test ctx
            in
-            List.map runTest tests
+            runTestsWithCtx ctx tests
 
 
-thenATodoShouldBeCreated : ThenStepDefinition HandleKeyUpCtx
+thenATodoShouldBeCreated : ThenStepDefinition KeyPressCtx
 thenATodoShouldBeCreated ctx =
     it "Then a Todo should be created"
         <| expect ctx.result toBe (Just CreateTodo)
 
 
-thenNothingShouldHappen : ThenStepDefinition HandleKeyUpCtx
+thenNothingShouldHappen : ThenStepDefinition KeyPressCtx
 thenNothingShouldHappen ctx =
     it "Then nothing should happen"
         <| expect ctx.result toBe (Just NoOp)
@@ -209,9 +216,40 @@ thenNothingShouldHappen ctx =
 handleKeyUpSuite : List Test
 handleKeyUpSuite =
     [ whenTheEnterKeyIsPressed [ thenATodoShouldBeCreated ]
-        { result = Nothing }
+        initialKeyPressCtx
     , whenTheTKeyIsPressed [ thenNothingShouldHappen ]
-        { result = Nothing }
+        initialKeyPressCtx
+    ]
+
+
+whenTheTextIsUpdated : WhenStepDefinition TodoCtx
+whenTheTextIsUpdated tests oldCtx =
+    describe "When the text is updated"
+        <| let
+            newText =
+                "Update text"
+
+            ctx =
+                { oldCtx
+                    | model = updateText newText oldCtx.model
+                    , newText = Just newText
+                }
+           in
+            runTestsWithCtx ctx tests
+
+
+thenTheNewTextIsStoredInTheModel : ThenStepDefinition TodoCtx
+thenTheNewTextIsStoredInTheModel ctx =
+    it "Then the new text is stored in the model"
+        <| expect ctx.newText toBe (Just ctx.model.currentText)
+
+
+updateTextSuite : List Test
+updateTextSuite =
+    [ givenACurrentText
+        [ whenTheTextIsUpdated [ thenTheNewTextIsStoredInTheModel ]
+        ]
+        initialTodoCtx
     ]
 
 
@@ -220,18 +258,5 @@ testSuite =
     describe "App.TodosTest"
         [ describe "createTodo" createTodoSuite
         , describe "handleKeyUp" handleKeyUpSuite
-          -- , describe "updateText"
-          --     [ it "should update the current text"
-          --         <| let
-          --             newText =
-          --                 "New text"
-          --
-          --             model =
-          --                 { initialModel | currentText = "old text" }
-          --
-          --             expectedResult =
-          --                 newText
-          --            in
-          --             expect expectedResult toBe (.currentText <| updateText newText model)
-          --     ]
+        , describe "updateText" updateTextSuite
         ]
