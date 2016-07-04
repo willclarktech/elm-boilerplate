@@ -2,7 +2,8 @@ module App.TodosTest exposing (testSuite)
 
 import App.Todos
     exposing
-        ( Msg(..)
+        ( Model
+        , Msg(..)
         , initialModel
         , handleKeyUp
         , updateText
@@ -19,27 +20,33 @@ import ElmTestBDDStyle
 
 
 type alias Ctx =
-    Maybe {}
+    { model : Model
+    , result : Maybe Model
+    , existingTodo : Maybe String
+    }
 
 
+type alias GivenStepDefinition =
+    List (Ctx -> Test) -> Ctx -> Test
+
+
+type alias WhenStepDefinition =
+    List (Ctx -> Test) -> Ctx -> Test
+
+
+type alias ThenStepDefinition =
+    Ctx -> Test
+
+
+givenACurrentText : GivenStepDefinition
 givenACurrentText tests oldCtx =
     describe "Given a current text"
         <| let
-            currentText =
-                "Buy milk"
-
             ctx =
-                case oldCtx of
-                    Just c ->
-                        { c
-                            | model =
-                                { initialModel | currentText = currentText }
-                        }
-
-                    Nothing ->
-                        { model =
-                            { initialModel | currentText = currentText }
-                        }
+                { oldCtx
+                    | model =
+                        { initialModel | currentText = "Buy milk" }
+                }
 
             runTest test =
                 test ctx
@@ -47,6 +54,7 @@ givenACurrentText tests oldCtx =
             List.map runTest tests
 
 
+givenAnExistingTodo : GivenStepDefinition
 givenAnExistingTodo tests oldCtx =
     describe "And an existing todo"
         <| let
@@ -62,6 +70,7 @@ givenAnExistingTodo tests oldCtx =
                         { oldModel
                             | todos = [ existingTodo ]
                         }
+                    , existingTodo = Just existingTodo
                 }
 
             runTest test =
@@ -70,39 +79,60 @@ givenAnExistingTodo tests oldCtx =
             List.map runTest tests
 
 
-whenATodoIsCreated tests ctx =
+whenATodoIsCreated : WhenStepDefinition
+whenATodoIsCreated tests oldCtx =
     describe "When a todo is created"
         <| let
-            result =
-                createTodo ctx.model
+            ctx =
+                { oldCtx
+                    | result = Just (createTodo oldCtx.model)
+                }
 
             runTest test =
-                test ctx result
+                test ctx
            in
             List.map runTest tests
 
 
-thenATodoShouldBeCreatedWithTheCurrentText ctx result =
+thenATodoShouldBeCreatedWithTheCurrentText : ThenStepDefinition
+thenATodoShouldBeCreatedWithTheCurrentText ctx =
     it "Then a todo should be created with the current text"
         <| let
-            expectedTodos =
-                [ ctx.model.currentText ]
+            newTodo =
+                ctx.model.currentText
            in
-            expect expectedTodos toBe result.todos
+            case ctx.result of
+                Just result ->
+                    expect (List.member newTodo result.todos) toBe True
+
+                Nothing ->
+                    expect True toBe False
 
 
-thenTheCurrentTextShouldBeReset ctx result =
+thenTheCurrentTextShouldBeReset : ThenStepDefinition
+thenTheCurrentTextShouldBeReset ctx =
     it "Then the current text should be reset"
         <| let
             expectedCurrentText =
                 ""
            in
-            expect expectedCurrentText toBe result.currentText
+            case ctx.result of
+                Just result ->
+                    expect expectedCurrentText toBe result.currentText
+
+                Nothing ->
+                    expect True toBe False
 
 
-thenTheExistingTodoShouldStillExist ctx result =
+thenTheExistingTodoShouldStillExist : ThenStepDefinition
+thenTheExistingTodoShouldStillExist ctx =
     it "And the existing todo should still exist"
-        <| expect (List.member ctx.existingTodo result.todos) toBe True
+        <| case ( ctx.result, ctx.existingTodo ) of
+            ( Just result, Just existingTodo ) ->
+                expect (List.member existingTodo result.todos) toBe True
+
+            _ ->
+                expect True toBe False
 
 
 createTodoSuite : List Test
@@ -119,7 +149,10 @@ createTodoSuite =
                 ]
             ]
         ]
-        Nothing
+        { model = initialModel
+        , result = Nothing
+        , existingTodo = Nothing
+        }
     ]
 
 
@@ -127,31 +160,31 @@ testSuite : Test
 testSuite =
     describe "App.TodosTest"
         [ describe "createTodo" createTodoSuite
-        , describe "handleKeyUp"
-            <| let
-                enterKey =
-                    13
-
-                tKey =
-                    84
-               in
-                [ it "should create a Todo on Enter"
-                    <| expect (CreateTodo) toBe (handleKeyUp enterKey)
-                , it "should ignore other keys"
-                    <| expect (NoOp) toBe (handleKeyUp tKey)
-                ]
-        , describe "updateText"
-            [ it "should update the current text"
-                <| let
-                    newText =
-                        "New text"
-
-                    model =
-                        { initialModel | currentText = "old text" }
-
-                    expectedResult =
-                        newText
-                   in
-                    expect expectedResult toBe (.currentText <| updateText newText model)
-            ]
+          -- , describe "handleKeyUp"
+          --     <| let
+          --         enterKey =
+          --             13
+          --
+          --         tKey =
+          --             84
+          --        in
+          --         [ it "should create a Todo on Enter"
+          --             <| expect (CreateTodo) toBe (handleKeyUp enterKey)
+          --         , it "should ignore other keys"
+          --             <| expect (NoOp) toBe (handleKeyUp tKey)
+          --         ]
+          -- , describe "updateText"
+          --     [ it "should update the current text"
+          --         <| let
+          --             newText =
+          --                 "New text"
+          --
+          --             model =
+          --                 { initialModel | currentText = "old text" }
+          --
+          --             expectedResult =
+          --                 newText
+          --            in
+          --             expect expectedResult toBe (.currentText <| updateText newText model)
+          --     ]
         ]

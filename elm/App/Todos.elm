@@ -9,6 +9,7 @@ module App.Todos
         , updateText
         , createTodo
         , Msg(..)
+        , Model
         )
 
 import Html exposing (..)
