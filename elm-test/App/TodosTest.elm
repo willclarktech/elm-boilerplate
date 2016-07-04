@@ -19,26 +19,34 @@ import ElmTestBDDStyle
         )
 
 
-type alias Ctx =
+type alias CreateTodoCtx =
     { model : Model
     , result : Maybe Model
     , existingTodo : Maybe String
     }
 
 
-type alias GivenStepDefinition =
-    List (Ctx -> Test) -> Ctx -> Test
+type alias HandleKeyUpCtx =
+    { result : Maybe Msg }
 
 
-type alias WhenStepDefinition =
-    List (Ctx -> Test) -> Ctx -> Test
+type alias PreStepDefinition ctx =
+    List (ctx -> Test) -> ctx -> Test
 
 
-type alias ThenStepDefinition =
-    Ctx -> Test
+type alias GivenStepDefinition ctx =
+    PreStepDefinition ctx
 
 
-givenACurrentText : GivenStepDefinition
+type alias WhenStepDefinition ctx =
+    PreStepDefinition ctx
+
+
+type alias ThenStepDefinition ctx =
+    ctx -> Test
+
+
+givenACurrentText : GivenStepDefinition CreateTodoCtx
 givenACurrentText tests oldCtx =
     describe "Given a current text"
         <| let
@@ -54,7 +62,7 @@ givenACurrentText tests oldCtx =
             List.map runTest tests
 
 
-givenAnExistingTodo : GivenStepDefinition
+givenAnExistingTodo : GivenStepDefinition CreateTodoCtx
 givenAnExistingTodo tests oldCtx =
     describe "And an existing todo"
         <| let
@@ -79,7 +87,7 @@ givenAnExistingTodo tests oldCtx =
             List.map runTest tests
 
 
-whenATodoIsCreated : WhenStepDefinition
+whenATodoIsCreated : WhenStepDefinition CreateTodoCtx
 whenATodoIsCreated tests oldCtx =
     describe "When a todo is created"
         <| let
@@ -94,7 +102,7 @@ whenATodoIsCreated tests oldCtx =
             List.map runTest tests
 
 
-thenATodoShouldBeCreatedWithTheCurrentText : ThenStepDefinition
+thenATodoShouldBeCreatedWithTheCurrentText : ThenStepDefinition CreateTodoCtx
 thenATodoShouldBeCreatedWithTheCurrentText ctx =
     it "Then a todo should be created with the current text"
         <| let
@@ -109,7 +117,7 @@ thenATodoShouldBeCreatedWithTheCurrentText ctx =
                     expect True toBe False
 
 
-thenTheCurrentTextShouldBeReset : ThenStepDefinition
+thenTheCurrentTextShouldBeReset : ThenStepDefinition CreateTodoCtx
 thenTheCurrentTextShouldBeReset ctx =
     it "Then the current text should be reset"
         <| let
@@ -124,7 +132,7 @@ thenTheCurrentTextShouldBeReset ctx =
                     expect True toBe False
 
 
-thenTheExistingTodoShouldStillExist : ThenStepDefinition
+thenTheExistingTodoShouldStillExist : ThenStepDefinition CreateTodoCtx
 thenTheExistingTodoShouldStillExist ctx =
     it "And the existing todo should still exist"
         <| case ( ctx.result, ctx.existingTodo ) of
@@ -156,23 +164,62 @@ createTodoSuite =
     ]
 
 
+whenTheEnterKeyIsPressed : WhenStepDefinition HandleKeyUpCtx
+whenTheEnterKeyIsPressed tests oldCtx =
+    describe "When the ENTER key is pressed"
+        <| let
+            ctx =
+                { oldCtx
+                    | result = Just <| handleKeyUp 13
+                }
+
+            runTest test =
+                test ctx
+           in
+            List.map runTest tests
+
+
+whenTheTKeyIsPressed : WhenStepDefinition HandleKeyUpCtx
+whenTheTKeyIsPressed tests oldCtx =
+    describe "When the T key is pressed"
+        <| let
+            ctx =
+                { oldCtx
+                    | result = Just <| handleKeyUp 84
+                }
+
+            runTest test =
+                test ctx
+           in
+            List.map runTest tests
+
+
+thenATodoShouldBeCreated : ThenStepDefinition HandleKeyUpCtx
+thenATodoShouldBeCreated ctx =
+    it "Then a Todo should be created"
+        <| expect ctx.result toBe (Just CreateTodo)
+
+
+thenNothingShouldHappen : ThenStepDefinition HandleKeyUpCtx
+thenNothingShouldHappen ctx =
+    it "Then nothing should happen"
+        <| expect ctx.result toBe (Just NoOp)
+
+
+handleKeyUpSuite : List Test
+handleKeyUpSuite =
+    [ whenTheEnterKeyIsPressed [ thenATodoShouldBeCreated ]
+        { result = Nothing }
+    , whenTheTKeyIsPressed [ thenNothingShouldHappen ]
+        { result = Nothing }
+    ]
+
+
 testSuite : Test
 testSuite =
     describe "App.TodosTest"
         [ describe "createTodo" createTodoSuite
-          -- , describe "handleKeyUp"
-          --     <| let
-          --         enterKey =
-          --             13
-          --
-          --         tKey =
-          --             84
-          --        in
-          --         [ it "should create a Todo on Enter"
-          --             <| expect (CreateTodo) toBe (handleKeyUp enterKey)
-          --         , it "should ignore other keys"
-          --             <| expect (NoOp) toBe (handleKeyUp tKey)
-          --         ]
+        , describe "handleKeyUp" handleKeyUpSuite
           -- , describe "updateText"
           --     [ it "should update the current text"
           --         <| let
