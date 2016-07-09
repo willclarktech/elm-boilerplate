@@ -1,57 +1,33 @@
 module App.Steps.Then exposing (then')
 
-import ElmTestBDDStyle
-    exposing
-        ( Assertion
-        , Test
-        , it
-        , expect
-        , toBe
-        )
+import ElmTestBDDStyle exposing (expect, toBe)
 import App.Todos exposing (Msg(..))
 import App.Steps.Context exposing (Context)
 import App.Steps.Helpers
     exposing
         ( ThenStep
         , ThenStepDefinition
-        , stepNotYetDefined
+        , ThenStepMap
+        , ThenFunction
+        , constructThenFunction
         , confirmIsJust
         )
 
 
-then' : String -> ThenStep Context
-then' description =
-    let
-        prefixedDescription =
-            "Then " ++ description
+then' : ThenFunction Context
+then' =
+    constructThenFunction thenStepMap
 
-        test =
-            it prefixedDescription
 
-        stepDefinition =
-            case description of
-                "the existing todo should still exist" ->
-                    thenTheExistingTodoShouldStillExist
-
-                "a todo should be created" ->
-                    thenATodoShouldBeCreated
-
-                "a todo should be created with the current text" ->
-                    thenATodoShouldBeCreatedWithTheCurrentText
-
-                "the current text should be reset" ->
-                    thenTheCurrentTextShouldBeReset
-
-                "the new text should be stored in the model" ->
-                    thenTheNewTextShouldBeStoredInTheModel
-
-                "nothing should happen" ->
-                    thenNothingShouldHappen
-
-                _ ->
-                    stepNotYetDefined (prefixedDescription)
-    in
-        stepDefinition test
+thenStepMap : ThenStepMap Context
+thenStepMap =
+    [ ( "the existing todo should still exist", thenTheExistingTodoShouldStillExist )
+    , ( "a todo should be created", thenATodoShouldBeCreated )
+    , ( "a todo should be created with the current text", thenATodoShouldBeCreatedWithTheCurrentText )
+    , ( "the current text should be reset", thenTheCurrentTextShouldBeReset )
+    , ( "the new text should be stored in the model", thenTheNewTextShouldBeStoredInTheModel )
+    , ( "nothing should happen", thenNothingShouldHappen )
+    ]
 
 
 thenATodoShouldBeCreatedWithTheCurrentText : ThenStepDefinition Context

@@ -1,17 +1,20 @@
 module App.Steps.Helpers
     exposing
         ( GivenStep
-        , WhenStep
-        , ThenStep
         , GivenStepDefinition
+        , WhenStep
         , WhenStepDefinition
+        , ThenStep
         , ThenStepDefinition
+        , ThenStepMap
+        , ThenFunction
+        , stepNotYetDefined
         , runTestsWithCtx
         , confirmIsJust
-        , stepNotYetDefined
+        , constructThenFunction
         )
 
-import ElmTestBDDStyle exposing (Assertion, Test)
+import ElmTestBDDStyle exposing (Assertion, Test, it)
 
 
 type alias PreStep ctx =
@@ -50,6 +53,14 @@ type alias ThenStepDefinition ctx =
     PartialTest -> ThenStep ctx
 
 
+type alias ThenStepMap ctx =
+    List ( String, ThenStepDefinition ctx )
+
+
+type alias ThenFunction ctx =
+    String -> ThenStep ctx
+
+
 runTestWithCtx : a -> (a -> b) -> b
 runTestWithCtx ctx test =
     test ctx
@@ -73,3 +84,33 @@ confirmIsJust description maybeRecord =
 
         Nothing ->
             Debug.crash ("You must set the " ++ description ++ " in a previous step.")
+
+
+getStepDefinition : ThenStepMap ctx -> String -> String -> ThenStepDefinition ctx
+getStepDefinition thenStepMap description prefixedDescription =
+    case thenStepMap of
+        [] ->
+            stepNotYetDefined prefixedDescription
+
+        ( stepDescription, stepDefinition ) :: stepPairs ->
+            case stepDescription == description of
+                True ->
+                    stepDefinition
+
+                False ->
+                    getStepDefinition stepPairs description prefixedDescription
+
+
+constructThenFunction : ThenStepMap ctx -> ThenFunction ctx
+constructThenFunction thenStepMap description =
+    let
+        prefixedDescription =
+            "Then " ++ description
+
+        test =
+            it prefixedDescription
+
+        stepDefinition =
+            getStepDefinition thenStepMap description prefixedDescription
+    in
+        stepDefinition test
