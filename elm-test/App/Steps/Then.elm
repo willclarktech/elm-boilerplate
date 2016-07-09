@@ -8,7 +8,7 @@ import ElmTestBDDStyle
         , toBe
         )
 import App.Todos exposing (Msg(..))
-import App.Steps.Helpers exposing (ThenStepDefinition)
+import App.Steps.Helpers exposing (ThenStepDefinition, handleUnsetContext)
 import App.Steps.Context exposing (Context)
 
 
@@ -20,7 +20,7 @@ thenATodoShouldBeCreatedWithTheCurrentText ctx =
                 expect (List.member currentText model.todos) toBe True
 
             _ ->
-                expect True toBe False
+                handleUnsetContext "model and currentText"
 
 
 thenTheCurrentTextShouldBeReset : ThenStepDefinition Context
@@ -34,8 +34,8 @@ thenTheCurrentTextShouldBeReset ctx =
                 Just model ->
                     expect expectedCurrentText toBe model.currentText
 
-                Nothing ->
-                    expect True toBe False
+                _ ->
+                    handleUnsetContext "model"
 
 
 thenTheExistingTodoShouldStillExist : ThenStepDefinition Context
@@ -46,19 +46,29 @@ thenTheExistingTodoShouldStillExist ctx =
                 expect (List.member existingTodo model.todos) toBe True
 
             _ ->
-                expect True toBe False
+                handleUnsetContext "model and existingTodo"
 
 
 thenATodoShouldBeCreated : ThenStepDefinition Context
 thenATodoShouldBeCreated ctx =
     it "Then a Todo should be created"
-        <| expect ctx.messageAfter toBe (Just CreateTodo)
+        <| case ctx.messageAfter of
+            Just msg ->
+                expect msg toBe CreateTodo
+
+            _ ->
+                handleUnsetContext "messageAfter"
 
 
 thenNothingShouldHappen : ThenStepDefinition Context
 thenNothingShouldHappen ctx =
     it "Then nothing should happen"
-        <| expect ctx.messageAfter toBe (Just NoOp)
+        <| case ctx.messageAfter of
+            Just msg ->
+                expect msg toBe NoOp
+
+            _ ->
+                handleUnsetContext "messageAfter"
 
 
 thenTheNewTextIsStoredInTheModel : ThenStepDefinition Context
@@ -69,4 +79,4 @@ thenTheNewTextIsStoredInTheModel ctx =
                 expect newText toBe model.currentText
 
             _ ->
-                expect True toBe False
+                handleUnsetContext "model and newText"

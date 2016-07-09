@@ -4,6 +4,7 @@ module App.Steps.Helpers
         , WhenStepDefinition
         , ThenStepDefinition
         , runTestsWithCtx
+        , handleUnsetContext
         )
 
 import ElmTestBDDStyle exposing (Test)
@@ -33,3 +34,8 @@ runTestWithCtx ctx test =
 runTestsWithCtx : a -> List (a -> b) -> List b
 runTestsWithCtx ctx tests =
     List.map (runTestWithCtx ctx) tests
+
+
+handleUnsetContext : String -> a
+handleUnsetContext string =
+    Debug.crash ("You must set the " ++ string ++ " in a previous step.")
