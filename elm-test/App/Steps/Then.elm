@@ -7,68 +7,66 @@ import ElmTestBDDStyle
         , expect
         , toBe
         )
-import App.Todos
-    exposing
-        ( Msg(..)
-        )
+import App.Todos exposing (Msg(..))
 import App.Steps.Helpers exposing (ThenStepDefinition)
-import App.Steps.Context exposing (TodoCtx, KeyPressCtx)
+import App.Steps.Context exposing (Context)
 
 
-thenATodoShouldBeCreatedWithTheCurrentText : ThenStepDefinition TodoCtx
+thenATodoShouldBeCreatedWithTheCurrentText : ThenStepDefinition Context
 thenATodoShouldBeCreatedWithTheCurrentText ctx =
     it "Then a todo should be created with the current text"
-        <| let
-            newTodo =
-                ctx.model.currentText
-           in
-            case ctx.result of
-                Just result ->
-                    expect (List.member newTodo result.todos) toBe True
+        <| case ( ctx.model, ctx.currentText ) of
+            ( Just model, Just currentText ) ->
+                expect (List.member currentText model.todos) toBe True
 
-                Nothing ->
-                    expect True toBe False
+            _ ->
+                expect True toBe False
 
 
-thenTheCurrentTextShouldBeReset : ThenStepDefinition TodoCtx
+thenTheCurrentTextShouldBeReset : ThenStepDefinition Context
 thenTheCurrentTextShouldBeReset ctx =
     it "Then the current text should be reset"
         <| let
             expectedCurrentText =
                 ""
            in
-            case ctx.result of
-                Just result ->
-                    expect expectedCurrentText toBe result.currentText
+            case ctx.model of
+                Just model ->
+                    expect expectedCurrentText toBe model.currentText
 
                 Nothing ->
                     expect True toBe False
 
 
-thenTheExistingTodoShouldStillExist : ThenStepDefinition TodoCtx
+thenTheExistingTodoShouldStillExist : ThenStepDefinition Context
 thenTheExistingTodoShouldStillExist ctx =
-    it "And the existing todo should still exist"
-        <| case ( ctx.result, ctx.existingTodo ) of
-            ( Just result, Just existingTodo ) ->
-                expect (List.member existingTodo result.todos) toBe True
+    it "Then the existing todo should still exist"
+        <| case ( ctx.model, ctx.existingTodo ) of
+            ( Just model, Just existingTodo ) ->
+                expect (List.member existingTodo model.todos) toBe True
 
             _ ->
                 expect True toBe False
 
 
-thenATodoShouldBeCreated : ThenStepDefinition KeyPressCtx
+thenATodoShouldBeCreated : ThenStepDefinition Context
 thenATodoShouldBeCreated ctx =
     it "Then a Todo should be created"
-        <| expect ctx.result toBe (Just CreateTodo)
+        <| expect ctx.messageAfter toBe (Just CreateTodo)
 
 
-thenNothingShouldHappen : ThenStepDefinition KeyPressCtx
+thenNothingShouldHappen : ThenStepDefinition Context
 thenNothingShouldHappen ctx =
     it "Then nothing should happen"
-        <| expect ctx.result toBe (Just NoOp)
+        <| expect ctx.messageAfter toBe (Just NoOp)
 
 
-thenTheNewTextIsStoredInTheModel : ThenStepDefinition TodoCtx
+thenTheNewTextIsStoredInTheModel : ThenStepDefinition Context
 thenTheNewTextIsStoredInTheModel ctx =
     it "Then the new text is stored in the model"
-        <| expect ctx.newText toBe (Just ctx.model.currentText)
+        <| case ( ctx.model, ctx.newText ) of
+            ( Just model, Just newText ) ->
+                expect newText toBe model.currentText
+
+            _ ->
+                expect True toBe False

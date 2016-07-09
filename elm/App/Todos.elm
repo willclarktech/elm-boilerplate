@@ -10,6 +10,7 @@ module App.Todos
         , createTodo
         , Msg(..)
         , Model
+        , Todo
         )
 
 import Html exposing (..)
@@ -25,9 +26,13 @@ type Msg
 
 
 type alias Model =
-    { todos : List String
+    { todos : List Todo
     , currentText : String
     }
+
+
+type alias Todo =
+    String
 
 
 initialModel : Model

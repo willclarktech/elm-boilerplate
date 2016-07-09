@@ -5,11 +5,7 @@ import ElmTestBDDStyle
         ( Test
         , describe
         )
-import App.Steps.Context
-    exposing
-        ( initialTodoCtx
-        , initialKeyPressCtx
-        )
+import App.Steps.Context exposing (initialContext)
 import App.Steps.Given
     exposing
         ( givenACurrentText
@@ -47,16 +43,16 @@ createTodoSuite =
                 ]
             ]
         ]
-        initialTodoCtx
+        initialContext
     ]
 
 
 handleKeyUpSuite : List Test
 handleKeyUpSuite =
     [ whenTheEnterKeyIsPressed [ thenATodoShouldBeCreated ]
-        initialKeyPressCtx
+        initialContext
     , whenTheTKeyIsPressed [ thenNothingShouldHappen ]
-        initialKeyPressCtx
+        initialContext
     ]
 
 
@@ -65,7 +61,7 @@ updateTextSuite =
     [ givenACurrentText
         [ whenTheTextIsUpdated [ thenTheNewTextIsStoredInTheModel ]
         ]
-        initialTodoCtx
+        initialContext
     ]
 
 

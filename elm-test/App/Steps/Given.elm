@@ -5,46 +5,62 @@ import ElmTestBDDStyle
         ( Test
         , describe
         )
+import App.Todos exposing (initialModel)
 import App.Steps.Helpers
     exposing
         ( GivenStepDefinition
         , runTestsWithCtx
         )
-import App.Steps.Context exposing (TodoCtx)
+import App.Steps.Context exposing (Context)
 
 
-givenACurrentText : GivenStepDefinition TodoCtx
+givenACurrentText : GivenStepDefinition Context
 givenACurrentText tests oldCtx =
     describe "Given a current text"
         <| let
+            text =
+                "Buy milk"
+
             oldModel =
-                oldCtx.model
+                case oldCtx.model of
+                    Just model ->
+                        model
+
+                    Nothing ->
+                        initialModel
 
             ctx =
                 { oldCtx
-                    | model =
-                        { oldModel | currentText = "Buy milk" }
+                    | currentText = Just text
+                    , model =
+                        Just { oldModel | currentText = text }
                 }
            in
             runTestsWithCtx ctx tests
 
 
-givenAnExistingTodo : GivenStepDefinition TodoCtx
+givenAnExistingTodo : GivenStepDefinition Context
 givenAnExistingTodo tests oldCtx =
-    describe "And an existing todo"
+    describe "Given an existing todo"
         <| let
             existingTodo =
                 "Existing todo"
 
             oldModel =
-                oldCtx.model
+                case oldCtx.model of
+                    Just model ->
+                        model
+
+                    Nothing ->
+                        initialModel
 
             ctx =
                 { oldCtx
                     | model =
-                        { oldModel
-                            | todos = [ existingTodo ]
-                        }
+                        Just
+                            { oldModel
+                                | todos = [ existingTodo ]
+                            }
                     , existingTodo = Just existingTodo
                 }
            in

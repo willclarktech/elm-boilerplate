@@ -16,55 +16,65 @@ import App.Steps.Helpers
         ( WhenStepDefinition
         , runTestsWithCtx
         )
-import App.Steps.Context exposing (TodoCtx, KeyPressCtx)
+import App.Steps.Context
+    exposing
+        ( Context
+        , getModel
+        )
 
 
-whenATodoIsCreated : WhenStepDefinition TodoCtx
+whenATodoIsCreated : WhenStepDefinition Context
 whenATodoIsCreated tests oldCtx =
     describe "When a todo is created"
         <| let
+            oldModel =
+                getModel oldCtx
+
             ctx =
                 { oldCtx
-                    | result = Just (createTodo oldCtx.model)
+                    | model = Just (createTodo oldModel)
                 }
            in
             runTestsWithCtx ctx tests
 
 
-whenTheEnterKeyIsPressed : WhenStepDefinition KeyPressCtx
+whenTheEnterKeyIsPressed : WhenStepDefinition Context
 whenTheEnterKeyIsPressed tests oldCtx =
     describe "When the ENTER key is pressed"
         <| let
             ctx =
                 { oldCtx
-                    | result = Just <| handleKeyUp 13
+                    | messageAfter = Just <| handleKeyUp 13
                 }
            in
             runTestsWithCtx ctx tests
 
 
-whenTheTKeyIsPressed : WhenStepDefinition KeyPressCtx
+whenTheTKeyIsPressed : WhenStepDefinition Context
 whenTheTKeyIsPressed tests oldCtx =
     describe "When the T key is pressed"
         <| let
             ctx =
                 { oldCtx
-                    | result = Just <| handleKeyUp 84
+                    | messageAfter = Just <| handleKeyUp 84
                 }
            in
             runTestsWithCtx ctx tests
 
 
-whenTheTextIsUpdated : WhenStepDefinition TodoCtx
+whenTheTextIsUpdated : WhenStepDefinition Context
 whenTheTextIsUpdated tests oldCtx =
     describe "When the text is updated"
         <| let
             newText =
                 "Update text"
 
+            oldModel =
+                getModel oldCtx
+
             ctx =
                 { oldCtx
-                    | model = updateText newText oldCtx.model
+                    | model = Just (updateText newText oldModel)
                     , newText = Just newText
                 }
            in

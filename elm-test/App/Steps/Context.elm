@@ -3,32 +3,31 @@ module App.Steps.Context exposing (..)
 import App.Todos
     exposing
         ( Model
+        , Todo
         , Msg
         , initialModel
         )
 
 
-type alias TodoCtx =
-    { model : Model
-    , result : Maybe Model
+type alias Context =
+    { model : Maybe Model
+    , currentText : Maybe String
     , newText : Maybe String
-    , existingTodo : Maybe String
+    , existingTodo : Maybe Todo
+    , messageAfter : Maybe Msg
     }
 
 
-type alias KeyPressCtx =
-    { result : Maybe Msg }
+initialContext : Context
+initialContext =
+    Context Nothing Nothing Nothing Nothing Nothing
 
 
-initialTodoCtx : TodoCtx
-initialTodoCtx =
-    { model = initialModel
-    , result = Nothing
-    , newText = Nothing
-    , existingTodo = Nothing
-    }
+getModel : Context -> Model
+getModel ctx =
+    case ctx.model of
+        Just model ->
+            model
 
-
-initialKeyPressCtx : KeyPressCtx
-initialKeyPressCtx =
-    { result = Nothing }
+        Nothing ->
+            initialModel
