@@ -3,11 +3,14 @@ module App.Steps.Helpers
         ( GivenStepDefinition
         , WhenStepDefinition
         , ThenStepDefinition
+        , PartialTest
+        , PartialSuite
         , runTestsWithCtx
         , confirmIsJust
+        , stepNotYetDefined
         )
 
-import ElmTestBDDStyle exposing (Test)
+import ElmTestBDDStyle exposing (Assertion, Test)
 
 
 type alias PreStepDefinition ctx =
@@ -26,6 +29,14 @@ type alias ThenStepDefinition ctx =
     ctx -> Test
 
 
+type alias PartialTest =
+    Assertion -> Test
+
+
+type alias PartialSuite =
+    List Test -> Test
+
+
 runTestWithCtx : a -> (a -> b) -> b
 runTestWithCtx ctx test =
     test ctx
@@ -34,6 +45,11 @@ runTestWithCtx ctx test =
 runTestsWithCtx : a -> List (a -> b) -> List b
 runTestsWithCtx ctx tests =
     List.map (runTestWithCtx ctx) tests
+
+
+stepNotYetDefined : String -> a
+stepNotYetDefined step =
+    Debug.crash ("This step does not yet have a definition: " ++ step)
 
 
 handleUnsetContext : String -> a

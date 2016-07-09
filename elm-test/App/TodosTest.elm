@@ -1,45 +1,23 @@
 module App.TodosTest exposing (testSuite)
 
-import ElmTestBDDStyle
-    exposing
-        ( Test
-        , describe
-        )
+import ElmTestBDDStyle exposing (Test, describe)
 import App.Steps.Context exposing (initialContext)
-import App.Steps.Given
-    exposing
-        ( givenACurrentText
-        , givenAnExistingTodo
-        )
-import App.Steps.When
-    exposing
-        ( whenATodoIsCreated
-        , whenTheEnterKeyIsPressed
-        , whenTheTKeyIsPressed
-        , whenTheTextIsUpdated
-        )
-import App.Steps.Then
-    exposing
-        ( thenATodoShouldBeCreated
-        , thenATodoShouldBeCreatedWithTheCurrentText
-        , thenTheCurrentTextShouldBeReset
-        , thenTheNewTextIsStoredInTheModel
-        , thenTheExistingTodoShouldStillExist
-        , thenNothingShouldHappen
-        )
+import App.Steps.Given exposing (given)
+import App.Steps.When exposing (when)
+import App.Steps.Then exposing (then')
 
 
 createTodoSuite : List Test
 createTodoSuite =
-    [ givenACurrentText
-        [ whenATodoIsCreated
-            [ thenATodoShouldBeCreatedWithTheCurrentText
-            , thenTheCurrentTextShouldBeReset
+    [ given "a current text"
+        [ when "a todo is created"
+            [ then' "a todo should be created with the current text"
+            , then' "the current text should be reset"
             ]
-        , givenAnExistingTodo
-            [ whenATodoIsCreated
-                [ thenATodoShouldBeCreatedWithTheCurrentText
-                , thenTheExistingTodoShouldStillExist
+        , given "an existing todo"
+            [ when "a todo is created"
+                [ then' "a todo should be created with the current text"
+                , then' "the existing todo should still exist"
                 ]
             ]
         ]
@@ -49,17 +27,20 @@ createTodoSuite =
 
 handleKeyUpSuite : List Test
 handleKeyUpSuite =
-    [ whenTheEnterKeyIsPressed [ thenATodoShouldBeCreated ]
+    [ when "the ENTER key is pressed"
+        [ then' "a todo should be created" ]
         initialContext
-    , whenTheTKeyIsPressed [ thenNothingShouldHappen ]
+    , when "the T key is pressed"
+        [ then' "nothing should happen" ]
         initialContext
     ]
 
 
 updateTextSuite : List Test
 updateTextSuite =
-    [ givenACurrentText
-        [ whenTheTextIsUpdated [ thenTheNewTextIsStoredInTheModel ]
+    [ given "a current text"
+        [ when "the text is updated"
+            [ then' "the new text should be stored in the model" ]
         ]
         initialContext
     ]

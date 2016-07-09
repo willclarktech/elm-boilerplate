@@ -1,8 +1,9 @@
-module App.Steps.When exposing (..)
+module App.Steps.When exposing (when)
 
 import ElmTestBDDStyle
     exposing
-        ( Test
+        ( Assertion
+        , Test
         , describe
         )
 import App.Todos
@@ -14,6 +15,8 @@ import App.Todos
 import App.Steps.Helpers
     exposing
         ( WhenStepDefinition
+        , PartialSuite
+        , stepNotYetDefined
         , runTestsWithCtx
         )
 import App.Steps.Context
@@ -23,9 +26,38 @@ import App.Steps.Context
         )
 
 
-whenATodoIsCreated : WhenStepDefinition Context
-whenATodoIsCreated tests oldCtx =
-    describe "When a todo is created"
+when : String -> WhenStepDefinition Context
+when description =
+    let
+        prefixedDescription =
+            "When " ++ description
+
+        suite =
+            describe prefixedDescription
+
+        stepDefinition =
+            case description of
+                "a todo is created" ->
+                    whenATodoIsCreated
+
+                "the ENTER key is pressed" ->
+                    whenTheEnterKeyIsPressed
+
+                "the T key is pressed" ->
+                    whenTheTKeyIsPressed
+
+                "the text is updated" ->
+                    whenTheTextIsUpdated
+
+                _ ->
+                    stepNotYetDefined (prefixedDescription)
+    in
+        stepDefinition suite
+
+
+whenATodoIsCreated : PartialSuite -> WhenStepDefinition Context
+whenATodoIsCreated suite tests oldCtx =
+    suite
         <| let
             oldModel =
                 getModel oldCtx
@@ -38,9 +70,9 @@ whenATodoIsCreated tests oldCtx =
             runTestsWithCtx ctx tests
 
 
-whenTheEnterKeyIsPressed : WhenStepDefinition Context
-whenTheEnterKeyIsPressed tests oldCtx =
-    describe "When the ENTER key is pressed"
+whenTheEnterKeyIsPressed : PartialSuite -> WhenStepDefinition Context
+whenTheEnterKeyIsPressed suite tests oldCtx =
+    suite
         <| let
             ctx =
                 { oldCtx
@@ -50,9 +82,9 @@ whenTheEnterKeyIsPressed tests oldCtx =
             runTestsWithCtx ctx tests
 
 
-whenTheTKeyIsPressed : WhenStepDefinition Context
-whenTheTKeyIsPressed tests oldCtx =
-    describe "When the T key is pressed"
+whenTheTKeyIsPressed : PartialSuite -> WhenStepDefinition Context
+whenTheTKeyIsPressed suite tests oldCtx =
+    suite
         <| let
             ctx =
                 { oldCtx
@@ -62,9 +94,9 @@ whenTheTKeyIsPressed tests oldCtx =
             runTestsWithCtx ctx tests
 
 
-whenTheTextIsUpdated : WhenStepDefinition Context
-whenTheTextIsUpdated tests oldCtx =
-    describe "When the text is updated"
+whenTheTextIsUpdated : PartialSuite -> WhenStepDefinition Context
+whenTheTextIsUpdated suite tests oldCtx =
+    suite
         <| let
             newText =
                 "Update text"

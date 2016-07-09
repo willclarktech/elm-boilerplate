@@ -1,55 +1,98 @@
-module App.Steps.Then exposing (..)
+module App.Steps.Then exposing (then')
 
 import ElmTestBDDStyle
     exposing
-        ( it
+        ( Assertion
+        , Test
+        , it
         , expect
         , toBe
         )
 import App.Todos exposing (Msg(..))
-import App.Steps.Helpers exposing (ThenStepDefinition, confirmIsJust)
 import App.Steps.Context exposing (Context)
+import App.Steps.Helpers
+    exposing
+        ( ThenStepDefinition
+        , PartialTest
+        , stepNotYetDefined
+        , confirmIsJust
+        )
 
 
-thenATodoShouldBeCreatedWithTheCurrentText : ThenStepDefinition Context
-thenATodoShouldBeCreatedWithTheCurrentText ctx =
-    it "Then a todo should be created with the current text"
+then' : String -> ThenStepDefinition Context
+then' description =
+    let
+        prefixedDescription =
+            "Then " ++ description
+
+        test =
+            it prefixedDescription
+
+        stepDefinition =
+            case description of
+                "the existing todo should still exist" ->
+                    thenTheExistingTodoShouldStillExist
+
+                "a todo should be created" ->
+                    thenATodoShouldBeCreated
+
+                "a todo should be created with the current text" ->
+                    thenATodoShouldBeCreatedWithTheCurrentText
+
+                "the current text should be reset" ->
+                    thenTheCurrentTextShouldBeReset
+
+                "the new text should be stored in the model" ->
+                    thenTheNewTextShouldBeStoredInTheModel
+
+                "nothing should happen" ->
+                    thenNothingShouldHappen
+
+                _ ->
+                    stepNotYetDefined (prefixedDescription)
+    in
+        stepDefinition test
+
+
+thenATodoShouldBeCreatedWithTheCurrentText : PartialTest -> ThenStepDefinition Context
+thenATodoShouldBeCreatedWithTheCurrentText test ctx =
+    test
         <| expect True toBe
         <| List.member (confirmIsJust "currentText" ctx.currentText)
         <| .todos (confirmIsJust "model" ctx.model)
 
 
-thenTheCurrentTextShouldBeReset : ThenStepDefinition Context
-thenTheCurrentTextShouldBeReset ctx =
-    it "Then the current text should be reset"
+thenTheCurrentTextShouldBeReset : PartialTest -> ThenStepDefinition Context
+thenTheCurrentTextShouldBeReset test ctx =
+    test
         <| expect "" toBe
         <| .currentText (confirmIsJust "model" ctx.model)
 
 
-thenTheExistingTodoShouldStillExist : ThenStepDefinition Context
-thenTheExistingTodoShouldStillExist ctx =
-    it "Then the existing todo should still exist"
+thenTheExistingTodoShouldStillExist : PartialTest -> ThenStepDefinition Context
+thenTheExistingTodoShouldStillExist test ctx =
+    test
         <| expect True toBe
         <| List.member (confirmIsJust "existingTodo" ctx.existingTodo)
         <| .todos (confirmIsJust "model" ctx.model)
 
 
-thenATodoShouldBeCreated : ThenStepDefinition Context
-thenATodoShouldBeCreated ctx =
-    it "Then a Todo should be created"
+thenATodoShouldBeCreated : PartialTest -> ThenStepDefinition Context
+thenATodoShouldBeCreated test ctx =
+    test
         <| expect CreateTodo toBe
         <| confirmIsJust "messageAfter" ctx.messageAfter
 
 
-thenNothingShouldHappen : ThenStepDefinition Context
-thenNothingShouldHappen ctx =
-    it "Then nothing should happen"
+thenNothingShouldHappen : PartialTest -> ThenStepDefinition Context
+thenNothingShouldHappen test ctx =
+    test
         <| expect NoOp toBe
         <| confirmIsJust "messageAfter" ctx.messageAfter
 
 
-thenTheNewTextIsStoredInTheModel : ThenStepDefinition Context
-thenTheNewTextIsStoredInTheModel ctx =
-    it "Then the new text is stored in the model"
+thenTheNewTextShouldBeStoredInTheModel : PartialTest -> ThenStepDefinition Context
+thenTheNewTextShouldBeStoredInTheModel test ctx =
+    test
         <| expect (confirmIsJust "newText" ctx.newText) toBe
         <| .currentText (confirmIsJust "model" ctx.model)

@@ -1,4 +1,4 @@
-module App.Steps.Given exposing (..)
+module App.Steps.Given exposing (given)
 
 import ElmTestBDDStyle
     exposing
@@ -9,14 +9,39 @@ import App.Todos exposing (initialModel)
 import App.Steps.Helpers
     exposing
         ( GivenStepDefinition
+        , PartialSuite
+        , stepNotYetDefined
         , runTestsWithCtx
         )
 import App.Steps.Context exposing (Context)
 
 
-givenACurrentText : GivenStepDefinition Context
-givenACurrentText tests oldCtx =
-    describe "Given a current text"
+given : String -> GivenStepDefinition Context
+given description =
+    let
+        prefixedDescription =
+            "Given " ++ description
+
+        suite =
+            describe prefixedDescription
+
+        stepDefinition =
+            case description of
+                "a current text" ->
+                    givenACurrentText
+
+                "an existing todo" ->
+                    givenAnExistingTodo
+
+                _ ->
+                    stepNotYetDefined (prefixedDescription)
+    in
+        stepDefinition suite
+
+
+givenACurrentText : PartialSuite -> GivenStepDefinition Context
+givenACurrentText suite tests oldCtx =
+    suite
         <| let
             text =
                 "Buy milk"
@@ -39,9 +64,9 @@ givenACurrentText tests oldCtx =
             runTestsWithCtx ctx tests
 
 
-givenAnExistingTodo : GivenStepDefinition Context
-givenAnExistingTodo tests oldCtx =
-    describe "Given an existing todo"
+givenAnExistingTodo : PartialSuite -> GivenStepDefinition Context
+givenAnExistingTodo suite tests oldCtx =
+    suite
         <| let
             existingTodo =
                 "Existing todo"
