@@ -4,7 +4,7 @@ module App.Steps.Helpers
         , WhenStepDefinition
         , ThenStepDefinition
         , runTestsWithCtx
-        , handleUnsetContext
+        , confirmIsJust
         )
 
 import ElmTestBDDStyle exposing (Test)
@@ -39,3 +39,13 @@ runTestsWithCtx ctx tests =
 handleUnsetContext : String -> a
 handleUnsetContext string =
     Debug.crash ("You must set the " ++ string ++ " in a previous step.")
+
+
+confirmIsJust : String -> Maybe a -> a
+confirmIsJust description maybeRecord =
+    case maybeRecord of
+        Just record ->
+            record
+
+        Nothing ->
+            handleUnsetContext description
