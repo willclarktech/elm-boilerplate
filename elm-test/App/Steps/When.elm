@@ -14,8 +14,8 @@ import App.Todos
         )
 import App.Steps.Helpers
     exposing
-        ( WhenStepDefinition
-        , PartialSuite
+        ( WhenStep
+        , WhenStepDefinition
         , stepNotYetDefined
         , runTestsWithCtx
         )
@@ -26,7 +26,7 @@ import App.Steps.Context
         )
 
 
-when : String -> WhenStepDefinition Context
+when : String -> WhenStep Context
 when description =
     let
         prefixedDescription =
@@ -55,7 +55,7 @@ when description =
         stepDefinition suite
 
 
-whenATodoIsCreated : PartialSuite -> WhenStepDefinition Context
+whenATodoIsCreated : WhenStepDefinition Context
 whenATodoIsCreated suite tests oldCtx =
     suite
         <| let
@@ -70,7 +70,7 @@ whenATodoIsCreated suite tests oldCtx =
             runTestsWithCtx ctx tests
 
 
-whenTheEnterKeyIsPressed : PartialSuite -> WhenStepDefinition Context
+whenTheEnterKeyIsPressed : WhenStepDefinition Context
 whenTheEnterKeyIsPressed suite tests oldCtx =
     suite
         <| let
@@ -82,7 +82,7 @@ whenTheEnterKeyIsPressed suite tests oldCtx =
             runTestsWithCtx ctx tests
 
 
-whenTheTKeyIsPressed : PartialSuite -> WhenStepDefinition Context
+whenTheTKeyIsPressed : WhenStepDefinition Context
 whenTheTKeyIsPressed suite tests oldCtx =
     suite
         <| let
@@ -94,7 +94,7 @@ whenTheTKeyIsPressed suite tests oldCtx =
             runTestsWithCtx ctx tests
 
 
-whenTheTextIsUpdated : PartialSuite -> WhenStepDefinition Context
+whenTheTextIsUpdated : WhenStepDefinition Context
 whenTheTextIsUpdated suite tests oldCtx =
     suite
         <| let

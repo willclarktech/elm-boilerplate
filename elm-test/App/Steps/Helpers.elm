@@ -1,10 +1,11 @@
 module App.Steps.Helpers
     exposing
-        ( GivenStepDefinition
+        ( GivenStep
+        , WhenStep
+        , ThenStep
+        , GivenStepDefinition
         , WhenStepDefinition
         , ThenStepDefinition
-        , PartialTest
-        , PartialSuite
         , runTestsWithCtx
         , confirmIsJust
         , stepNotYetDefined
@@ -13,19 +14,19 @@ module App.Steps.Helpers
 import ElmTestBDDStyle exposing (Assertion, Test)
 
 
-type alias PreStepDefinition ctx =
+type alias PreStep ctx =
     List (ctx -> Test) -> ctx -> Test
 
 
-type alias GivenStepDefinition ctx =
-    PreStepDefinition ctx
+type alias GivenStep ctx =
+    PreStep ctx
 
 
-type alias WhenStepDefinition ctx =
-    PreStepDefinition ctx
+type alias WhenStep ctx =
+    PreStep ctx
 
 
-type alias ThenStepDefinition ctx =
+type alias ThenStep ctx =
     ctx -> Test
 
 
@@ -35,6 +36,18 @@ type alias PartialTest =
 
 type alias PartialSuite =
     List Test -> Test
+
+
+type alias GivenStepDefinition ctx =
+    PartialSuite -> GivenStep ctx
+
+
+type alias WhenStepDefinition ctx =
+    PartialSuite -> WhenStep ctx
+
+
+type alias ThenStepDefinition ctx =
+    PartialTest -> ThenStep ctx
 
 
 runTestWithCtx : a -> (a -> b) -> b
@@ -52,11 +65,6 @@ stepNotYetDefined step =
     Debug.crash ("This step does not yet have a definition: " ++ step)
 
 
-handleUnsetContext : String -> a
-handleUnsetContext string =
-    Debug.crash ("You must set the " ++ string ++ " in a previous step.")
-
-
 confirmIsJust : String -> Maybe a -> a
 confirmIsJust description maybeRecord =
     case maybeRecord of
@@ -64,4 +72,4 @@ confirmIsJust description maybeRecord =
             record
 
         Nothing ->
-            handleUnsetContext description
+            Debug.crash ("You must set the " ++ description ++ " in a previous step.")

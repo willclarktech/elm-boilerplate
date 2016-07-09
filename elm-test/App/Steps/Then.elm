@@ -12,14 +12,14 @@ import App.Todos exposing (Msg(..))
 import App.Steps.Context exposing (Context)
 import App.Steps.Helpers
     exposing
-        ( ThenStepDefinition
-        , PartialTest
+        ( ThenStep
+        , ThenStepDefinition
         , stepNotYetDefined
         , confirmIsJust
         )
 
 
-then' : String -> ThenStepDefinition Context
+then' : String -> ThenStep Context
 then' description =
     let
         prefixedDescription =
@@ -54,7 +54,7 @@ then' description =
         stepDefinition test
 
 
-thenATodoShouldBeCreatedWithTheCurrentText : PartialTest -> ThenStepDefinition Context
+thenATodoShouldBeCreatedWithTheCurrentText : ThenStepDefinition Context
 thenATodoShouldBeCreatedWithTheCurrentText test ctx =
     test
         <| expect True toBe
@@ -62,14 +62,14 @@ thenATodoShouldBeCreatedWithTheCurrentText test ctx =
         <| .todos (confirmIsJust "model" ctx.model)
 
 
-thenTheCurrentTextShouldBeReset : PartialTest -> ThenStepDefinition Context
+thenTheCurrentTextShouldBeReset : ThenStepDefinition Context
 thenTheCurrentTextShouldBeReset test ctx =
     test
         <| expect "" toBe
         <| .currentText (confirmIsJust "model" ctx.model)
 
 
-thenTheExistingTodoShouldStillExist : PartialTest -> ThenStepDefinition Context
+thenTheExistingTodoShouldStillExist : ThenStepDefinition Context
 thenTheExistingTodoShouldStillExist test ctx =
     test
         <| expect True toBe
@@ -77,21 +77,21 @@ thenTheExistingTodoShouldStillExist test ctx =
         <| .todos (confirmIsJust "model" ctx.model)
 
 
-thenATodoShouldBeCreated : PartialTest -> ThenStepDefinition Context
+thenATodoShouldBeCreated : ThenStepDefinition Context
 thenATodoShouldBeCreated test ctx =
     test
         <| expect CreateTodo toBe
         <| confirmIsJust "messageAfter" ctx.messageAfter
 
 
-thenNothingShouldHappen : PartialTest -> ThenStepDefinition Context
+thenNothingShouldHappen : ThenStepDefinition Context
 thenNothingShouldHappen test ctx =
     test
         <| expect NoOp toBe
         <| confirmIsJust "messageAfter" ctx.messageAfter
 
 
-thenTheNewTextShouldBeStoredInTheModel : PartialTest -> ThenStepDefinition Context
+thenTheNewTextShouldBeStoredInTheModel : ThenStepDefinition Context
 thenTheNewTextShouldBeStoredInTheModel test ctx =
     test
         <| expect (confirmIsJust "newText" ctx.newText) toBe

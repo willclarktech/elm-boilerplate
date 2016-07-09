@@ -6,17 +6,17 @@ import ElmTestBDDStyle
         , describe
         )
 import App.Todos exposing (initialModel)
+import App.Steps.Context exposing (Context)
 import App.Steps.Helpers
     exposing
-        ( GivenStepDefinition
-        , PartialSuite
+        ( GivenStep
+        , GivenStepDefinition
         , stepNotYetDefined
         , runTestsWithCtx
         )
-import App.Steps.Context exposing (Context)
 
 
-given : String -> GivenStepDefinition Context
+given : String -> GivenStep Context
 given description =
     let
         prefixedDescription =
@@ -39,7 +39,7 @@ given description =
         stepDefinition suite
 
 
-givenACurrentText : PartialSuite -> GivenStepDefinition Context
+givenACurrentText : GivenStepDefinition Context
 givenACurrentText suite tests oldCtx =
     suite
         <| let
@@ -64,7 +64,7 @@ givenACurrentText suite tests oldCtx =
             runTestsWithCtx ctx tests
 
 
-givenAnExistingTodo : PartialSuite -> GivenStepDefinition Context
+givenAnExistingTodo : GivenStepDefinition Context
 givenAnExistingTodo suite tests oldCtx =
     suite
         <| let
