@@ -6,7 +6,7 @@ module App.Steps.Helpers
         , constructThenFunction
         )
 
-import ElmTestBDDStyle exposing (describe, it)
+import ElmTestBDDStyle exposing (Test, describe, it)
 import App.Steps.Types
     exposing
         ( GivenStepMap
@@ -58,44 +58,36 @@ getStepDefinition stepMap description prefixedDescription =
                     getStepDefinition remainingStepPairs description prefixedDescription
 
 
-constructGivenFunction : GivenStepMap ctx -> GivenFunction ctx
-constructGivenFunction givenStepMap description =
+constructPreStepFunction : String -> List ( String, ctx -> b ) -> String -> List (b -> Test) -> ctx -> Test
+constructPreStepFunction prefix stepMap description =
     let
         prefixedDescription =
-            "Given " ++ description
+            prefix ++ description
 
         suite =
             describe prefixedDescription
 
         stepDefinition =
-            getStepDefinition givenStepMap description prefixedDescription
+            getStepDefinition stepMap description prefixedDescription
 
-        getGivenStepForContext tests context =
+        getStepForContext tests context =
             suite <| runTestsWithCtx tests <| stepDefinition context
     in
-        getGivenStepForContext
+        getStepForContext
+
+
+constructGivenFunction : GivenStepMap ctx -> GivenFunction ctx
+constructGivenFunction stepMap description =
+    constructPreStepFunction "Given" stepMap description
 
 
 constructWhenFunction : WhenStepMap ctx -> WhenFunction ctx
-constructWhenFunction whenStepMap description =
-    let
-        prefixedDescription =
-            "When " ++ description
-
-        suite =
-            describe prefixedDescription
-
-        stepDefinition =
-            getStepDefinition whenStepMap description prefixedDescription
-
-        getWhenStepForContext tests context =
-            suite <| runTestsWithCtx tests <| stepDefinition context
-    in
-        getWhenStepForContext
+constructWhenFunction stepMap description =
+    constructPreStepFunction "When" stepMap description
 
 
 constructThenFunction : ThenStepMap ctx -> ThenFunction ctx
-constructThenFunction thenStepMap description =
+constructThenFunction stepMap description =
     let
         prefixedDescription =
             "Then " ++ description
@@ -104,7 +96,7 @@ constructThenFunction thenStepMap description =
             it prefixedDescription
 
         stepDefinition =
-            getStepDefinition thenStepMap description prefixedDescription
+            getStepDefinition stepMap description prefixedDescription
 
         getThenStepForContext context =
             test <| stepDefinition context
