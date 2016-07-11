@@ -2,22 +2,22 @@ module App.Steps.Given exposing (given)
 
 import App.Todos exposing (initialModel)
 import App.Steps.Context exposing (Context)
-import App.Steps.Helpers
+import App.Steps.Helpers exposing (constructGivenFunction)
+import App.Steps.Types
     exposing
         ( GivenStepDefinition
         , GivenStepMap
         , GivenFunction
-        , constructGivenFunction
         )
 
 
 given : GivenFunction Context
 given =
-    constructGivenFunction givenStepMap
+    constructGivenFunction stepMap
 
 
-givenStepMap : GivenStepMap Context
-givenStepMap =
+stepMap : GivenStepMap Context
+stepMap =
     [ ( "a current text"
       , givenACurrentText
       )

@@ -6,27 +6,23 @@ import App.Todos
         , updateText
         , createTodo
         )
-import App.Steps.Helpers
+import App.Steps.Helpers exposing (constructWhenFunction)
+import App.Steps.Context exposing (Context, getModel)
+import App.Steps.Types
     exposing
         ( WhenStepDefinition
         , WhenStepMap
         , WhenFunction
-        , constructWhenFunction
-        )
-import App.Steps.Context
-    exposing
-        ( Context
-        , getModel
         )
 
 
 when : WhenFunction Context
 when =
-    constructWhenFunction whenStepMap
+    constructWhenFunction stepMap
 
 
-whenStepMap : WhenStepMap Context
-whenStepMap =
+stepMap : WhenStepMap Context
+stepMap =
     [ ( "a todo is created"
       , whenATodoIsCreated
       )

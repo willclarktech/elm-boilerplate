@@ -3,23 +3,26 @@ module App.Steps.Then exposing (then')
 import ElmTestBDDStyle exposing (expect, toBe)
 import App.Todos exposing (Msg(..))
 import App.Steps.Context exposing (Context)
-import App.Steps.Helpers
+import App.Steps.Types
     exposing
         ( ThenStepDefinition
         , ThenStepMap
         , ThenFunction
-        , constructThenFunction
+        )
+import App.Steps.Helpers
+    exposing
+        ( constructThenFunction
         , confirmIsJust
         )
 
 
 then' : ThenFunction Context
 then' =
-    constructThenFunction thenStepMap
+    constructThenFunction stepMap
 
 
-thenStepMap : ThenStepMap Context
-thenStepMap =
+stepMap : ThenStepMap Context
+stepMap =
     [ ( "the existing todo should still exist"
       , thenTheExistingTodoShouldStillExist
       )
