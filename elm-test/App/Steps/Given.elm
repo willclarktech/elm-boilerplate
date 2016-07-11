@@ -1,92 +1,72 @@
 module App.Steps.Given exposing (given)
 
-import ElmTestBDDStyle
-    exposing
-        ( Test
-        , describe
-        )
 import App.Todos exposing (initialModel)
 import App.Steps.Context exposing (Context)
 import App.Steps.Helpers
     exposing
-        ( GivenStep
-        , GivenStepDefinition
-        , stepNotYetDefined
-        , runTestsWithCtx
+        ( GivenStepDefinition
+        , GivenStepMap
+        , GivenFunction
+        , constructGivenFunction
         )
 
 
-given : String -> GivenStep Context
-given description =
-    let
-        prefixedDescription =
-            "Given " ++ description
+given : GivenFunction Context
+given =
+    constructGivenFunction givenStepMap
 
-        suite =
-            describe prefixedDescription
 
-        stepDefinition =
-            case description of
-                "a current text" ->
-                    givenACurrentText
-
-                "an existing todo" ->
-                    givenAnExistingTodo
-
-                _ ->
-                    stepNotYetDefined (prefixedDescription)
-    in
-        stepDefinition suite
+givenStepMap : GivenStepMap Context
+givenStepMap =
+    [ ( "a current text"
+      , givenACurrentText
+      )
+    , ( "an existing todo"
+      , givenAnExistingTodo
+      )
+    ]
 
 
 givenACurrentText : GivenStepDefinition Context
-givenACurrentText suite tests oldCtx =
-    suite
-        <| let
-            text =
-                "Buy milk"
+givenACurrentText oldCtx =
+    let
+        text =
+            "Buy milk"
 
-            oldModel =
-                case oldCtx.model of
-                    Just model ->
-                        model
+        oldModel =
+            case oldCtx.model of
+                Just model ->
+                    model
 
-                    Nothing ->
-                        initialModel
-
-            ctx =
-                { oldCtx
-                    | currentText = Just text
-                    , model =
-                        Just { oldModel | currentText = text }
-                }
-           in
-            runTestsWithCtx ctx tests
+                Nothing ->
+                    initialModel
+    in
+        { oldCtx
+            | currentText = Just text
+            , model =
+                Just { oldModel | currentText = text }
+        }
 
 
 givenAnExistingTodo : GivenStepDefinition Context
-givenAnExistingTodo suite tests oldCtx =
-    suite
-        <| let
-            existingTodo =
-                "Existing todo"
+givenAnExistingTodo oldCtx =
+    let
+        existingTodo =
+            "Existing todo"
 
-            oldModel =
-                case oldCtx.model of
-                    Just model ->
-                        model
+        oldModel =
+            case oldCtx.model of
+                Just model ->
+                    model
 
-                    Nothing ->
-                        initialModel
-
-            ctx =
-                { oldCtx
-                    | model =
-                        Just
-                            { oldModel
-                                | todos = [ existingTodo ]
-                            }
-                    , existingTodo = Just existingTodo
-                }
-           in
-            runTestsWithCtx ctx tests
+                Nothing ->
+                    initialModel
+    in
+        { oldCtx
+            | model =
+                Just
+                    { oldModel
+                        | todos = [ existingTodo ]
+                    }
+            , existingTodo = Just existingTodo
+        }

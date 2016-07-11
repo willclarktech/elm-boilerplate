@@ -1,11 +1,5 @@
 module App.Steps.When exposing (when)
 
-import ElmTestBDDStyle
-    exposing
-        ( Assertion
-        , Test
-        , describe
-        )
 import App.Todos
     exposing
         ( handleKeyUp
@@ -14,10 +8,10 @@ import App.Todos
         )
 import App.Steps.Helpers
     exposing
-        ( WhenStep
-        , WhenStepDefinition
-        , stepNotYetDefined
-        , runTestsWithCtx
+        ( WhenStepDefinition
+        , WhenStepMap
+        , WhenFunction
+        , constructWhenFunction
         )
 import App.Steps.Context
     exposing
@@ -26,88 +20,63 @@ import App.Steps.Context
         )
 
 
-when : String -> WhenStep Context
-when description =
-    let
-        prefixedDescription =
-            "When " ++ description
+when : WhenFunction Context
+when =
+    constructWhenFunction whenStepMap
 
-        suite =
-            describe prefixedDescription
 
-        stepDefinition =
-            case description of
-                "a todo is created" ->
-                    whenATodoIsCreated
-
-                "the ENTER key is pressed" ->
-                    whenTheEnterKeyIsPressed
-
-                "the T key is pressed" ->
-                    whenTheTKeyIsPressed
-
-                "the text is updated" ->
-                    whenTheTextIsUpdated
-
-                _ ->
-                    stepNotYetDefined (prefixedDescription)
-    in
-        stepDefinition suite
+whenStepMap : WhenStepMap Context
+whenStepMap =
+    [ ( "a todo is created"
+      , whenATodoIsCreated
+      )
+    , ( "the ENTER key is pressed"
+      , whenTheEnterKeyIsPressed
+      )
+    , ( "the T key is pressed"
+      , whenTheTKeyIsPressed
+      )
+    , ( "the text is updated"
+      , whenTheTextIsUpdated
+      )
+    ]
 
 
 whenATodoIsCreated : WhenStepDefinition Context
-whenATodoIsCreated suite tests oldCtx =
-    suite
-        <| let
-            oldModel =
-                getModel oldCtx
-
-            ctx =
-                { oldCtx
-                    | model = Just (createTodo oldModel)
-                }
-           in
-            runTestsWithCtx ctx tests
+whenATodoIsCreated oldCtx =
+    let
+        oldModel =
+            getModel oldCtx
+    in
+        { oldCtx
+            | model = Just (createTodo oldModel)
+        }
 
 
 whenTheEnterKeyIsPressed : WhenStepDefinition Context
-whenTheEnterKeyIsPressed suite tests oldCtx =
-    suite
-        <| let
-            ctx =
-                { oldCtx
-                    | messageAfter = Just <| handleKeyUp 13
-                }
-           in
-            runTestsWithCtx ctx tests
+whenTheEnterKeyIsPressed oldCtx =
+    { oldCtx
+        | messageAfter = Just <| handleKeyUp 13
+    }
 
 
 whenTheTKeyIsPressed : WhenStepDefinition Context
-whenTheTKeyIsPressed suite tests oldCtx =
-    suite
-        <| let
-            ctx =
-                { oldCtx
-                    | messageAfter = Just <| handleKeyUp 84
-                }
-           in
-            runTestsWithCtx ctx tests
+whenTheTKeyIsPressed oldCtx =
+    { oldCtx
+        | messageAfter = Just <| handleKeyUp 84
+    }
 
 
 whenTheTextIsUpdated : WhenStepDefinition Context
-whenTheTextIsUpdated suite tests oldCtx =
-    suite
-        <| let
-            newText =
-                "Update text"
+whenTheTextIsUpdated oldCtx =
+    let
+        newText =
+            "Update text"
 
-            oldModel =
-                getModel oldCtx
-
-            ctx =
-                { oldCtx
-                    | model = Just (updateText newText oldModel)
-                    , newText = Just newText
-                }
-           in
-            runTestsWithCtx ctx tests
+        oldModel =
+            getModel oldCtx
+    in
+        { oldCtx
+            | model = Just (updateText newText oldModel)
+            , newText = Just newText
+        }

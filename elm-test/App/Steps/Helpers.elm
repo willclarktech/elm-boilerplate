@@ -1,20 +1,24 @@
 module App.Steps.Helpers
     exposing
-        ( GivenStep
-        , GivenStepDefinition
-        , WhenStep
+        ( GivenStepDefinition
+        , GivenStep
+        , GivenStepMap
+        , GivenFunction
         , WhenStepDefinition
-        , ThenStep
+        , WhenStep
+        , WhenStepMap
+        , WhenFunction
         , ThenStepDefinition
+        , ThenStep
         , ThenStepMap
         , ThenFunction
-        , stepNotYetDefined
-        , runTestsWithCtx
         , confirmIsJust
+        , constructGivenFunction
+        , constructWhenFunction
         , constructThenFunction
         )
 
-import ElmTestBDDStyle exposing (Assertion, Test, it)
+import ElmTestBDDStyle exposing (Assertion, Test, describe, it)
 
 
 type alias PreStep ctx =
@@ -33,28 +37,36 @@ type alias ThenStep ctx =
     ctx -> Test
 
 
-type alias PartialTest =
-    Assertion -> Test
-
-
-type alias PartialSuite =
-    List Test -> Test
-
-
 type alias GivenStepDefinition ctx =
-    PartialSuite -> GivenStep ctx
+    ctx -> ctx
 
 
 type alias WhenStepDefinition ctx =
-    PartialSuite -> WhenStep ctx
+    ctx -> ctx
 
 
 type alias ThenStepDefinition ctx =
-    PartialTest -> ThenStep ctx
+    ctx -> Assertion
+
+
+type alias GivenStepMap ctx =
+    List ( String, GivenStepDefinition ctx )
+
+
+type alias WhenStepMap ctx =
+    List ( String, WhenStepDefinition ctx )
 
 
 type alias ThenStepMap ctx =
     List ( String, ThenStepDefinition ctx )
+
+
+type alias GivenFunction ctx =
+    String -> GivenStep ctx
+
+
+type alias WhenFunction ctx =
+    String -> WhenStep ctx
 
 
 type alias ThenFunction ctx =
@@ -66,8 +78,8 @@ runTestWithCtx ctx test =
     test ctx
 
 
-runTestsWithCtx : a -> List (a -> b) -> List b
-runTestsWithCtx ctx tests =
+runTestsWithCtx : List (a -> b) -> a -> List b
+runTestsWithCtx tests ctx =
     List.map (runTestWithCtx ctx) tests
 
 
@@ -86,19 +98,55 @@ confirmIsJust description maybeRecord =
             Debug.crash ("You must set the " ++ description ++ " in a previous step.")
 
 
-getStepDefinition : ThenStepMap ctx -> String -> String -> ThenStepDefinition ctx
-getStepDefinition thenStepMap description prefixedDescription =
-    case thenStepMap of
+getStepDefinition : List ( String, b ) -> String -> String -> b
+getStepDefinition stepMap description prefixedDescription =
+    case stepMap of
         [] ->
             stepNotYetDefined prefixedDescription
 
-        ( stepDescription, stepDefinition ) :: stepPairs ->
+        ( stepDescription, stepDefinition ) :: remainingStepPairs ->
             case stepDescription == description of
                 True ->
                     stepDefinition
 
                 False ->
-                    getStepDefinition stepPairs description prefixedDescription
+                    getStepDefinition remainingStepPairs description prefixedDescription
+
+
+constructGivenFunction : GivenStepMap ctx -> GivenFunction ctx
+constructGivenFunction givenStepMap description =
+    let
+        prefixedDescription =
+            "Given " ++ description
+
+        suite =
+            describe prefixedDescription
+
+        stepDefinition =
+            getStepDefinition givenStepMap description prefixedDescription
+
+        getGivenStepForContext tests context =
+            suite <| runTestsWithCtx tests <| stepDefinition context
+    in
+        getGivenStepForContext
+
+
+constructWhenFunction : WhenStepMap ctx -> WhenFunction ctx
+constructWhenFunction whenStepMap description =
+    let
+        prefixedDescription =
+            "When " ++ description
+
+        suite =
+            describe prefixedDescription
+
+        stepDefinition =
+            getStepDefinition whenStepMap description prefixedDescription
+
+        getWhenStepForContext tests context =
+            suite <| runTestsWithCtx tests <| stepDefinition context
+    in
+        getWhenStepForContext
 
 
 constructThenFunction : ThenStepMap ctx -> ThenFunction ctx
@@ -112,5 +160,8 @@ constructThenFunction thenStepMap description =
 
         stepDefinition =
             getStepDefinition thenStepMap description prefixedDescription
+
+        getThenStepForContext context =
+            test <| stepDefinition context
     in
-        stepDefinition test
+        getThenStepForContext

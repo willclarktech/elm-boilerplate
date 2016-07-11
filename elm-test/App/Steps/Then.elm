@@ -5,8 +5,7 @@ import App.Todos exposing (Msg(..))
 import App.Steps.Context exposing (Context)
 import App.Steps.Helpers
     exposing
-        ( ThenStep
-        , ThenStepDefinition
+        ( ThenStepDefinition
         , ThenStepMap
         , ThenFunction
         , constructThenFunction
@@ -21,54 +20,60 @@ then' =
 
 thenStepMap : ThenStepMap Context
 thenStepMap =
-    [ ( "the existing todo should still exist", thenTheExistingTodoShouldStillExist )
-    , ( "a todo should be created", thenATodoShouldBeCreated )
-    , ( "a todo should be created with the current text", thenATodoShouldBeCreatedWithTheCurrentText )
-    , ( "the current text should be reset", thenTheCurrentTextShouldBeReset )
-    , ( "the new text should be stored in the model", thenTheNewTextShouldBeStoredInTheModel )
-    , ( "nothing should happen", thenNothingShouldHappen )
+    [ ( "the existing todo should still exist"
+      , thenTheExistingTodoShouldStillExist
+      )
+    , ( "a todo should be created"
+      , thenATodoShouldBeCreated
+      )
+    , ( "a todo should be created with the current text"
+      , thenATodoShouldBeCreatedWithTheCurrentText
+      )
+    , ( "the current text should be reset"
+      , thenTheCurrentTextShouldBeReset
+      )
+    , ( "the new text should be stored in the model"
+      , thenTheNewTextShouldBeStoredInTheModel
+      )
+    , ( "nothing should happen"
+      , thenNothingShouldHappen
+      )
     ]
 
 
 thenATodoShouldBeCreatedWithTheCurrentText : ThenStepDefinition Context
-thenATodoShouldBeCreatedWithTheCurrentText test ctx =
-    test
-        <| expect True toBe
+thenATodoShouldBeCreatedWithTheCurrentText ctx =
+    expect True toBe
         <| List.member (confirmIsJust "currentText" ctx.currentText)
         <| .todos (confirmIsJust "model" ctx.model)
 
 
 thenTheCurrentTextShouldBeReset : ThenStepDefinition Context
-thenTheCurrentTextShouldBeReset test ctx =
-    test
-        <| expect "" toBe
+thenTheCurrentTextShouldBeReset ctx =
+    expect "" toBe
         <| .currentText (confirmIsJust "model" ctx.model)
 
 
 thenTheExistingTodoShouldStillExist : ThenStepDefinition Context
-thenTheExistingTodoShouldStillExist test ctx =
-    test
-        <| expect True toBe
+thenTheExistingTodoShouldStillExist ctx =
+    expect True toBe
         <| List.member (confirmIsJust "existingTodo" ctx.existingTodo)
         <| .todos (confirmIsJust "model" ctx.model)
 
 
 thenATodoShouldBeCreated : ThenStepDefinition Context
-thenATodoShouldBeCreated test ctx =
-    test
-        <| expect CreateTodo toBe
+thenATodoShouldBeCreated ctx =
+    expect CreateTodo toBe
         <| confirmIsJust "messageAfter" ctx.messageAfter
 
 
 thenNothingShouldHappen : ThenStepDefinition Context
-thenNothingShouldHappen test ctx =
-    test
-        <| expect NoOp toBe
+thenNothingShouldHappen ctx =
+    expect NoOp toBe
         <| confirmIsJust "messageAfter" ctx.messageAfter
 
 
 thenTheNewTextShouldBeStoredInTheModel : ThenStepDefinition Context
-thenTheNewTextShouldBeStoredInTheModel test ctx =
-    test
-        <| expect (confirmIsJust "newText" ctx.newText) toBe
+thenTheNewTextShouldBeStoredInTheModel ctx =
+    expect (confirmIsJust "newText" ctx.newText) toBe
         <| .currentText (confirmIsJust "model" ctx.model)
