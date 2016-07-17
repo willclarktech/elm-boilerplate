@@ -3,13 +3,13 @@ module App.Steps.Then exposing (then')
 import ElmTestBDDStyle exposing (expect, toBe)
 import App.Todos exposing (Msg(..))
 import App.Steps.Context exposing (Context)
-import App.Steps.Types
+import GivenWhenThen.Types
     exposing
-        ( ThenStepDefinition
+        ( ThenStep
         , ThenStepMap
         , ThenFunction
         )
-import App.Steps.Helpers
+import GivenWhenThen.Helpers
     exposing
         ( constructThenFunction
         , confirmIsJust
@@ -44,39 +44,39 @@ stepMap =
     ]
 
 
-thenATodoShouldBeCreatedWithTheCurrentText : ThenStepDefinition Context
+thenATodoShouldBeCreatedWithTheCurrentText : ThenStep Context
 thenATodoShouldBeCreatedWithTheCurrentText ctx =
     expect True toBe
         <| List.member (confirmIsJust "currentText" ctx.currentText)
         <| .todos (confirmIsJust "model" ctx.model)
 
 
-thenTheCurrentTextShouldBeReset : ThenStepDefinition Context
+thenTheCurrentTextShouldBeReset : ThenStep Context
 thenTheCurrentTextShouldBeReset ctx =
     expect "" toBe
         <| .currentText (confirmIsJust "model" ctx.model)
 
 
-thenTheExistingTodoShouldStillExist : ThenStepDefinition Context
+thenTheExistingTodoShouldStillExist : ThenStep Context
 thenTheExistingTodoShouldStillExist ctx =
     expect True toBe
         <| List.member (confirmIsJust "existingTodo" ctx.existingTodo)
         <| .todos (confirmIsJust "model" ctx.model)
 
 
-thenATodoShouldBeCreated : ThenStepDefinition Context
+thenATodoShouldBeCreated : ThenStep Context
 thenATodoShouldBeCreated ctx =
     expect CreateTodo toBe
         <| confirmIsJust "messageAfter" ctx.messageAfter
 
 
-thenNothingShouldHappen : ThenStepDefinition Context
+thenNothingShouldHappen : ThenStep Context
 thenNothingShouldHappen ctx =
     expect NoOp toBe
         <| confirmIsJust "messageAfter" ctx.messageAfter
 
 
-thenTheNewTextShouldBeStoredInTheModel : ThenStepDefinition Context
+thenTheNewTextShouldBeStoredInTheModel : ThenStep Context
 thenTheNewTextShouldBeStoredInTheModel ctx =
     expect (confirmIsJust "newText" ctx.newText) toBe
         <| .currentText (confirmIsJust "model" ctx.model)

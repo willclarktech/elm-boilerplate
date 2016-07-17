@@ -1,11 +1,10 @@
 module App.Steps.Given exposing (given)
 
-import App.Todos exposing (initialModel)
-import App.Steps.Context exposing (Context)
-import App.Steps.Helpers exposing (constructGivenFunction)
-import App.Steps.Types
+import App.Steps.Context exposing (Context, getModel)
+import GivenWhenThen.Helpers exposing (constructGivenFunction)
+import GivenWhenThen.Types
     exposing
-        ( GivenStepDefinition
+        ( GivenStep
         , GivenStepMap
         , GivenFunction
         )
@@ -27,19 +26,14 @@ stepMap =
     ]
 
 
-givenACurrentText : GivenStepDefinition Context
+givenACurrentText : GivenStep Context
 givenACurrentText oldCtx =
     let
         text =
             "Buy milk"
 
         oldModel =
-            case oldCtx.model of
-                Just model ->
-                    model
-
-                Nothing ->
-                    initialModel
+            getModel oldCtx
     in
         { oldCtx
             | currentText = Just text
@@ -48,25 +42,20 @@ givenACurrentText oldCtx =
         }
 
 
-givenAnExistingTodo : GivenStepDefinition Context
+givenAnExistingTodo : GivenStep Context
 givenAnExistingTodo oldCtx =
     let
-        existingTodo =
+        todo =
             "Existing todo"
 
         oldModel =
-            case oldCtx.model of
-                Just model ->
-                    model
-
-                Nothing ->
-                    initialModel
+            getModel oldCtx
     in
         { oldCtx
             | model =
                 Just
                     { oldModel
-                        | todos = [ existingTodo ]
+                        | todos = [ todo ]
                     }
-            , existingTodo = Just existingTodo
+            , existingTodo = Just todo
         }

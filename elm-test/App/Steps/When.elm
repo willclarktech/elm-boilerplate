@@ -6,11 +6,11 @@ import App.Todos
         , updateText
         , createTodo
         )
-import App.Steps.Helpers exposing (constructWhenFunction)
 import App.Steps.Context exposing (Context, getModel)
-import App.Steps.Types
+import GivenWhenThen.Helpers exposing (constructWhenFunction)
+import GivenWhenThen.Types
     exposing
-        ( WhenStepDefinition
+        ( WhenStep
         , WhenStepMap
         , WhenFunction
         )
@@ -38,7 +38,7 @@ stepMap =
     ]
 
 
-whenATodoIsCreated : WhenStepDefinition Context
+whenATodoIsCreated : WhenStep Context
 whenATodoIsCreated oldCtx =
     let
         oldModel =
@@ -49,30 +49,30 @@ whenATodoIsCreated oldCtx =
         }
 
 
-whenTheEnterKeyIsPressed : WhenStepDefinition Context
+whenTheEnterKeyIsPressed : WhenStep Context
 whenTheEnterKeyIsPressed oldCtx =
     { oldCtx
         | messageAfter = Just <| handleKeyUp 13
     }
 
 
-whenTheTKeyIsPressed : WhenStepDefinition Context
+whenTheTKeyIsPressed : WhenStep Context
 whenTheTKeyIsPressed oldCtx =
     { oldCtx
         | messageAfter = Just <| handleKeyUp 84
     }
 
 
-whenTheTextIsUpdated : WhenStepDefinition Context
+whenTheTextIsUpdated : WhenStep Context
 whenTheTextIsUpdated oldCtx =
     let
-        newText =
+        text =
             "Update text"
 
         oldModel =
             getModel oldCtx
     in
         { oldCtx
-            | model = Just (updateText newText oldModel)
-            , newText = Just newText
+            | model = Just (updateText text oldModel)
+            , newText = Just text
         }

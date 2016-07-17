@@ -1,4 +1,4 @@
-module App.Steps.Helpers
+module GivenWhenThen.Helpers
     exposing
         ( confirmIsJust
         , constructGivenFunction
@@ -7,7 +7,7 @@ module App.Steps.Helpers
         )
 
 import ElmTestBDDStyle exposing (Test, describe, it)
-import App.Steps.Types
+import GivenWhenThen.Types
     exposing
         ( GivenStepMap
         , GivenFunction
@@ -62,7 +62,7 @@ constructPreStepFunction : String -> List ( String, ctx -> b ) -> String -> List
 constructPreStepFunction prefix stepMap description =
     let
         prefixedDescription =
-            prefix ++ description
+            prefix ++ " " ++ description
 
         suite =
             describe prefixedDescription
