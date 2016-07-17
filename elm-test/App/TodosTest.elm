@@ -1,6 +1,6 @@
 module App.TodosTest exposing (testSuite)
 
-import ElmTestBDDStyle exposing (Test, describe)
+import ElmTest exposing (Test, suite)
 import App.Steps.Context exposing (initialContext)
 import App.Steps.Given exposing (given)
 import App.Steps.When exposing (when)
@@ -48,8 +48,8 @@ updateTextSuite =
 
 testSuite : Test
 testSuite =
-    describe "App.TodosTest"
-        [ describe "createTodo" createTodoSuite
-        , describe "handleKeyUp" handleKeyUpSuite
-        , describe "updateText" updateTextSuite
+    suite "App.TodosTest"
+        [ suite "createTodo" createTodoSuite
+        , suite "handleKeyUp" handleKeyUpSuite
+        , suite "updateText" updateTextSuite
         ]
