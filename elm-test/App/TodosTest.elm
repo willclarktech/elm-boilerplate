@@ -46,10 +46,21 @@ updateTextSuite =
     ]
 
 
+markAsCompletedSuite : List Test
+markAsCompletedSuite =
+    [ given "an existing todo"
+        [ when "the todo is marked as completed"
+            [ then' "the todo should be completed" ]
+        ]
+        initialContext
+    ]
+
+
 testSuite : Test
 testSuite =
     suite "App.TodosTest"
         [ suite "createTodo" createTodoSuite
         , suite "handleKeyUp" handleKeyUpSuite
         , suite "updateText" updateTextSuite
+        , suite "markAsCompleted" markAsCompletedSuite
         ]

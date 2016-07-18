@@ -46,7 +46,9 @@ givenAnExistingTodo : GivenStep Context
 givenAnExistingTodo oldCtx =
     let
         todo =
-            "Existing todo"
+            { text = "Existing todo"
+            , completed = False
+            }
 
         oldModel =
             getModel oldCtx

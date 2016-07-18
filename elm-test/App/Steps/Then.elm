@@ -41,6 +41,9 @@ stepMap =
     , ( "nothing should happen"
       , thenNothingShouldHappen
       )
+    , ( "the todo should be completed"
+      , thenTheTodoShouldBeCompleted
+      )
     ]
 
 
@@ -48,6 +51,7 @@ thenATodoShouldBeCreatedWithTheCurrentText : ThenStep Context
 thenATodoShouldBeCreatedWithTheCurrentText ctx =
     expect True toBe
         <| List.member (confirmIsJust "currentText" ctx.currentText)
+        <| List.map (\todo -> todo.text)
         <| .todos (confirmIsJust "model" ctx.model)
 
 
@@ -80,3 +84,12 @@ thenTheNewTextShouldBeStoredInTheModel : ThenStep Context
 thenTheNewTextShouldBeStoredInTheModel ctx =
     expect (confirmIsJust "newText" ctx.newText) toBe
         <| .currentText (confirmIsJust "model" ctx.model)
+
+
+thenTheTodoShouldBeCompleted : ThenStep Context
+thenTheTodoShouldBeCompleted ctx =
+    expect False toBe
+        <| List.isEmpty
+        <| List.filter .completed
+        <| List.filter (\todo -> todo.text == .text (confirmIsJust "existingTodo" ctx.existingTodo))
+        <| .todos (confirmIsJust "model" ctx.model)

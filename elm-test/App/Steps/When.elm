@@ -5,9 +5,14 @@ import App.Todos
         ( handleKeyUp
         , updateText
         , createTodo
+        , markAsCompleted
         )
 import App.Steps.Context exposing (Context, getModel)
-import GivenWhenThen.Helpers exposing (constructWhenFunction)
+import GivenWhenThen.Helpers
+    exposing
+        ( constructWhenFunction
+        , confirmIsJust
+        )
 import GivenWhenThen.Types
     exposing
         ( WhenStep
@@ -34,6 +39,9 @@ stepMap =
       )
     , ( "the text is updated"
       , whenTheTextIsUpdated
+      )
+    , ( "the todo is marked as completed"
+      , whenTheTodoIsMarkedAsCompleted
       )
     ]
 
@@ -75,4 +83,18 @@ whenTheTextIsUpdated oldCtx =
         { oldCtx
             | model = Just (updateText text oldModel)
             , newText = Just text
+        }
+
+
+whenTheTodoIsMarkedAsCompleted : WhenStep Context
+whenTheTodoIsMarkedAsCompleted oldCtx =
+    let
+        existingTodo =
+            confirmIsJust "existingTodo" oldCtx.existingTodo
+
+        oldModel =
+            getModel oldCtx
+    in
+        { oldCtx
+            | model = Just (markAsCompleted existingTodo oldModel)
         }

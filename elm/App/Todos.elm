@@ -8,20 +8,28 @@ module App.Todos
         , handleKeyUp
         , updateText
         , createTodo
+        , markAsCompleted
         , Msg(..)
         , Model
         , Todo
         )
 
+import Json.Decode as Json
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onInput, on, keyCode)
-import Json.Decode as Json
+import Html.Events
+    exposing
+        ( onInput
+        , onClick
+        , on
+        , keyCode
+        )
 
 
 type Msg
     = CreateTodo
     | UpdateText String
+    | MarkAsCompleted Todo
     | NoOp
 
 
@@ -32,7 +40,9 @@ type alias Model =
 
 
 type alias Todo =
-    String
+    { text : String
+    , completed : Bool
+    }
 
 
 initialModel : Model
@@ -61,6 +71,9 @@ update action model =
         UpdateText text ->
             ( updateText text model, Cmd.none )
 
+        MarkAsCompleted todo ->
+            ( markAsCompleted todo model, Cmd.none )
+
         _ ->
             noFx model
 
@@ -74,10 +87,35 @@ updateText text model =
 
 createTodo : Model -> Model
 createTodo model =
-    { model
-        | todos = model.currentText :: model.todos
-        , currentText = ""
-    }
+    let
+        newTodo =
+            Todo model.currentText False
+    in
+        { model
+            | todos = newTodo :: model.todos
+            , currentText = ""
+        }
+
+
+findTodoAndMarkAsComplete : List Todo -> Todo -> List Todo
+findTodoAndMarkAsComplete todos todo =
+    case todos of
+        [] ->
+            []
+
+        firstTodo :: remainingTodos ->
+            { firstTodo | completed = True } :: remainingTodos
+
+
+markAsCompleted : Todo -> Model -> Model
+markAsCompleted todo model =
+    let
+        newTodos =
+            findTodoAndMarkAsComplete model.todos todo
+    in
+        { model
+            | todos = newTodos
+        }
 
 
 view : Model -> Html Msg
@@ -95,10 +133,24 @@ view model =
         ]
 
 
-viewTodo : String -> Html Msg
+viewTodo : Todo -> Html Msg
 viewTodo todo =
-    li []
-        [ label [] [ text todo ] ]
+    let
+        className =
+            if todo.completed then
+                "completed"
+            else
+                ""
+    in
+        li [ class className ]
+            [ input
+                [ class "toggle"
+                , type' "checkbox"
+                , onClick <| MarkAsCompleted todo
+                ]
+                []
+            , label [] [ text todo.text ]
+            ]
 
 
 handleKeyUp : Int -> Msg
