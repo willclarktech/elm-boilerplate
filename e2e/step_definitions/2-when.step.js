@@ -12,4 +12,9 @@ module.exports = function () {
       .type('#new-todo', todoText)
       .type('#new-todo', enter);
   });
+
+  this.When(/^I complete the Todo$/, function () {
+    return this.browser
+      .click('.toggle');
+  });
 };
