@@ -16,4 +16,10 @@ module.exports = function thenSteps() {
       .expect(this.todosPage.isTodoCompleted())
       .eventually.to.be.true;
   });
+
+  this.Then(/^I should see that the Todo is not completed$/, function () {
+    return this
+      .expect(this.todosPage.isTodoCompleted())
+      .eventually.to.be.false;
+  });
 };

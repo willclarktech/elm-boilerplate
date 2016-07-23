@@ -29,7 +29,12 @@ export default class TodosPage extends BasePage {
       .typeTextIntoElementAndSubmit(todoText, this.selectors.newTodo);
   }
 
-  completeTodo() {
+  markTodoAsComplete() {
+    return this
+      .clickElement(this.selectors.toggleTodo);
+  }
+
+  markTodoAsIncomplete() {
     return this
       .clickElement(this.selectors.toggleTodo);
   }

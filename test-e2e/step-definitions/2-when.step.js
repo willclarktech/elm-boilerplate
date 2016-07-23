@@ -7,7 +7,11 @@ module.exports = function () {
     return this.todosPage.createTodo();
   });
 
-  this.When(/^I complete the Todo$/, function () {
-    return this.todosPage.completeTodo();
+  this.When(/^I mark the Todo as complete$/, function () {
+    return this.todosPage.markTodoAsComplete();
+  });
+
+  this.When(/^I mark the Todo as incomplete$/, function () {
+    return this.todosPage.markTodoAsIncomplete();
   });
 };

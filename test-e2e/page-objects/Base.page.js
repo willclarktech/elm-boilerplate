@@ -24,6 +24,7 @@ export default class BasePage {
     return new Promise((resolve, reject) => {
       this.browser
         .wait(selector)
+        .wait(20) // Nightmare too fast
         .click(selector)
         .then(resolve)
         .catch(reject);
@@ -79,7 +80,7 @@ export default class BasePage {
     return new Promise((resolve, reject) => {
       this.browser
         .wait(selector)
-        .wait(10) // Nightmare too fast
+        .wait(20) // Nightmare too fast
         .evaluate(getClassList, selector)
         .then(resolve)
         .catch(reject);
