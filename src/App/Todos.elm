@@ -36,20 +36,23 @@ type Msg
 
 
 type alias Model =
-    { todos : List Todo
+    { counter : Int
+    , todos : List Todo
     , currentText : String
     }
 
 
 type alias Todo =
-    { text : String
+    { id : Int
+    , text : String
     , completed : Bool
     }
 
 
 initialModel : Model
 initialModel =
-    { todos = []
+    { counter = 0
+    , todos = []
     , currentText = ""
     }
 
@@ -91,11 +94,12 @@ createTodo : Model -> Model
 createTodo model =
     let
         newTodo =
-            Todo model.currentText False
+            Todo model.counter model.currentText False
     in
         { model
             | todos = newTodo :: model.todos
             , currentText = ""
+            , counter = model.counter + 1
         }
 
 
@@ -106,7 +110,16 @@ findTodoAndMarkAsComplete todos todo =
             []
 
         firstTodo :: remainingTodos ->
-            { firstTodo | completed = True } :: remainingTodos
+            let
+                isRelevantTodo =
+                    firstTodo.id == todo.id
+            in
+                case isRelevantTodo of
+                    True ->
+                        { firstTodo | completed = True } :: remainingTodos
+
+                    False ->
+                        firstTodo :: findTodoAndMarkAsComplete remainingTodos todo
 
 
 markAsCompleted : Todo -> Model -> Model
@@ -145,11 +158,15 @@ viewTodo todo =
             else
                 ""
     in
-        li [ class className ]
+        li
+            [ id ("todo-" ++ toString todo.id)
+            , class className
+            ]
             [ input
                 [ class "toggle"
                 , type' "checkbox"
                 , onClick <| MarkAsCompleted todo
+                , checked todo.completed
                 ]
                 []
             , label [] [ text todo.text ]
