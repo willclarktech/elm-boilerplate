@@ -4,8 +4,8 @@
     "repository": "https://github.com/LikeJasper/elm-boilerplate.git",
     "license": "MIT",
     "source-directories": [
-        "elm",
-        "elm-test"
+        "src",
+        "test-unit"
     ],
     "exposed-modules": [],
     "dependencies": {
