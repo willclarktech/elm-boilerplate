@@ -47,6 +47,12 @@ stepMap =
     , ( "the todo should be completed"
       , thenTheTodoShouldBeCompleted
       )
+    , ( "the todo should not be completed"
+      , thenTheTodoShouldNotBeCompleted
+      )
+    , ( "the other todo should be completed"
+      , thenTheOtherTodoShouldBeCompleted
+      )
     , ( "the other todo should not be completed"
       , thenTheOtherTodoShouldNotBeCompleted
       )
@@ -107,7 +113,25 @@ thenTheTodoShouldBeCompleted ctx =
     expect False toBe
         <| List.isEmpty
         <| List.filter .completed
-        <| List.filter (\todo -> todo.text == .text (confirmIsJust "existingTodo" ctx.existingTodo))
+        <| List.filter (\todo -> todo.id == .id (confirmIsJust "existingTodo" ctx.existingTodo))
+        <| .todos (confirmIsJust "model" ctx.model)
+
+
+thenTheTodoShouldNotBeCompleted : ThenStep Context
+thenTheTodoShouldNotBeCompleted ctx =
+    expect True toBe
+        <| List.isEmpty
+        <| List.filter .completed
+        <| List.filter (\todo -> todo.id == .id (confirmIsJust "existingTodo" ctx.existingTodo))
+        <| .todos (confirmIsJust "model" ctx.model)
+
+
+thenTheOtherTodoShouldBeCompleted : ThenStep Context
+thenTheOtherTodoShouldBeCompleted ctx =
+    expect False toBe
+        <| List.isEmpty
+        <| List.filter .completed
+        <| List.filter (\todo -> todo.id == .id (confirmIsJust "secondTodo" ctx.secondTodo))
         <| .todos (confirmIsJust "model" ctx.model)
 
 

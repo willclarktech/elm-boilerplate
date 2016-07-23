@@ -63,6 +63,24 @@ markAsCompletedSuite =
     ]
 
 
+markAsIncompleteSuite : List Test
+markAsIncompleteSuite =
+    [ given "an existing todo"
+        [ given "the todo has been marked as completed"
+            [ when "the todo is marked as incomplete"
+                [ then' "the todo should not be completed" ]
+            , given "another existing todo"
+                [ given "the other todo has been marked as completed"
+                    [ when "the todo is marked as incomplete"
+                        [ then' "the other todo should be completed" ]
+                    ]
+                ]
+            ]
+        ]
+        initialContext
+    ]
+
+
 testSuite : Test
 testSuite =
     suite "App.TodosTest"
@@ -70,4 +88,5 @@ testSuite =
         , suite "handleKeyUp" handleKeyUpSuite
         , suite "updateText" updateTextSuite
         , suite "markAsCompleted" markAsCompletedSuite
+        , suite "markAsIncomplete" markAsIncompleteSuite
         ]

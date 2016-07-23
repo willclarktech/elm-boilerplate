@@ -2,7 +2,11 @@ module App.Steps.Given exposing (given)
 
 import App.Todos exposing (Todo)
 import App.Steps.Context exposing (Context, getModel)
-import GivenWhenThen.Helpers exposing (constructGivenFunction)
+import GivenWhenThen.Helpers
+    exposing
+        ( constructGivenFunction
+        , confirmIsJust
+        )
 import GivenWhenThen.Types
     exposing
         ( GivenStep
@@ -29,6 +33,12 @@ stepMap =
       )
     , ( "another existing todo"
       , givenAnotherExistingTodo
+      )
+    , ( "the todo has been marked as completed"
+      , givenTheTodoHasBeenMarkedAsCompleted
+      )
+    , ( "the other todo has been marked as completed"
+      , givenTheOtherTodoHasBeenMarkedAsCompleted
       )
     ]
 
@@ -97,7 +107,49 @@ givenAnotherExistingTodo oldCtx =
             | model =
                 Just
                     { oldModel
-                        | todos = [ todo ]
+                        | todos = todo :: oldModel.todos
                     }
             , secondTodo = Just todo
         }
+
+
+markTodoAsComplete todoKey getTodoFromCtx oldCtx =
+    let
+        oldModel =
+            getModel oldCtx
+
+        todoId =
+            .id (confirmIsJust todoKey (getTodoFromCtx oldCtx))
+
+        newTodos =
+            List.map
+                (\todo ->
+                    let
+                        isCurrent =
+                            todo.id
+                                == todoId
+                    in
+                        if isCurrent then
+                            { todo | completed = True }
+                        else
+                            todo
+                )
+                oldModel.todos
+    in
+        { oldCtx
+            | model =
+                Just
+                    { oldModel
+                        | todos = newTodos
+                    }
+        }
+
+
+givenTheOtherTodoHasBeenMarkedAsCompleted : GivenStep Context
+givenTheOtherTodoHasBeenMarkedAsCompleted oldCtx =
+    markTodoAsComplete "secondTodo" .secondTodo oldCtx
+
+
+givenTheTodoHasBeenMarkedAsCompleted : GivenStep Context
+givenTheTodoHasBeenMarkedAsCompleted oldCtx =
+    markTodoAsComplete "existingTodo" .existingTodo oldCtx

@@ -6,6 +6,7 @@ import App.Todos
         , updateText
         , createTodo
         , markAsCompleted
+        , markAsIncomplete
         )
 import App.Steps.Context exposing (Context, getModel)
 import GivenWhenThen.Helpers
@@ -42,6 +43,9 @@ stepMap =
       )
     , ( "the todo is marked as completed"
       , whenTheTodoIsMarkedAsCompleted
+      )
+    , ( "the todo is marked as incomplete"
+      , whenTheTodoIsMarkedAsIncomplete
       )
     ]
 
@@ -97,4 +101,18 @@ whenTheTodoIsMarkedAsCompleted oldCtx =
     in
         { oldCtx
             | model = Just (markAsCompleted existingTodo oldModel)
+        }
+
+
+whenTheTodoIsMarkedAsIncomplete : WhenStep Context
+whenTheTodoIsMarkedAsIncomplete oldCtx =
+    let
+        existingTodo =
+            confirmIsJust "existingTodo" oldCtx.existingTodo
+
+        oldModel =
+            getModel oldCtx
+    in
+        { oldCtx
+            | model = Just (markAsIncomplete existingTodo oldModel)
         }
