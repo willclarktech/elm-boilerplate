@@ -1,20 +1,13 @@
 module.exports = function () {
   this.When(/^I visit the Todos page$/, function () {
-    return this.browser
-      .goto(`${this.baseUrl}/`);
+    return this.todosPage.visit();
   });
 
   this.When(/^I create a Todo$/, function () {
-    const todoText = 'Buy milk';
-    this.ctx.todoText = todoText;
-    const enter = '\u000d';
-    return this.browser
-      .type('#new-todo', todoText)
-      .type('#new-todo', enter);
+    return this.todosPage.createTodo();
   });
 
   this.When(/^I complete the Todo$/, function () {
-    return this.browser
-      .click('.toggle');
+    return this.todosPage.completeTodo();
   });
 };

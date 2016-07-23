@@ -3,6 +3,7 @@ Feature: Create Todo
   I want to create a Todo
   In order to externalise the burden of remembering something I need to do
 
+  @now
   @critical
   Scenario: New user creates a Todo
     When I visit the Todos page

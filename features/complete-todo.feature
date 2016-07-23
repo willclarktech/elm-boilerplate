@@ -3,6 +3,7 @@ Feature: Complete Todo
   I want to complete a Todo
   In order to gain a sense of self-satisfaction
 
+  @now
   @critical
   Scenario: New user completes a Todo
     Given I am on the Todos page
