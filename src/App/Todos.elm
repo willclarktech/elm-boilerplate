@@ -9,6 +9,7 @@ module App.Todos
         , updateText
         , createTodo
         , markAsCompleted
+        , markAsIncomplete
         , Msg(..)
         , Model
         , Todo
@@ -32,6 +33,7 @@ type Msg
     = CreateTodo
     | UpdateText String
     | MarkAsCompleted Todo
+    | MarkAsIncomplete Todo
     | NoOp
 
 
@@ -79,7 +81,10 @@ update action model =
         MarkAsCompleted todo ->
             ( markAsCompleted todo model, Cmd.none )
 
-        _ ->
+        MarkAsIncomplete todo ->
+            ( markAsIncomplete todo model, Cmd.none )
+
+        NoOp ->
             noFx model
 
 
@@ -103,8 +108,8 @@ createTodo model =
         }
 
 
-findTodoAndMarkAsComplete : List Todo -> Todo -> List Todo
-findTodoAndMarkAsComplete todos todo =
+findTodoAndSetStatus : List Todo -> Todo -> Bool -> List Todo
+findTodoAndSetStatus todos todo status =
     case todos of
         [] ->
             []
@@ -114,23 +119,31 @@ findTodoAndMarkAsComplete todos todo =
                 isRelevantTodo =
                     firstTodo.id == todo.id
             in
-                case isRelevantTodo of
-                    True ->
-                        { firstTodo | completed = True } :: remainingTodos
-
-                    False ->
-                        firstTodo :: findTodoAndMarkAsComplete remainingTodos todo
+                if isRelevantTodo then
+                    { firstTodo | completed = status } :: remainingTodos
+                else
+                    firstTodo :: findTodoAndSetStatus remainingTodos todo status
 
 
-markAsCompleted : Todo -> Model -> Model
-markAsCompleted todo model =
+setCompleteStatusForTodoInModel : Todo -> Model -> Bool -> Model
+setCompleteStatusForTodoInModel todo model status =
     let
         newTodos =
-            findTodoAndMarkAsComplete model.todos todo
+            findTodoAndSetStatus model.todos todo status
     in
         { model
             | todos = newTodos
         }
+
+
+markAsCompleted : Todo -> Model -> Model
+markAsCompleted todo model =
+    setCompleteStatusForTodoInModel todo model True
+
+
+markAsIncomplete : Todo -> Model -> Model
+markAsIncomplete todo model =
+    setCompleteStatusForTodoInModel todo model False
 
 
 view : Model -> Html Msg
@@ -152,11 +165,20 @@ view model =
 viewTodo : Todo -> Html Msg
 viewTodo todo =
     let
+        complete =
+            todo.completed
+
         className =
-            if todo.completed then
+            if complete then
                 "completed"
             else
                 ""
+
+        onClickMsg =
+            if complete then
+                MarkAsIncomplete todo
+            else
+                MarkAsCompleted todo
     in
         li
             [ id ("todo-" ++ toString todo.id)
@@ -165,8 +187,8 @@ viewTodo todo =
             [ input
                 [ class "toggle"
                 , type' "checkbox"
-                , onClick <| MarkAsCompleted todo
-                , checked todo.completed
+                , onClick <| onClickMsg
+                , checked complete
                 ]
                 []
             , label [] [ text todo.text ]
@@ -175,12 +197,10 @@ viewTodo todo =
 
 handleKeyUp : Int -> Msg
 handleKeyUp keyCode =
-    case isEnter keyCode of
-        True ->
-            CreateTodo
-
-        False ->
-            NoOp
+    if isEnter keyCode then
+        CreateTodo
+    else
+        NoOp
 
 
 isEnter : Int -> Bool
