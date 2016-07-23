@@ -18,13 +18,35 @@ given =
 
 stepMap : GivenStepMap Context
 stepMap =
-    [ ( "a current text"
+    [ ( "an initial count"
+      , givenAnInitialCount
+      )
+    , ( "a current text"
       , givenACurrentText
       )
     , ( "an existing todo"
       , givenAnExistingTodo
       )
+    , ( "another existing todo"
+      , givenAnotherExistingTodo
+      )
     ]
+
+
+givenAnInitialCount : GivenStep Context
+givenAnInitialCount oldCtx =
+    let
+        count =
+            0
+
+        oldModel =
+            getModel oldCtx
+    in
+        { oldCtx
+            | initialCount = Just count
+            , model =
+                Just { oldModel | counter = count }
+        }
 
 
 givenACurrentText : GivenStep Context
@@ -47,7 +69,7 @@ givenAnExistingTodo : GivenStep Context
 givenAnExistingTodo oldCtx =
     let
         todo =
-            Todo "Existing todo" False
+            Todo 1 "Existing todo" False
 
         oldModel =
             getModel oldCtx
@@ -59,4 +81,23 @@ givenAnExistingTodo oldCtx =
                         | todos = [ todo ]
                     }
             , existingTodo = Just todo
+        }
+
+
+givenAnotherExistingTodo : GivenStep Context
+givenAnotherExistingTodo oldCtx =
+    let
+        todo =
+            Todo 2 "Another existing todo" False
+
+        oldModel =
+            getModel oldCtx
+    in
+        { oldCtx
+            | model =
+                Just
+                    { oldModel
+                        | todos = [ todo ]
+                    }
+            , secondTodo = Just todo
         }

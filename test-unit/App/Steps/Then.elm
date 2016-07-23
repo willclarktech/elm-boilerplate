@@ -35,6 +35,9 @@ stepMap =
     , ( "the current text should be reset"
       , thenTheCurrentTextShouldBeReset
       )
+    , ( "the counter should be incremented"
+      , thenTheCounterShouldBeIncremented
+      )
     , ( "the new text should be stored in the model"
       , thenTheNewTextShouldBeStoredInTheModel
       )
@@ -43,6 +46,9 @@ stepMap =
       )
     , ( "the todo should be completed"
       , thenTheTodoShouldBeCompleted
+      )
+    , ( "the other todo should not be completed"
+      , thenTheOtherTodoShouldNotBeCompleted
       )
     ]
 
@@ -59,6 +65,16 @@ thenTheCurrentTextShouldBeReset : ThenStep Context
 thenTheCurrentTextShouldBeReset ctx =
     expect "" toBe
         <| .currentText (confirmIsJust "model" ctx.model)
+
+
+thenTheCounterShouldBeIncremented : ThenStep Context
+thenTheCounterShouldBeIncremented ctx =
+    expect
+        ((confirmIsJust "initialCount" ctx.initialCount)
+            + 1
+        )
+        toBe
+        <| .counter (confirmIsJust "model" ctx.model)
 
 
 thenTheExistingTodoShouldStillExist : ThenStep Context
@@ -92,4 +108,13 @@ thenTheTodoShouldBeCompleted ctx =
         <| List.isEmpty
         <| List.filter .completed
         <| List.filter (\todo -> todo.text == .text (confirmIsJust "existingTodo" ctx.existingTodo))
+        <| .todos (confirmIsJust "model" ctx.model)
+
+
+thenTheOtherTodoShouldNotBeCompleted : ThenStep Context
+thenTheOtherTodoShouldNotBeCompleted ctx =
+    expect True toBe
+        <| List.isEmpty
+        <| List.filter .completed
+        <| List.filter (\todo -> todo.id == .id (confirmIsJust "secondTodo" ctx.secondTodo))
         <| .todos (confirmIsJust "model" ctx.model)

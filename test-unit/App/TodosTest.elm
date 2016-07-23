@@ -9,15 +9,18 @@ import App.Steps.Then exposing (then')
 
 createTodoSuite : List Test
 createTodoSuite =
-    [ given "a current text"
-        [ when "a todo is created"
-            [ then' "a todo should be created with the current text"
-            , then' "the current text should be reset"
-            ]
-        , given "an existing todo"
+    [ given "an initial count"
+        [ given "a current text"
             [ when "a todo is created"
                 [ then' "a todo should be created with the current text"
-                , then' "the existing todo should still exist"
+                , then' "the current text should be reset"
+                , then' "the counter should be incremented"
+                ]
+            , given "an existing todo"
+                [ when "a todo is created"
+                    [ then' "a todo should be created with the current text"
+                    , then' "the existing todo should still exist"
+                    ]
                 ]
             ]
         ]
@@ -51,6 +54,10 @@ markAsCompletedSuite =
     [ given "an existing todo"
         [ when "the todo is marked as completed"
             [ then' "the todo should be completed" ]
+        , given "another existing todo"
+            [ when "the todo is marked as completed"
+                [ then' "the other todo should not be completed" ]
+            ]
         ]
         initialContext
     ]
