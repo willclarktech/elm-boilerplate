@@ -4,6 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 
 import { TodosPage } from '../page-objects';
 
+require('../../scripts/pretty-error');
 global.Promise = require('bluebird');
 chai.use(chaiAsPromised);
 

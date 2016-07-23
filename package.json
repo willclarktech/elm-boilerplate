@@ -54,6 +54,7 @@
     "nightmare": "^2.5.2",
     "nodemon": "^1.9.2",
     "npm-check-updates": "^2.6.7",
+    "pretty-error": "^2.0.0",
     "semantic-ui": "^2.1.8"
   }
 }

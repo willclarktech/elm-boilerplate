@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable prefer-rest-params */
 
+require('./pretty-error');
 const fs = require('fs');
 const util = require('util');
 

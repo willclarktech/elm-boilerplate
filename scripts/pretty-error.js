@@ -1,0 +1,1 @@
+require('pretty-error').start();
