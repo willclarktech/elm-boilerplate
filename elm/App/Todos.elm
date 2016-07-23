@@ -15,6 +15,7 @@ module App.Todos
         )
 
 import Json.Decode as Json
+import Markdown
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events
@@ -24,6 +25,7 @@ import Html.Events
         , on
         , keyCode
         )
+import Copy.Todos exposing (headingMD, placeholderText)
 
 
 type Msg
@@ -121,10 +123,10 @@ markAsCompleted todo model =
 view : Model -> Html Msg
 view model =
     div []
-        [ h1 [] [ text "Example App" ]
+        [ Markdown.toHtml [] headingMD
         , input
             [ id "new-todo"
-            , placeholder "What needs to be done?"
+            , placeholder placeholderText
             , on "keyup" <| Json.map handleKeyUp keyCode
             , onInput UpdateText
             , value model.currentText
