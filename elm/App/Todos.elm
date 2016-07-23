@@ -124,6 +124,7 @@ view model =
         [ h1 [] [ text "Example App" ]
         , input
             [ id "new-todo"
+            , placeholder "What needs to be done?"
             , on "keyup" <| Json.map handleKeyUp keyCode
             , onInput UpdateText
             , value model.currentText
