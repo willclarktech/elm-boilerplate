@@ -1,5 +1,6 @@
 module App.Steps.Given exposing (given)
 
+import App.Todos exposing (Todo)
 import App.Steps.Context exposing (Context, getModel)
 import GivenWhenThen.Helpers exposing (constructGivenFunction)
 import GivenWhenThen.Types
@@ -46,9 +47,7 @@ givenAnExistingTodo : GivenStep Context
 givenAnExistingTodo oldCtx =
     let
         todo =
-            { text = "Existing todo"
-            , completed = False
-            }
+            Todo "Existing todo" False
 
         oldModel =
             getModel oldCtx
