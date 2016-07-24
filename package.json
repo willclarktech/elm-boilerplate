@@ -13,6 +13,7 @@
     "url": "https://github.com/LikeJasper/elm-boilerplate/issues"
   },
   "scripts": {
+    "deploy": "git-directory-deploy --directory ./dev --repo origin --branch gh-pages",
     "dev": "elm-server ./src/Main.elm --output ./dev/app.js",
     "lint": "eslint ./features ./scripts",
     "lint:fix": "npm run lint -- --fix",
@@ -50,6 +51,7 @@
     "eslint-plugin-import": "^1.8.1",
     "eslint-plugin-jsx-a11y": "^1.4.2",
     "eslint-plugin-react": "^5.1.1",
+    "git-directory-deploy": "^1.5.0",
     "husky": "^0.11.4",
     "less": "^2.7.1",
     "nightmare": "^2.5.2",
