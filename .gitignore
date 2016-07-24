@@ -5,6 +5,7 @@
 # elm
 /elm-stuff/
 /dev/
+/dist/
 
 # semantic-ui
 /semantic/src/definitions/

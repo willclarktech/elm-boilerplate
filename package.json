@@ -1,7 +1,7 @@
 {
   "name": "elm-boilerplate",
   "description": "A boilerplate for elm apps",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "LikeJasper <will@willclark.tech>",
   "license": "MIT",
   "homepage": "https://github.com/LikeJasper/elm-boilerplate#readme",
@@ -13,7 +13,8 @@
     "url": "https://github.com/LikeJasper/elm-boilerplate/issues"
   },
   "scripts": {
-    "deploy": "git-directory-deploy --directory ./dev --repo origin --branch gh-pages",
+    "predeploy": "npm run clean:dist && cp -a ./dev ./dist && uglifyjs ./dist/app.js --compress --mangle --output ./dist/app.js",
+    "deploy": "git-directory-deploy --directory ./dist --repo origin --branch gh-pages",
     "dev": "elm-server ./src/Main.elm --output ./dev/app.js",
     "lint": "eslint ./features ./scripts",
     "lint:fix": "npm run lint -- --fix",
@@ -24,6 +25,7 @@
     "test:unit:single": "npm run clean:test && FILE=./temp/$(uuidgen).test.js && elm-make ./test-unit/TestRunner.elm --output $FILE && node $FILE; RESULT=$?; rm -f $FILE;",
     "test:unit:watch": "nodemon --watch ./src --watch ./test-unit --ext elm --exec 'npm run test:unit:single'",
     "clean:test": "rm ./temp/*.test.js || true",
+    "clean:dist": "rm -r ./dist || true",
     "clean:dev": "rm -r ./dev",
     "clean:ui": "rm -r ./dev/ui",
     "build:ui": "cd ./semantic && gulp build && cd .. || cd ..",
