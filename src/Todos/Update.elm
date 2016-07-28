@@ -8,7 +8,6 @@ module Todos.Update
         , markAsCompleted
         , markAsIncomplete
         , delete
-        , subscriptions
         )
 
 import Todos.Types
@@ -126,8 +125,3 @@ delete todo model =
         { model
             | todos = newTodos
         }
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
