@@ -11,7 +11,8 @@ import Html.Events
         , on
         , keyCode
         )
-import Todos.Todos exposing (..)
+import Todos.Todos exposing (Todo, Model, Msg(..))
+import Todos.Update exposing (..)
 import Copy.Todos exposing (headingMD, placeholderText)
 
 

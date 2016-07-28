@@ -1,6 +1,6 @@
 module TodosTest.Steps.When exposing (when)
 
-import Todos.Todos
+import Todos.Update
     exposing
         ( updateText
         , createTodo

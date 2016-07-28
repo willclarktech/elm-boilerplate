@@ -5,8 +5,8 @@ import Todos.Todos
         ( Model
         , Todo
         , Msg
-        , initialModel
         )
+import Todos.Update exposing (initialModel)
 
 
 type alias Context =
