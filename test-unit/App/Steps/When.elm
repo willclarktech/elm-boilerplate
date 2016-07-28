@@ -65,18 +65,25 @@ whenATodoIsCreated oldCtx =
         }
 
 
+pressKey : Int -> WhenStep Context
+pressKey keyNumber oldCtx =
+    let
+        currentText =
+            confirmIsJust "currentText" oldCtx.currentText
+    in
+        { oldCtx
+            | messageAfter = Just <| handleKeyUp currentText keyNumber
+        }
+
+
 whenTheEnterKeyIsPressed : WhenStep Context
 whenTheEnterKeyIsPressed oldCtx =
-    { oldCtx
-        | messageAfter = Just <| handleKeyUp 13
-    }
+    pressKey 13 oldCtx
 
 
 whenTheTKeyIsPressed : WhenStep Context
 whenTheTKeyIsPressed oldCtx =
-    { oldCtx
-        | messageAfter = Just <| handleKeyUp 84
-    }
+    pressKey 84 oldCtx
 
 
 whenTheTextIsUpdated : WhenStep Context

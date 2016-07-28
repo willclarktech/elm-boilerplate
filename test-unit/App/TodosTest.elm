@@ -30,11 +30,19 @@ createTodoSuite =
 
 handleKeyUpSuite : List Test
 handleKeyUpSuite =
-    [ when "the ENTER key is pressed"
-        [ then' "a todo should be created" ]
+    [ given "a current text"
+        [ when "the ENTER key is pressed"
+            [ then' "a todo should be created" ]
+        , when "the T key is pressed"
+            [ then' "nothing should happen" ]
+        ]
         initialContext
-    , when "the T key is pressed"
-        [ then' "nothing should happen" ]
+    , given "a blank text"
+        [ when "the ENTER key is pressed"
+            [ then' "nothing should happen" ]
+        , when "the T key is pressed"
+            [ then' "nothing should happen" ]
+        ]
         initialContext
     ]
 

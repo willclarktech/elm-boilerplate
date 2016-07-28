@@ -28,6 +28,9 @@ stepMap =
     , ( "a current text"
       , givenACurrentText
       )
+    , ( "a blank text"
+      , givenABlankText
+      )
     , ( "an existing todo"
       , givenAnExistingTodo
       )
@@ -59,12 +62,9 @@ givenAnInitialCount oldCtx =
         }
 
 
-givenACurrentText : GivenStep Context
-givenACurrentText oldCtx =
+setCurrentText : String -> GivenStep Context
+setCurrentText text oldCtx =
     let
-        text =
-            "Buy milk"
-
         oldModel =
             getModel oldCtx
     in
@@ -73,6 +73,16 @@ givenACurrentText oldCtx =
             , model =
                 Just { oldModel | currentText = text }
         }
+
+
+givenACurrentText : GivenStep Context
+givenACurrentText oldCtx =
+    setCurrentText "Buy milk" oldCtx
+
+
+givenABlankText : GivenStep Context
+givenABlankText oldCtx =
+    setCurrentText "" oldCtx
 
 
 givenAnExistingTodo : GivenStep Context
