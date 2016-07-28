@@ -24,7 +24,9 @@ export default class TodosPage extends BasePage {
   }
 
   createTodo(text) {
-    const todoText = text || 'Test';
+    const todoText = typeof text === 'string'
+      ? text
+      : 'Test';
     this.browser.ctx.todoText = todoText;
     return this
       .typeTextIntoElementAndSubmit(todoText, this.selectors.newTodo);

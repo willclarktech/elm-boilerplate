@@ -1,4 +1,3 @@
-@now
 Feature: Create Todo
   As a busy inhabitant of the modern world
   I want to create a Todo

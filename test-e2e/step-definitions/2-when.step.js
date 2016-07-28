@@ -7,9 +7,8 @@ module.exports = function () {
     return this.todosPage.createTodo();
   });
 
-  this.When(/^I try to create a blank Todo$/, function (callback) {
-    // Write code here that turns the phrase above into concrete actions
-    callback(null, 'pending');
+  this.When(/^I try to create a blank Todo$/, function () {
+    return this.todosPage.createTodo('');
   });
 
   this.When(/^I mark the Todo as complete$/, function () {
