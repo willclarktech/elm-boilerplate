@@ -1,6 +1,6 @@
 module TodosTest.Steps.Context exposing (..)
 
-import Todos.Todos
+import Todos.Types
     exposing
         ( Model
         , Todo

@@ -1,6 +1,6 @@
 module TodosTest.Steps.Given exposing (given)
 
-import Todos.Todos exposing (Todo)
+import Todos.Types exposing (Todo)
 import TodosTest.Steps.Context exposing (Context, getModel)
 import GivenWhenThen.Helpers
     exposing

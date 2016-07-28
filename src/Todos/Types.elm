@@ -1,4 +1,4 @@
-module Todos.Todos
+module Todos.Types
     exposing
         ( Model
         , Todo

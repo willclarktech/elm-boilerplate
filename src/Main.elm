@@ -1,7 +1,6 @@
 module Main exposing (..)
 
 import Html.App
-import Todos.Todos as Todos
 import Todos.Update as Update
 import Todos.View as View
 

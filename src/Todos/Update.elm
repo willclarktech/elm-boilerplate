@@ -11,7 +11,7 @@ module Todos.Update
         , subscriptions
         )
 
-import Todos.Todos
+import Todos.Types
     exposing
         ( Model
         , Todo
