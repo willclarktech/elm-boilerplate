@@ -2,13 +2,13 @@ module App.Steps.When exposing (when)
 
 import App.Todos
     exposing
-        ( handleKeyUp
-        , updateText
+        ( updateText
         , createTodo
         , markAsCompleted
         , markAsIncomplete
         , delete
         )
+import App.View exposing (handleKeyUp)
 import App.Steps.Context exposing (Context, getModel)
 import GivenWhenThen.Helpers
     exposing
