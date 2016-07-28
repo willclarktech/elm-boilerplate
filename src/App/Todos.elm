@@ -153,7 +153,13 @@ markAsIncomplete todo model =
 
 delete : Todo -> Model -> Model
 delete todo model =
-    model
+    let
+        newTodos =
+            List.filter (\todoToCheck -> todoToCheck.id /= todo.id) model.todos
+    in
+        { model
+            | todos = newTodos
+        }
 
 
 view : Model -> Html Msg
