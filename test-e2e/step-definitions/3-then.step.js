@@ -23,8 +23,9 @@ module.exports = function thenSteps() {
       .eventually.to.be.false;
   });
 
-  this.Then(/^I should not see the Todo$/, function (callback) {
-    // Write code here that turns the phrase above into concrete actions
-    callback(null, 'pending');
+  this.Then(/^I should not see the Todo$/, function () {
+    return this
+      .expect(this.todosPage.isTodoPresent())
+      .eventually.to.be.false;
   });
 };

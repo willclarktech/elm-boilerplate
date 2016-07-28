@@ -17,6 +17,7 @@ export default class TodosPage extends BasePage {
       identifier,
       newTodo: '#new-todo',
       toggleTodo: '.toggle',
+      deleteTodo: '.delete',
       todo: 'li',
       todoText: 'li label',
     };
@@ -39,10 +40,16 @@ export default class TodosPage extends BasePage {
       .clickElement(this.selectors.toggleTodo);
   }
 
+  deleteTodo() {
+    return this
+      .clickElement(this.selectors.deleteTodo);
+  }
+
   isTodoPresent() {
     return this
       .getElementText(this.selectors.todoText)
-      .then(text => text === this.browser.ctx.todoText);
+      .then(text => text === this.browser.ctx.todoText)
+      .catch(() => false);
   }
 
   isTodoCompleted() {
