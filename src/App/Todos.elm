@@ -163,18 +163,18 @@ delete todo model =
 
 
 view : Model -> Html Msg
-view model =
+view { currentText, todos } =
     div []
         [ Markdown.toHtml [] headingMD
         , input
             [ id "new-todo"
             , placeholder placeholderText
-            , on "keyup" <| Json.map handleKeyUp keyCode
+            , on "keyup" <| Json.map (handleKeyUp currentText) keyCode
             , onInput UpdateText
-            , value model.currentText
+            , value currentText
             ]
             []
-        , ul [] <| List.map viewTodo model.todos
+        , ul [] <| List.map viewTodo todos
         ]
 
 
@@ -216,9 +216,9 @@ viewTodo todo =
             ]
 
 
-handleKeyUp : Int -> Msg
-handleKeyUp keyCode =
-    if isEnter keyCode then
+handleKeyUp : String -> Int -> Msg
+handleKeyUp currentText keyCode =
+    if currentText /= "" && isEnter keyCode then
         CreateTodo
     else
         NoOp
