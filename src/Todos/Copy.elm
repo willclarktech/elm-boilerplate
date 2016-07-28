@@ -1,4 +1,4 @@
-module Copy.Todos exposing (headingMD, placeholderText)
+module Todos.Copy exposing (headingMD, placeholderText)
 
 
 headingMD : String

@@ -13,7 +13,7 @@ import Html.Events
         )
 import Todos.Types exposing (Todo, Model, Msg(..))
 import Todos.Update exposing (..)
-import Copy.Todos exposing (headingMD, placeholderText)
+import Todos.Copy exposing (headingMD, placeholderText)
 
 
 view : Model -> Html Msg
