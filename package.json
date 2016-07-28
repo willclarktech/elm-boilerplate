@@ -31,7 +31,7 @@
     "clean:dist": "rm -r ./dist || true",
     "clean:dev": "rm -r ./dev",
     "clean:ui": "rm -r ./dev/ui",
-    "build:ui": "cd ./semantic && gulp build && cd .. || cd ..",
+    "build:ui": "cd ./ui && gulp build && cd .. || cd ..",
     "predev:prepare": "npm run clean:dev || true",
     "dev:prepare": "mkdir ./dev && npm run dev:prepare:html && npm run dev:prepare:ui",
     "dev:prepare:html": "cp ./skeleton.html ./dev/index.html",
