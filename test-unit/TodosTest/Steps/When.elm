@@ -1,6 +1,6 @@
-module App.Steps.When exposing (when)
+module TodosTest.Steps.When exposing (when)
 
-import App.Todos
+import Todos.Todos
     exposing
         ( updateText
         , createTodo
@@ -8,8 +8,8 @@ import App.Todos
         , markAsIncomplete
         , delete
         )
-import App.View exposing (handleKeyUp)
-import App.Steps.Context exposing (Context, getModel)
+import Todos.View exposing (handleKeyUp)
+import TodosTest.Steps.Context exposing (Context, getModel)
 import GivenWhenThen.Helpers
     exposing
         ( constructWhenFunction

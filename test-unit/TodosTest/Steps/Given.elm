@@ -1,7 +1,7 @@
-module App.Steps.Given exposing (given)
+module TodosTest.Steps.Given exposing (given)
 
-import App.Todos exposing (Todo)
-import App.Steps.Context exposing (Context, getModel)
+import Todos.Todos exposing (Todo)
+import TodosTest.Steps.Context exposing (Context, getModel)
 import GivenWhenThen.Helpers
     exposing
         ( constructGivenFunction

@@ -1,4 +1,4 @@
-module App.View exposing (view, handleKeyUp)
+module Todos.View exposing (view, handleKeyUp)
 
 import Json.Decode as Json
 import Markdown
@@ -11,7 +11,7 @@ import Html.Events
         , on
         , keyCode
         )
-import App.Todos exposing(..)
+import Todos.Todos exposing (..)
 import Copy.Todos exposing (headingMD, placeholderText)
 
 

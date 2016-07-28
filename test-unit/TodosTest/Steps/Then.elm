@@ -1,8 +1,8 @@
-module App.Steps.Then exposing (then')
+module TodosTest.Steps.Then exposing (then')
 
 import ElmTestBDDStyle exposing (expect, toBe)
-import App.Todos exposing (Msg(..))
-import App.Steps.Context exposing (Context)
+import Todos.Todos exposing (Msg(..))
+import TodosTest.Steps.Context exposing (Context)
 import GivenWhenThen.Types
     exposing
         ( ThenStep

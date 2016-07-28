@@ -1,4 +1,4 @@
-module App.Todos
+module Todos.Todos
     exposing
         ( init
         , update

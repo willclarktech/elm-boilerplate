@@ -1,6 +1,6 @@
-module App.Steps.Context exposing (..)
+module TodosTest.Steps.Context exposing (..)
 
-import App.Todos
+import Todos.Todos
     exposing
         ( Model
         , Todo

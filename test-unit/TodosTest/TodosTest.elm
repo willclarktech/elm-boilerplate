@@ -1,10 +1,10 @@
-module App.TodosTest exposing (testSuite)
+module TodosTest.TodosTest exposing (testSuite)
 
 import ElmTest exposing (Test, suite)
-import App.Steps.Context exposing (initialContext)
-import App.Steps.Given exposing (given)
-import App.Steps.When exposing (when)
-import App.Steps.Then exposing (then')
+import TodosTest.Steps.Context exposing (initialContext)
+import TodosTest.Steps.Given exposing (given)
+import TodosTest.Steps.When exposing (when)
+import TodosTest.Steps.Then exposing (then')
 
 
 createTodoSuite : List Test
@@ -105,7 +105,7 @@ deleteSuite =
 
 testSuite : Test
 testSuite =
-    suite "App.TodosTest"
+    suite "TodosTest.TodosTest"
         [ suite "createTodo" createTodoSuite
         , suite "handleKeyUp" handleKeyUpSuite
         , suite "updateText" updateTextSuite

@@ -1,8 +1,8 @@
 module Main exposing (..)
 
 import Html.App
-import App.Todos as Todos
-import App.View as View
+import Todos.Todos as Todos
+import Todos.View as View
 
 
 main : Program Never
