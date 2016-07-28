@@ -25,6 +25,7 @@
     "test:e2e:now": "cucumber-js ./features --compiler js:babel-core/register -r ./test-e2e/support -r ./test-e2e/step-definitions --tags @now || true",
     "test:e2e:single": "npm run test:e2e",
     "test:e2e:watch": "nodemon --watch ./dev --watch ./features --watch ./test-e2e --ext js,feature,html --exec 'npm run test:e2e:now'",
+    "test:e2e:watch:all": "nodemon --watch ./dev --watch ./features --watch ./test-e2e --ext js,feature,html --exec 'npm run test:e2e:single'",
     "test:unit:single": "npm run clean:test && FILE=./temp/$(uuidgen).test.js && elm-make ./test-unit/TestRunner.elm --output $FILE && node $FILE; RESULT=$?; rm -f $FILE;",
     "test:unit:watch": "nodemon --watch ./src --watch ./test-unit --ext elm --exec 'npm run test:unit:single'",
     "clean:test": "rm ./temp/*.test.js || true",
