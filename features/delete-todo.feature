@@ -1,4 +1,3 @@
-@now
 Feature: Delete Todo
   As a fallible human being
   I want to delete a Todo
