@@ -4,6 +4,7 @@ module GivenWhenThen.Helpers
         , constructGivenFunction
         , constructWhenFunction
         , constructThenFunction
+        , constructGWTSuite
         )
 
 import ElmTestBDDStyle exposing (Test, describe, it)
@@ -102,3 +103,8 @@ constructThenFunction stepMap description =
             test <| stepDefinition context
     in
         getThenStepForContext
+
+
+constructGWTSuite : List (ctx -> Test) -> ctx -> List Test
+constructGWTSuite steps initialContext =
+    List.map (\step -> step initialContext) steps
