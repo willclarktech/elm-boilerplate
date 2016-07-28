@@ -34,6 +34,7 @@ type Msg
     | UpdateText String
     | MarkAsCompleted Todo
     | MarkAsIncomplete Todo
+    | Delete Todo
     | NoOp
 
 
@@ -83,6 +84,9 @@ update action model =
 
         MarkAsIncomplete todo ->
             ( markAsIncomplete todo model, Cmd.none )
+
+        Delete todo ->
+            ( delete todo model, Cmd.none )
 
         NoOp ->
             noFx model
@@ -146,6 +150,11 @@ markAsIncomplete todo model =
     setCompleteStatusForTodoInModel todo model False
 
 
+delete : Todo -> Model -> Model
+delete todo model =
+    model
+
+
 view : Model -> Html Msg
 view model =
     div []
@@ -174,7 +183,7 @@ viewTodo todo =
             else
                 ""
 
-        onClickMsg =
+        onToggleMsg =
             if complete then
                 MarkAsIncomplete todo
             else
@@ -187,11 +196,16 @@ viewTodo todo =
             [ input
                 [ class "toggle"
                 , type' "checkbox"
-                , onClick <| onClickMsg
+                , onClick <| onToggleMsg
                 , checked complete
                 ]
                 []
             , label [] [ text todo.text ]
+            , span
+                [ class "delete"
+                , onClick <| Delete todo
+                ]
+                [ text "×" ]
             ]
 
 
