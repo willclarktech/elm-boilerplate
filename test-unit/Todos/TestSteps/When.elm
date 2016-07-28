@@ -1,4 +1,4 @@
-module TodosTest.Steps.When exposing (when)
+module Todos.TestSteps.When exposing (when)
 
 import Todos.Update
     exposing
@@ -9,7 +9,7 @@ import Todos.Update
         , delete
         )
 import Todos.View exposing (handleKeyUp)
-import TodosTest.Steps.Context exposing (Context, getModel)
+import Todos.TestContext exposing (Context, getModel)
 import GivenWhenThen.Helpers
     exposing
         ( constructWhenFunction

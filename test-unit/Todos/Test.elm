@@ -1,10 +1,10 @@
-module TodosTest.TodosTest exposing (testSuite)
+module Todos.Test exposing (testSuite)
 
 import ElmTest exposing (Test, suite)
-import TodosTest.Steps.Context exposing (initialContext)
-import TodosTest.Steps.Given exposing (given)
-import TodosTest.Steps.When exposing (when)
-import TodosTest.Steps.Then exposing (then')
+import Todos.TestContext exposing (initialContext)
+import Todos.TestSteps.Given exposing (given)
+import Todos.TestSteps.When exposing (when)
+import Todos.TestSteps.Then exposing (then')
 
 
 createTodoSuite : List Test
