@@ -14,4 +14,9 @@ module.exports = function () {
   this.When(/^I mark the Todo as incomplete$/, function () {
     return this.todosPage.markTodoAsIncomplete();
   });
+
+  this.When(/^I delete the Todo$/, function (callback) {
+    // Write code here that turns the phrase above into concrete actions
+    callback(null, 'pending');
+  });
 };

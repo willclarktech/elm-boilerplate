@@ -1,4 +1,3 @@
-@now
 Feature: Complete Todo
   As a busy inhabitant of the modern world
   I want to complete a Todo
