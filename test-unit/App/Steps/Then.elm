@@ -56,6 +56,12 @@ stepMap =
     , ( "the other todo should not be completed"
       , thenTheOtherTodoShouldNotBeCompleted
       )
+    , ( "the todo should be gone"
+      , thenTheTodoShouldBeGone
+      )
+    , ( "the other todo should remain"
+      , thenTheOtherTodoShouldRemain
+      )
     ]
 
 
@@ -140,5 +146,21 @@ thenTheOtherTodoShouldNotBeCompleted ctx =
     expect True toBe
         <| List.isEmpty
         <| List.filter .completed
+        <| List.filter (\todo -> todo.id == .id (confirmIsJust "secondTodo" ctx.secondTodo))
+        <| .todos (confirmIsJust "model" ctx.model)
+
+
+thenTheTodoShouldBeGone : ThenStep Context
+thenTheTodoShouldBeGone ctx =
+    expect True toBe
+        <| List.isEmpty
+        <| List.filter (\todo -> todo.id == .id (confirmIsJust "existingTodo" ctx.existingTodo))
+        <| .todos (confirmIsJust "model" ctx.model)
+
+
+thenTheOtherTodoShouldRemain : ThenStep Context
+thenTheOtherTodoShouldRemain ctx =
+    expect False toBe
+        <| List.isEmpty
         <| List.filter (\todo -> todo.id == .id (confirmIsJust "secondTodo" ctx.secondTodo))
         <| .todos (confirmIsJust "model" ctx.model)

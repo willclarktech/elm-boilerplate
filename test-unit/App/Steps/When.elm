@@ -7,6 +7,7 @@ import App.Todos
         , createTodo
         , markAsCompleted
         , markAsIncomplete
+        , delete
         )
 import App.Steps.Context exposing (Context, getModel)
 import GivenWhenThen.Helpers
@@ -46,6 +47,9 @@ stepMap =
       )
     , ( "the todo is marked as incomplete"
       , whenTheTodoIsMarkedAsIncomplete
+      )
+    , ( "the todo is deleted"
+      , whenTheTodoIsDeleted
       )
     ]
 
@@ -115,4 +119,18 @@ whenTheTodoIsMarkedAsIncomplete oldCtx =
     in
         { oldCtx
             | model = Just (markAsIncomplete existingTodo oldModel)
+        }
+
+
+whenTheTodoIsDeleted : WhenStep Context
+whenTheTodoIsDeleted oldCtx =
+    let
+        existingTodo =
+            confirmIsJust "existingTodo" oldCtx.existingTodo
+
+        oldModel =
+            getModel oldCtx
+    in
+        { oldCtx
+            | model = Just (delete existingTodo oldModel)
         }

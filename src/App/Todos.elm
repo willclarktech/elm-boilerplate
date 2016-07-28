@@ -10,6 +10,7 @@ module App.Todos
         , createTodo
         , markAsCompleted
         , markAsIncomplete
+        , delete
         , Msg(..)
         , Model
         , Todo

@@ -81,6 +81,20 @@ markAsIncompleteSuite =
     ]
 
 
+deleteSuite : List Test
+deleteSuite =
+    [ given "an existing todo"
+        [ when "the todo is deleted"
+            [ then' "the todo should be gone" ]
+        , given "another existing todo"
+            [ when "the todo is deleted"
+                [ then' "the other todo should remain" ]
+            ]
+        ]
+        initialContext
+    ]
+
+
 testSuite : Test
 testSuite =
     suite "App.TodosTest"
@@ -89,4 +103,5 @@ testSuite =
         , suite "updateText" updateTextSuite
         , suite "markAsCompleted" markAsCompletedSuite
         , suite "markAsIncomplete" markAsIncompleteSuite
+        , suite "delete" deleteSuite
         ]
