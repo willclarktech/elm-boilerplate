@@ -181,17 +181,17 @@ view { currentText, todos } =
 viewTodo : Todo -> Html Msg
 viewTodo todo =
     let
-        complete =
+        completed =
             todo.completed
 
         className =
-            if complete then
+            if completed then
                 "completed"
             else
                 ""
 
         onToggleMsg =
-            if complete then
+            if completed then
                 MarkAsIncomplete todo
             else
                 MarkAsCompleted todo
@@ -204,7 +204,7 @@ viewTodo todo =
                 [ class "toggle"
                 , type' "checkbox"
                 , onClick <| onToggleMsg
-                , checked complete
+                , checked completed
                 ]
                 []
             , label [] [ text todo.text ]
