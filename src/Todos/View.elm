@@ -18,18 +18,41 @@ import Todos.Copy exposing (headingMD, placeholderText)
 
 view : Model -> Html Msg
 view { currentText, todos } =
-    div []
-        [ Markdown.toHtml [] headingMD
-        , input
-            [ id "new-todo"
-            , placeholder placeholderText
-            , on "keyup" <| Json.map (handleKeyUp currentText) keyCode
-            , onInput UpdateText
-            , value currentText
-            ]
-            []
-        , ul [] <| List.map viewTodo todos
+    div [ id "todos-app" ]
+        [ viewHeading
+        , viewNewTodoInput currentText
+        , viewTodos todos
+        , viewFilters
         ]
+
+
+viewHeading : Html Msg
+viewHeading =
+    Markdown.toHtml [] headingMD
+
+
+viewFilters : Html Msg
+viewFilters =
+    div [ id "filters" ]
+        [ div [ id "filter-all" ] [ text "filter-all" ]
+        ]
+
+
+viewNewTodoInput : String -> Html Msg
+viewNewTodoInput currentText =
+    input
+        [ id "new-todo"
+        , placeholder placeholderText
+        , on "keyup" <| Json.map (handleKeyUp currentText) keyCode
+        , onInput UpdateText
+        , value currentText
+        ]
+        []
+
+
+viewTodos : List Todo -> Html Msg
+viewTodos todos =
+    ul [] <| List.map viewTodo todos
 
 
 viewTodo : Todo -> Html Msg
