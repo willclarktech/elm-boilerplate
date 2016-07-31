@@ -9,6 +9,10 @@ global.Promise = require('bluebird');
 chai.use(chaiAsPromised);
 
 function World() {
+  this.expect = chai.expect;
+}
+
+function Before() {
   this.browser = Browser({
     waitTimeout: 1000,
   });
@@ -18,10 +22,9 @@ function World() {
   this.todosPage = new TodosPage({
     browser: this.browser,
   });
-
-  this.expect = chai.expect;
 }
 
 module.exports = function createWorld() {
   this.World = World;
+  this.Before(Before);
 };
