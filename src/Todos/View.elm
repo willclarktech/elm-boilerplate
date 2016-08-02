@@ -19,7 +19,12 @@ import Todos.Types
         , FilterOption(..)
         )
 import Todos.Update exposing (..)
-import Todos.Copy exposing (headingMD, placeholderText)
+import Todos.Copy
+    exposing
+        ( headingMD
+        , placeholderText
+        , getButtonText
+        )
 
 
 view : Model -> Html Msg
@@ -40,22 +45,32 @@ viewHeading =
 viewFilters : Html Msg
 viewFilters =
     div [ id "filters" ]
-        [ button
-            [ id "filter-all"
-            , onClick <| Filter All
+        <| List.map viewFilterButton
+            [ All, Completed, Incomplete ]
+
+
+viewFilterButton : FilterOption -> Html Msg
+viewFilterButton filterOption =
+    let
+        idSuffix =
+            case filterOption of
+                All ->
+                    "all"
+
+                Completed ->
+                    "completed"
+
+                Incomplete ->
+                    "incomplete"
+
+        buttonId =
+            "filter-" ++ idSuffix
+    in
+        button
+            [ id buttonId
+            , onClick <| Filter filterOption
             ]
-            [ text "All" ]
-        , button
-            [ id "filter-completed"
-            , onClick <| Filter Completed
-            ]
-            [ text "Completed" ]
-        , button
-            [ id "filter-incomplete"
-            , onClick <| Filter Incomplete
-            ]
-            [ text "Incomplete" ]
-        ]
+            [ text <| getButtonText buttonId ]
 
 
 viewNewTodoInput : String -> Html Msg
