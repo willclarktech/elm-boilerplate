@@ -29,23 +29,44 @@ module.exports = function thenSteps() {
       .eventually.to.be.false;
   });
 
-  this.Then(/^I should see the Todos I have completed$/, function (callback) {
-    // Write code here that turns the phrase above into concrete actions
-    callback(null, 'pending');
+  this.Then(/^I should see the Todos I have (completed|not completed)$/, function (status) {
+    const relevantTodos = status === 'completed'
+      ? this.browser.ctx.completedTodos
+      : this.browser.ctx.incompleteTodos;
+
+    return this.todosPage
+      .getTodos()
+      .then(todos => relevantTodos
+        .map(todo => this
+          .expect(todos.includes(todo))
+          .to.be.true
+        )
+      );
   });
 
-  this.Then(/^I should see the Todos I have not completed$/, function (callback) {
-    // Write code here that turns the phrase above into concrete actions
-    callback(null, 'pending');
+  this.Then(/^I should not see the Todos I have (completed|not completed)$/, function (status) {
+    const relevantTodos = status === 'completed'
+      ? this.browser.ctx.completedTodos
+      : this.browser.ctx.incompleteTodos;
+
+    return this.todosPage
+      .getTodos()
+      .then(todos => relevantTodos
+        .map(todo => this
+          .expect(todos.includes(todo))
+          .to.be.false
+        )
+      );
   });
 
-  this.Then(/^I should not see the Todos I have completed$/, function (callback) {
-    // Write code here that turns the phrase above into concrete actions
-    callback(null, 'pending');
-  });
-
-  this.Then(/^I should not see the Todos I have not completed$/, function (callback) {
-    // Write code here that turns the phrase above into concrete actions
-    callback(null, 'pending');
+  this.Then(/^I should see all of the Todos$/, function () {
+    return this.todosPage
+      .getTodos()
+      .then(todos => this.browser.ctx.todoTexts
+        .map(todo => this
+          .expect(todos.includes(todo))
+          .to.be.true
+        )
+      );
   });
 };

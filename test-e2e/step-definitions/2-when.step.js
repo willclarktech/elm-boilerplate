@@ -23,13 +23,7 @@ module.exports = function () {
     return this.todosPage.deleteTodo();
   });
 
-  this.When(/^I filter for completed Todos$/, function (callback) {
-    // Write code here that turns the phrase above into concrete actions
-    callback(null, 'pending');
-  });
-
-  this.When(/^I filter for incomplete Todos$/, function (callback) {
-    // Write code here that turns the phrase above into concrete actions
-    callback(null, 'pending');
+  this.When(/^I filter for (completed|incomplete|all) Todos$/, function (filterOption) {
+    return this.todosPage.filter(filterOption);
   });
 };

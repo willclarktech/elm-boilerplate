@@ -13,3 +13,10 @@ export function getText(selector) {
     .querySelector(selector)
     .innerText;
 }
+
+export function getAllTexts(selector) {
+  return Array.prototype.map.call(
+    document.querySelectorAll(selector),
+    element => element.innerText
+  );
+}

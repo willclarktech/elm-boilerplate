@@ -1,6 +1,9 @@
 import BasePage from './Base.page';
 
 const COMPLETED_CLASS = 'completed';
+const FILTER_COMPLETED = 'completed';
+const FILTER_INCOMPLETE = 'incomplete';
+const FILTER_ALL = 'all';
 
 export default class TodosPage extends BasePage {
   constructor({ browser }) {
@@ -20,6 +23,9 @@ export default class TodosPage extends BasePage {
       deleteTodo: '.delete',
       todo: 'li',
       todoText: 'li label',
+      filterAll: '#filter-all',
+      filterCompleted: '#filter-completed',
+      filterIncomplete: '#filter-incomplete',
     };
   }
 
@@ -32,14 +38,58 @@ export default class TodosPage extends BasePage {
       .typeTextIntoElementAndSubmit(todoText, this.selectors.newTodo);
   }
 
-  markTodoAsComplete() {
-    return this
-      .clickElement(this.selectors.toggleTodo);
+  createTodos(numberOfTodos) {
+    const todoTexts = [];
+    for (let i = 0; i < numberOfTodos; ++i) {
+      todoTexts.push(`Test ${i}`);
+    }
+    this.browser.ctx.todoTexts = todoTexts;
+    return todoTexts
+      .reduce((previousText, nextText) => previousText
+        .then(() => this
+          .typeTextIntoElementAndSubmit(nextText, this.selectors.newTodo)
+        ), Promise.resolve()
+      );
   }
 
-  markTodoAsIncomplete() {
+  markTodoAsComplete(selector = this.selectors.toggleTodo) {
     return this
-      .clickElement(this.selectors.toggleTodo);
+      .clickElement(selector);
+  }
+
+  markTodoAsIncomplete(selector = this.selectors.toggleTodo) {
+    return this
+      .clickElement(selector);
+  }
+
+  markTodosAsComplete(numberOfTodos) {
+    const todoTexts = [...this.browser.ctx.todoTexts];
+    if (numberOfTodos > todoTexts.length) {
+      throw new Error('You are trying to complete more todos than there are!');
+    }
+
+    const completedIndices = [];
+
+    const completeRandomTodos = (incompleteTodos, numberToComplete, completedTodos = []) => {
+      if (numberToComplete > completedTodos.length) {
+        const index = parseInt(Math.random() * incompleteTodos.length, 10);
+        const todoToComplete = incompleteTodos[index];
+        completedIndices.push(todoTexts.indexOf(todoToComplete));
+        const newCompleteTodos = [...completedTodos, todoToComplete];
+        const newIncompleteTodos = incompleteTodos.filter((todo, i) => i !== index);
+        return completeRandomTodos(newIncompleteTodos, numberToComplete, newCompleteTodos);
+      }
+      return { completedTodos, incompleteTodos };
+    };
+
+    const { completedTodos, incompleteTodos } = completeRandomTodos(todoTexts, numberOfTodos);
+    this.browser.ctx.completedTodos = completedTodos;
+    this.browser.ctx.incompleteTodos = incompleteTodos;
+
+    return Promise.map(
+      completedIndices,
+      index => this.markTodoAsComplete(`#todo-${index} .toggle`)
+    );
   }
 
   deleteTodo() {
@@ -58,5 +108,26 @@ export default class TodosPage extends BasePage {
     return this
       .getClassList(this.selectors.todo)
       .then(classList => classList.includes(COMPLETED_CLASS));
+  }
+
+  filter(status) {
+    switch (status) {
+      case FILTER_COMPLETED:
+        return this
+          .clickElement(this.selectors.filterCompleted);
+      case FILTER_INCOMPLETE:
+        return this
+          .clickElement(this.selectors.filterIncomplete);
+      case FILTER_ALL:
+      default:
+        return this
+          .clickElement(this.selectors.filterAll);
+    }
+  }
+
+  getTodos() {
+    return this
+      .getElementTextForEach(this.selectors.todoText)
+      .catch(() => false);
   }
 }

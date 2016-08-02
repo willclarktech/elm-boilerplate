@@ -1,6 +1,7 @@
 import {
   getClassList,
   getText,
+  getAllTexts,
 } from './helpers.js';
 
 const ENTER = '\u000d';
@@ -24,7 +25,7 @@ export default class BasePage {
     return new Promise((resolve, reject) => {
       this.browser
         .wait(selector)
-        .wait(20) // Nightmare too fast
+        .wait(200) // Nightmare too fast
         .click(selector)
         .then(resolve)
         .catch(reject);
@@ -35,7 +36,9 @@ export default class BasePage {
     return new Promise((resolve, reject) => {
       this.browser
         .wait(selector)
+        .wait(50)
         .type(selector, text)
+        .wait(50)
         .type(selector, ENTER)
         .then(resolve)
         .catch(reject);
@@ -91,7 +94,18 @@ export default class BasePage {
     return new Promise((resolve, reject) => {
       this.browser
         .wait(selector)
-        .evaluate(getText, selector)
+        .evaluates(getText, selector)
+        .then(resolve)
+        .catch(reject);
+    });
+  }
+
+  getElementTextForEach(selector) {
+    return new Promise((resolve, reject) => {
+      this.browser
+        .wait(selector)
+        .wait(20)
+        .evaluate(getAllTexts, selector)
         .then(resolve)
         .catch(reject);
     });
