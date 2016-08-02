@@ -205,6 +205,7 @@ handleKeyUp currentText keyCode =
         NoOp
 
 
+handleCheck : Todo -> Bool -> Msg
 handleCheck todo checked =
     if checked then
         MarkAsCompleted todo
