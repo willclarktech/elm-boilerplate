@@ -1,5 +1,6 @@
 module Todos.TestSteps.When exposing (when)
 
+import Todos.Types exposing (FilterOption(..))
 import Todos.Update
     exposing
         ( updateText
@@ -7,6 +8,7 @@ import Todos.Update
         , markAsCompleted
         , markAsIncomplete
         , delete
+        , setFilter
         )
 import Todos.View exposing (handleKeyUp)
 import Todos.TestContext exposing (Context, getModel)
@@ -50,6 +52,15 @@ stepMap =
       )
     , ( "the todo is deleted"
       , whenTheTodoIsDeleted
+      )
+    , ( "the todos are filtered by completed"
+      , whenTheTodosAreFilteredByCompleted
+      )
+    , ( "the todos are filtered by incomplete"
+      , whenTheTodosAreFilteredByIncomplete
+      )
+    , ( "the todos are filtered by all"
+      , whenTheTodosAreFilteredByAll
       )
     ]
 
@@ -141,3 +152,28 @@ whenTheTodoIsDeleted oldCtx =
         { oldCtx
             | model = Just (delete existingTodo oldModel)
         }
+
+
+setFilterOnModelForContext filterOption ctx =
+    let
+        oldModel =
+            getModel ctx
+    in
+        { ctx
+            | model = Just (setFilter filterOption oldModel)
+        }
+
+
+whenTheTodosAreFilteredByCompleted : WhenStep Context
+whenTheTodosAreFilteredByCompleted oldCtx =
+    setFilterOnModelForContext Completed oldCtx
+
+
+whenTheTodosAreFilteredByIncomplete : WhenStep Context
+whenTheTodosAreFilteredByIncomplete oldCtx =
+    setFilterOnModelForContext Incomplete oldCtx
+
+
+whenTheTodosAreFilteredByAll : WhenStep Context
+whenTheTodosAreFilteredByAll oldCtx =
+    setFilterOnModelForContext All oldCtx

@@ -1,7 +1,7 @@
 module Todos.TestSteps.Then exposing (then')
 
 import ElmTestBDDStyle exposing (expect, toBe)
-import Todos.Types exposing (Msg(..))
+import Todos.Types exposing (Msg(..), FilterOption(..))
 import Todos.TestContext exposing (Context)
 import GivenWhenThen.Types
     exposing
@@ -62,6 +62,21 @@ stepMap =
     , ( "the other todo should remain"
       , thenTheOtherTodoShouldRemain
       )
+    , ( "the filter should be set to completed"
+      , thenTheFilterShouldBeSetToCompleted
+      )
+    , ( "the filter should be set to incomplete"
+      , thenTheFilterShouldBeSetToIncomplete
+      )
+    , ( "the filter should be set to all"
+      , thenTheFilterShouldBeSetToAll
+      )
+      -- , ( "the todo should not be visible"
+      --   , thenTheTodoShouldNotBeVisible
+      --   )
+      -- , ( "the other todo should be visible"
+      --   , thenTheOtherTodoShouldBeVisible
+      --   )
     ]
 
 
@@ -164,3 +179,38 @@ thenTheOtherTodoShouldRemain ctx =
         <| List.isEmpty
         <| List.filter (\todo -> todo.id == .id (confirmIsJust "secondTodo" ctx.secondTodo))
         <| .todos (confirmIsJust "model" ctx.model)
+
+
+thenTheFilterShouldBeSetToCompleted : ThenStep Context
+thenTheFilterShouldBeSetToCompleted ctx =
+    expect Completed toBe
+        <| .filterOption (confirmIsJust "model" ctx.model)
+
+
+thenTheFilterShouldBeSetToIncomplete : ThenStep Context
+thenTheFilterShouldBeSetToIncomplete ctx =
+    expect Incomplete toBe
+        <| .filterOption (confirmIsJust "model" ctx.model)
+
+
+thenTheFilterShouldBeSetToAll : ThenStep Context
+thenTheFilterShouldBeSetToAll ctx =
+    expect All toBe
+        <| .filterOption (confirmIsJust "model" ctx.model)
+
+
+
+-- thenTheTodoShouldNotBeVisible : ThenStep Context
+-- thenTheTodoShouldNotBeVisible ctx =
+--     expect True toBe
+--         <| List.isEmpty
+--         <| List.filter (\todo -> todo.id == .id (confirmIsJust "existingTodo" ctx.existingTodo))
+--         <| .visibleTodos (confirmIsJust "model" ctx.model)
+--
+--
+-- thenTheOtherTodoShouldBeVisible : ThenStep Context
+-- thenTheOtherTodoShouldBeVisible ctx =
+--     expect False toBe
+--         <| List.isEmpty
+--         <| List.filter (\todo -> todo.id == .id (confirmIsJust "secondTodo" ctx.secondTodo))
+--         <| .visibleTodos (confirmIsJust "model" ctx.model)

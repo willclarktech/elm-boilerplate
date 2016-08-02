@@ -109,6 +109,19 @@ deleteSuite =
         initialContext
 
 
+filterSuite : List Test
+filterSuite =
+    constructGWTSuite
+        [ when "the todos are filtered by completed"
+            [ then' "the filter should be set to completed" ]
+        , when "the todos are filtered by incomplete"
+            [ then' "the filter should be set to incomplete" ]
+        , when "the todos are filtered by all"
+            [ then' "the filter should be set to all" ]
+        ]
+        initialContext
+
+
 testSuite : Test
 testSuite =
     suite "TodosTest.TodosTest"
@@ -118,4 +131,5 @@ testSuite =
         , suite "markAsCompleted" markAsCompletedSuite
         , suite "markAsIncomplete" markAsIncompleteSuite
         , suite "delete" deleteSuite
+        , suite "filter" filterSuite
         ]

@@ -43,6 +43,9 @@ stepMap =
     , ( "the other todo has been marked as completed"
       , givenTheOtherTodoHasBeenMarkedAsCompleted
       )
+    , ( "the todo has been marked as incomplete"
+      , givenTheTodoHasBeenMarkedAsIncomplete
+      )
     ]
 
 
@@ -123,6 +126,7 @@ givenAnotherExistingTodo oldCtx =
         }
 
 
+markTodoAsComplete : String -> (Context -> Maybe Todo) -> Context -> Context
 markTodoAsComplete todoKey getTodoFromCtx oldCtx =
     let
         oldModel =
@@ -155,6 +159,39 @@ markTodoAsComplete todoKey getTodoFromCtx oldCtx =
         }
 
 
+markTodoAsIncomplete : String -> (Context -> Maybe Todo) -> Context -> Context
+markTodoAsIncomplete todoKey getTodoFromCtx oldCtx =
+    let
+        oldModel =
+            getModel oldCtx
+
+        todoId =
+            .id (confirmIsJust todoKey (getTodoFromCtx oldCtx))
+
+        newTodos =
+            List.map
+                (\todo ->
+                    let
+                        isCurrent =
+                            todo.id
+                                == todoId
+                    in
+                        if isCurrent then
+                            { todo | completed = False }
+                        else
+                            todo
+                )
+                oldModel.todos
+    in
+        { oldCtx
+            | model =
+                Just
+                    { oldModel
+                        | todos = newTodos
+                    }
+        }
+
+
 givenTheOtherTodoHasBeenMarkedAsCompleted : GivenStep Context
 givenTheOtherTodoHasBeenMarkedAsCompleted oldCtx =
     markTodoAsComplete "secondTodo" .secondTodo oldCtx
@@ -163,3 +200,8 @@ givenTheOtherTodoHasBeenMarkedAsCompleted oldCtx =
 givenTheTodoHasBeenMarkedAsCompleted : GivenStep Context
 givenTheTodoHasBeenMarkedAsCompleted oldCtx =
     markTodoAsComplete "existingTodo" .existingTodo oldCtx
+
+
+givenTheTodoHasBeenMarkedAsIncomplete : GivenStep Context
+givenTheTodoHasBeenMarkedAsIncomplete oldCtx =
+    markTodoAsIncomplete "existingTodo" .existingTodo oldCtx
