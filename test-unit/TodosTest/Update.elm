@@ -1,11 +1,11 @@
-module Todos.Test exposing (testSuite)
+module TodosTest.Update exposing (testSuite)
 
 import ElmTest exposing (Test, suite)
 import GivenWhenThen.Helpers exposing (constructGWTSuite)
-import Todos.TestContext exposing (initialContext)
-import Todos.TestSteps.Given exposing (given)
-import Todos.TestSteps.When exposing (when)
-import Todos.TestSteps.Then exposing (then')
+import TodosTest.Context exposing (initialContext)
+import TodosTest.Steps.Given exposing (given)
+import TodosTest.Steps.When exposing (when)
+import TodosTest.Steps.Then exposing (then')
 
 
 createTodoSuite : List Test
@@ -25,25 +25,6 @@ createTodoSuite =
                         ]
                     ]
                 ]
-            ]
-        ]
-        initialContext
-
-
-handleKeyUpSuite : List Test
-handleKeyUpSuite =
-    constructGWTSuite
-        [ given "a current text"
-            [ when "the ENTER key is pressed"
-                [ then' "a todo should be created" ]
-            , when "the T key is pressed"
-                [ then' "nothing should happen" ]
-            ]
-        , given "a blank text"
-            [ when "the ENTER key is pressed"
-                [ then' "nothing should happen" ]
-            , when "the T key is pressed"
-                [ then' "nothing should happen" ]
             ]
         ]
         initialContext
@@ -126,7 +107,6 @@ testSuite : Test
 testSuite =
     suite "TodosTest.TodosTest"
         [ suite "createTodo" createTodoSuite
-        , suite "handleKeyUp" handleKeyUpSuite
         , suite "updateText" updateTextSuite
         , suite "markAsCompleted" markAsCompletedSuite
         , suite "markAsIncomplete" markAsIncompleteSuite

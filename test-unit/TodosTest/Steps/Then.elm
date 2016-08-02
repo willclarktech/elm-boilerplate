@@ -1,8 +1,8 @@
-module Todos.TestSteps.Then exposing (then')
+module TodosTest.Steps.Then exposing (then')
 
 import ElmTestBDDStyle exposing (expect, toBe)
 import Todos.Types exposing (Msg(..), FilterOption(..))
-import Todos.TestContext exposing (Context)
+import TodosTest.Context exposing (Context)
 import GivenWhenThen.Types
     exposing
         ( ThenStep
@@ -71,12 +71,6 @@ stepMap =
     , ( "the filter should be set to all"
       , thenTheFilterShouldBeSetToAll
       )
-      -- , ( "the todo should not be visible"
-      --   , thenTheTodoShouldNotBeVisible
-      --   )
-      -- , ( "the other todo should be visible"
-      --   , thenTheOtherTodoShouldBeVisible
-      --   )
     ]
 
 
@@ -197,20 +191,3 @@ thenTheFilterShouldBeSetToAll : ThenStep Context
 thenTheFilterShouldBeSetToAll ctx =
     expect All toBe
         <| .filterOption (confirmIsJust "model" ctx.model)
-
-
-
--- thenTheTodoShouldNotBeVisible : ThenStep Context
--- thenTheTodoShouldNotBeVisible ctx =
---     expect True toBe
---         <| List.isEmpty
---         <| List.filter (\todo -> todo.id == .id (confirmIsJust "existingTodo" ctx.existingTodo))
---         <| .visibleTodos (confirmIsJust "model" ctx.model)
---
---
--- thenTheOtherTodoShouldBeVisible : ThenStep Context
--- thenTheOtherTodoShouldBeVisible ctx =
---     expect False toBe
---         <| List.isEmpty
---         <| List.filter (\todo -> todo.id == .id (confirmIsJust "secondTodo" ctx.secondTodo))
---         <| .visibleTodos (confirmIsJust "model" ctx.model)

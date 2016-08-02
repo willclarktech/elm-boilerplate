@@ -1,4 +1,4 @@
-module Todos.TestSteps.When exposing (when)
+module TodosTest.Steps.When exposing (when)
 
 import Todos.Types exposing (FilterOption(..))
 import Todos.Update
@@ -11,7 +11,7 @@ import Todos.Update
         , setFilter
         )
 import Todos.View exposing (handleKeyUp)
-import Todos.TestContext exposing (Context, getModel)
+import TodosTest.Context exposing (Context, getModel)
 import GivenWhenThen.Helpers
     exposing
         ( constructWhenFunction

@@ -1,4 +1,4 @@
-module Todos.TestContext exposing (..)
+module TodosTest.Context exposing (..)
 
 import Todos.Types
     exposing

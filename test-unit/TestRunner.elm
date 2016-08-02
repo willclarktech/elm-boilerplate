@@ -1,7 +1,8 @@
 module Main exposing (..)
 
 import ElmTest exposing (Test, suite, runSuite)
-import Todos.Test
+import TodosTest.Update
+import TodosTest.View
 
 
 main : Program Never
@@ -11,4 +12,7 @@ main =
 
 testSuite : Test
 testSuite =
-    suite "All tests" [ Todos.Test.testSuite ]
+    suite "All tests"
+        [ TodosTest.Update.testSuite
+        , TodosTest.View.testSuite
+        ]
