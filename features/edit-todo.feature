@@ -7,7 +7,6 @@ Feature: Edit Todo
     Given I am on the Todos page
     And I have created a todo
 
-  @now
   @critical
   Scenario: New user edits a Todo
     When I edit the Todo

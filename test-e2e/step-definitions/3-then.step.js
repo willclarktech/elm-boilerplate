@@ -69,4 +69,10 @@ module.exports = function thenSteps() {
         )
       );
   });
+
+  this.Then(/^I should see that the Todo is updated$/, function () {
+    return this
+      .expect(this.todosPage.isTodoUpdated())
+      .eventually.to.be.true;
+  });
 };

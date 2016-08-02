@@ -26,4 +26,8 @@ module.exports = function whenSteps() {
   this.When(/^I filter for (completed|incomplete|all) Todos$/, function (filterOption) {
     return this.todosPage.filter(filterOption);
   });
+
+  this.When(/^I edit the Todo$/, function () {
+    return this.todosPage.editTodo();
+  });
 };

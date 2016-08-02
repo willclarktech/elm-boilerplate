@@ -23,6 +23,7 @@ export default class TodosPage extends BasePage {
       deleteTodo: '.delete',
       todo: 'li',
       todoText: 'li label',
+      todoEditBox: '.edit',
       filterAll: '#filter-all',
       filterCompleted: '#filter-completed',
       filterIncomplete: '#filter-incomplete',
@@ -92,22 +93,26 @@ export default class TodosPage extends BasePage {
     );
   }
 
+  editTodo(text) {
+    const newTodoText = typeof text === 'undefined'
+      ? 'Edited'
+      : text;
+
+    this.browser.ctx.editedText = newTodoText;
+
+    return this
+      .clickElement(this.selectors.todoText)
+      .then(() => this
+        .clearInput(this.selectors.todoEditBox)
+      )
+      .then(() => this
+        .typeTextIntoElementAndSubmit(newTodoText, this.selectors.todoEditBox)
+      );
+  }
+
   deleteTodo() {
     return this
       .clickElement(this.selectors.deleteTodo);
-  }
-
-  isTodoPresent() {
-    return this
-      .getElementText(this.selectors.todoText)
-      .then(text => text === this.browser.ctx.todoText)
-      .catch(() => false);
-  }
-
-  isTodoCompleted() {
-    return this
-      .getClassList(this.selectors.todo)
-      .then(classList => classList.includes(COMPLETED_CLASS));
   }
 
   filter(status) {
@@ -125,9 +130,28 @@ export default class TodosPage extends BasePage {
     }
   }
 
+  isTodoPresent() {
+    return this
+      .getElementText(this.selectors.todoText)
+      .then(text => text === this.browser.ctx.todoText)
+      .catch(() => false);
+  }
+
+  isTodoCompleted() {
+    return this
+      .getClassList(this.selectors.todo)
+      .then(classList => classList.includes(COMPLETED_CLASS));
+  }
+
+  isTodoUpdated() {
+    return this
+      .getElementText(this.selectors.todoText)
+      .then(text => text === this.browser.ctx.editedText);
+  }
+
   getTodos() {
     return this
       .getElementTextForEach(this.selectors.todoText)
-      .catch(() => false);
+      .catch(() => []);
   }
 }

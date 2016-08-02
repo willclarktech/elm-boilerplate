@@ -16,8 +16,7 @@ export default class BasePage {
     return new Promise((resolve, reject) => {
       this.browser
         .goto(this.url)
-        .then(resolve)
-        .catch(reject);
+        .then(resolve, reject);
     });
   }
 
@@ -27,8 +26,16 @@ export default class BasePage {
         .wait(selector)
         .wait(200) // Nightmare too fast
         .click(selector)
-        .then(resolve)
-        .catch(reject);
+        .then(resolve, reject);
+    });
+  }
+
+  clearInput(selector) {
+    return new Promise((resolve, reject) => {
+      this.browser
+        .wait(selector)
+        .type(selector, null)
+        .then(resolve, reject);
     });
   }
 
@@ -40,8 +47,8 @@ export default class BasePage {
         .type(selector, text)
         .wait(50)
         .type(selector, ENTER)
-        .then(resolve)
-        .catch(reject);
+        .wait(200)
+        .then(resolve, reject);
     });
   }
 
@@ -49,8 +56,7 @@ export default class BasePage {
     return new Promise((resolve, reject) => {
       this.browser
         .url()
-        .then(resolve)
-        .catch(reject);
+        .then(resolve, reject);
     })
       .then(url => url === this.url);
   }
@@ -60,8 +66,7 @@ export default class BasePage {
       this.browser
         .wait(selector)
         .exists(selector)
-        .then(resolve)
-        .catch(reject);
+        .then(resolve, reject);
     });
   }
 
@@ -85,8 +90,7 @@ export default class BasePage {
         .wait(selector)
         .wait(20) // Nightmare too fast
         .evaluate(getClassList, selector)
-        .then(resolve)
-        .catch(reject);
+        .then(resolve, reject);
     });
   }
 
@@ -94,9 +98,8 @@ export default class BasePage {
     return new Promise((resolve, reject) => {
       this.browser
         .wait(selector)
-        .evaluates(getText, selector)
-        .then(resolve)
-        .catch(reject);
+        .evaluate(getText, selector)
+        .then(resolve, reject);
     });
   }
 
@@ -106,8 +109,7 @@ export default class BasePage {
         .wait(selector)
         .wait(20)
         .evaluate(getAllTexts, selector)
-        .then(resolve)
-        .catch(reject);
+        .then(resolve, reject);
     });
   }
 }

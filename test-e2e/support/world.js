@@ -14,7 +14,8 @@ function World() {
 
 function Before() {
   this.browser = Browser({
-    waitTimeout: 10000,
+    waitTimeout: 2000,
+    typeInterval: 200,
   });
   this.browser.ctx = {};
   this.browser.baseUrl = 'http://localhost:3000';
