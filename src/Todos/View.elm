@@ -14,6 +14,7 @@ import Html.Events
         , keyCode
         , targetChecked
         )
+import Helpers exposing (isEnter)
 import Todos.Types
     exposing
         ( Model
@@ -202,11 +203,6 @@ handleKeyUp currentText keyCode =
         CreateTodo
     else
         NoOp
-
-
-isEnter : Int -> Bool
-isEnter keyCode =
-    keyCode == 13
 
 
 handleCheck todo checked =

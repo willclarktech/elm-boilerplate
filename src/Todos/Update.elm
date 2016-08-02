@@ -103,13 +103,9 @@ findTodoAndSetStatus todos todo status =
 
 setCompleteStatusForTodoInModel : Todo -> Model -> Bool -> Model
 setCompleteStatusForTodoInModel todo model status =
-    let
-        newTodos =
-            findTodoAndSetStatus model.todos todo status
-    in
-        { model
-            | todos = newTodos
-        }
+    { model
+        | todos = findTodoAndSetStatus model.todos todo status
+    }
 
 
 markAsCompleted : Todo -> Model -> Model
