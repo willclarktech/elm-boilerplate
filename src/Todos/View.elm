@@ -11,17 +11,23 @@ import Html.Events
         , on
         , keyCode
         )
-import Todos.Types exposing (Todo, Model, Msg(..))
+import Todos.Types
+    exposing
+        ( Model
+        , Todo
+        , Msg(..)
+        , FilterOption(..)
+        )
 import Todos.Update exposing (..)
 import Todos.Copy exposing (headingMD, placeholderText)
 
 
 view : Model -> Html Msg
-view { currentText, todos } =
+view { currentText, todos, filterOption } =
     div [ id "todos-app" ]
         [ viewHeading
         , viewNewTodoInput currentText
-        , viewTodos todos
+        , viewTodos todos filterOption
         , viewFilters
         ]
 
@@ -34,7 +40,21 @@ viewHeading =
 viewFilters : Html Msg
 viewFilters =
     div [ id "filters" ]
-        [ div [ id "filter-all" ] [ text "filter-all" ]
+        [ button
+            [ id "filter-all"
+            , onClick <| Filter All
+            ]
+            [ text "All" ]
+        , button
+            [ id "filter-completed"
+            , onClick <| Filter Completed
+            ]
+            [ text "Completed" ]
+        , button
+            [ id "filter-incomplete"
+            , onClick <| Filter Incomplete
+            ]
+            [ text "Incomplete" ]
         ]
 
 
@@ -50,9 +70,24 @@ viewNewTodoInput currentText =
         []
 
 
-viewTodos : List Todo -> Html Msg
-viewTodos todos =
-    ul [] <| List.map viewTodo todos
+viewTodos : List Todo -> FilterOption -> Html Msg
+viewTodos todos filterOption =
+    ul []
+        <| List.map viewTodo
+        <| getTodosForFilterOption todos filterOption
+
+
+getTodosForFilterOption : List Todo -> FilterOption -> List Todo
+getTodosForFilterOption todos filterOption =
+    case filterOption of
+        Completed ->
+            List.filter (\todo -> todo.completed) todos
+
+        Incomplete ->
+            List.filter (\todo -> todo.completed /= True) todos
+
+        All ->
+            todos
 
 
 viewTodo : Todo -> Html Msg
@@ -85,7 +120,7 @@ viewTodo todo =
                 ]
                 []
             , label [] [ text todo.text ]
-            , span
+            , button
                 [ class "delete"
                 , onClick <| Delete todo
                 ]

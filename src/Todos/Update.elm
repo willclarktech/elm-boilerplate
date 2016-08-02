@@ -8,6 +8,7 @@ module Todos.Update
         , markAsCompleted
         , markAsIncomplete
         , delete
+        , setFilter
         )
 
 import Todos.Types
@@ -15,6 +16,7 @@ import Todos.Types
         ( Model
         , Todo
         , Msg(..)
+        , FilterOption(..)
         )
 
 
@@ -22,6 +24,7 @@ initialModel : Model
 initialModel =
     { counter = 0
     , todos = []
+    , filterOption = All
     , currentText = ""
     }
 
@@ -53,6 +56,9 @@ update action model =
 
         Delete todo ->
             ( delete todo model, Cmd.none )
+
+        Filter filterOption ->
+            ( setFilter filterOption model, Cmd.none )
 
         NoOp ->
             noFx model
@@ -125,3 +131,10 @@ delete todo model =
         { model
             | todos = newTodos
         }
+
+
+setFilter : FilterOption -> Model -> Model
+setFilter filterOption model =
+    { model
+        | filterOption = filterOption
+    }
