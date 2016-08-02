@@ -18,6 +18,7 @@ import Todos.Types
         , Msg(..)
         , FilterOption(..)
         )
+import String exposing (trim)
 
 
 initialModel : Model
@@ -75,7 +76,7 @@ createTodo : Model -> Model
 createTodo model =
     let
         newTodo =
-            Todo model.counter model.currentText False
+            Todo model.counter (String.trim model.currentText) False
     in
         { model
             | todos = newTodo :: model.todos

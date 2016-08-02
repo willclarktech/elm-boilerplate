@@ -41,7 +41,10 @@ view { currentText, todos, filterOption } =
 
         components =
             if List.length todos /= 0 then
-                List.append baseComponents [ viewFilters filterOption, viewTodos todos filterOption ]
+                List.append baseComponents
+                    [ viewFilters filterOption
+                    , viewTodos todos filterOption
+                    ]
             else
                 baseComponents
     in
