@@ -1,16 +1,14 @@
 module Todos.Copy
     exposing
-        ( headingMD
+        ( headingText
         , placeholderText
         , getButtonText
         )
 
 
-headingMD : String
-headingMD =
-    """
-# todos
-"""
+headingText : String
+headingText =
+    "todos"
 
 
 placeholderText : String

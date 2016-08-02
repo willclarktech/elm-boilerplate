@@ -24,7 +24,7 @@ import Todos.Types
 import Todos.Update exposing (..)
 import Todos.Copy
     exposing
-        ( headingMD
+        ( headingText
         , placeholderText
         , getButtonText
         )
@@ -32,28 +32,64 @@ import Todos.Copy
 
 view : Model -> Html Msg
 view { currentText, todos, filterOption } =
-    div [ id "todos-app" ]
-        [ viewHeading
-        , viewNewTodoInput currentText
-        , viewTodos todos filterOption
-        , viewFilters
-        ]
+    let
+        baseComponents =
+            [ viewHeading
+            , viewNewTodoInput currentText
+            ]
+
+        components =
+            if List.length todos /= 0 then
+                List.append baseComponents [ viewFilters filterOption, viewTodos todos filterOption ]
+            else
+                baseComponents
+    in
+        div
+            [ id "todos-app"
+            , class "ui segments container"
+            ]
+            components
 
 
 viewHeading : Html Msg
 viewHeading =
-    Markdown.toHtml [] headingMD
+    div [ class "ui raised attached inverted orange segment" ]
+        [ h1 [ class "ui huge header" ]
+            [ text headingText ]
+        ]
 
 
-viewFilters : Html Msg
-viewFilters =
-    div [ id "filters" ]
-        <| List.map viewFilterButton
-            [ All, Completed, Incomplete ]
+viewNewTodoInput : String -> Html Msg
+viewNewTodoInput currentText =
+    div [ class "ui compact attached segment" ]
+        [ div [ class "ui huge form" ]
+            [ input
+                [ id "new-todo"
+                , class "ui field"
+                , placeholder placeholderText
+                , on "keyup" <| Json.map (handleKeyUp currentText) keyCode
+                , onInput UpdateText
+                , value currentText
+                ]
+                []
+            ]
+        ]
 
 
-viewFilterButton : FilterOption -> Html Msg
-viewFilterButton filterOption =
+viewFilters : FilterOption -> Html Msg
+viewFilters activeOption =
+    footer
+        [ id "filters"
+        , class "ui tiny segment attached center aligned"
+        ]
+        [ div [ class "ui buttons" ]
+            <| List.map (viewFilterButton activeOption)
+                [ All, Completed, Incomplete ]
+        ]
+
+
+viewFilterButton : FilterOption -> FilterOption -> Html Msg
+viewFilterButton activeOption filterOption =
     let
         idSuffix =
             case filterOption of
@@ -68,31 +104,39 @@ viewFilterButton filterOption =
 
         buttonId =
             "filter-" ++ idSuffix
+
+        baseClass =
+            "ui button "
+
+        buttonClass =
+            if activeOption == filterOption then
+                baseClass ++ "active positive "
+            else
+                baseClass
     in
         button
             [ id buttonId
             , onClick <| Filter filterOption
+            , class buttonClass
             ]
             [ text <| getButtonText buttonId ]
 
 
-viewNewTodoInput : String -> Html Msg
-viewNewTodoInput currentText =
-    input
-        [ id "new-todo"
-        , placeholder placeholderText
-        , on "keyup" <| Json.map (handleKeyUp currentText) keyCode
-        , onInput UpdateText
-        , value currentText
-        ]
-        []
-
-
 viewTodos : List Todo -> FilterOption -> Html Msg
 viewTodos todos filterOption =
-    Html.Keyed.ol []
-        <| List.map (\todo -> ( "todo-" ++ toString todo.id, viewTodo todo ))
-        <| getTodosForFilterOption todos filterOption
+    let
+        relevantTodos =
+            getTodosForFilterOption todos filterOption
+    in
+        div [ class "ui attached segment" ]
+            <| case relevantTodos of
+                [] ->
+                    [ text "No todos to display..." ]
+
+                _ ->
+                    [ Html.Keyed.ol [ class "ui big list" ]
+                        <| List.map (\todo -> ( toString todo.id, viewTodo todo )) relevantTodos
+                    ]
 
 
 getTodosForFilterOption : List Todo -> FilterOption -> List Todo
@@ -111,33 +155,45 @@ getTodosForFilterOption todos filterOption =
 viewTodo : Todo -> Html Msg
 viewTodo todo =
     let
-        completed =
-            todo.completed
+        baseClass =
+            "item "
 
-        className =
-            if completed then
-                "completed"
+        todoClass =
+            if todo.completed then
+                baseClass ++ "completed"
             else
-                ""
+                baseClass
     in
         li
             [ id ("todo-" ++ toString todo.id)
-            , class className
+            , class todoClass
             ]
-            [ input
-                [ class "toggle"
-                , type' "checkbox"
-                , onCheck <| handleCheck todo
-                , checked completed
-                ]
-                []
+            [ viewCheckbox todo
             , label [] [ text todo.text ]
-            , button
-                [ class "delete"
-                , onClick <| Delete todo
-                ]
-                [ text "×" ]
+            , viewDeleteButton todo
             ]
+
+
+viewCheckbox : Todo -> Html Msg
+viewCheckbox todo =
+    span [ class "ui right spaced image" ]
+        [ input
+            [ class "toggle"
+            , type' "checkbox"
+            , onCheck <| handleCheck todo
+            , checked todo.completed
+            ]
+            []
+        ]
+
+
+viewDeleteButton : Todo -> Html Msg
+viewDeleteButton todo =
+    button
+        [ class "delete ui compact icon negative button right floated"
+        , onClick <| Delete todo
+        ]
+        [ text "×" ]
 
 
 handleKeyUp : String -> Int -> Msg
