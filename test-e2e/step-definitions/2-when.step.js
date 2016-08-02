@@ -1,4 +1,4 @@
-module.exports = function () {
+module.exports = function whenSteps() {
   this.When(/^I visit the Todos page$/, function () {
     return this.todosPage.visit();
   });

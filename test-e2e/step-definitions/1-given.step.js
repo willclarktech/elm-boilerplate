@@ -1,4 +1,4 @@
-module.exports = function () {
+module.exports = function givenSteps() {
   this.Given(/^I am on the Todos page$/, function () {
     return this.todosPage.visit();
   });
