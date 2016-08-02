@@ -3,13 +3,16 @@ module Todos.View exposing (view, handleKeyUp)
 import Json.Decode as Json
 import Markdown
 import Html exposing (..)
+import Html.Keyed exposing (ol)
 import Html.Attributes exposing (..)
 import Html.Events
     exposing
         ( onInput
         , onClick
+        , onCheck
         , on
         , keyCode
+        , targetChecked
         )
 import Todos.Types
     exposing
@@ -87,8 +90,8 @@ viewNewTodoInput currentText =
 
 viewTodos : List Todo -> FilterOption -> Html Msg
 viewTodos todos filterOption =
-    ul []
-        <| List.map viewTodo
+    Html.Keyed.ol []
+        <| List.map (\todo -> ( "todo-" ++ toString todo.id, viewTodo todo ))
         <| getTodosForFilterOption todos filterOption
 
 
@@ -116,12 +119,6 @@ viewTodo todo =
                 "completed"
             else
                 ""
-
-        onToggleMsg =
-            if completed then
-                MarkAsIncomplete todo
-            else
-                MarkAsCompleted todo
     in
         li
             [ id ("todo-" ++ toString todo.id)
@@ -130,7 +127,7 @@ viewTodo todo =
             [ input
                 [ class "toggle"
                 , type' "checkbox"
-                , onClick <| onToggleMsg
+                , onCheck <| handleCheck todo
                 , checked completed
                 ]
                 []
@@ -154,3 +151,10 @@ handleKeyUp currentText keyCode =
 isEnter : Int -> Bool
 isEnter keyCode =
     keyCode == 13
+
+
+handleCheck todo checked =
+    if checked then
+        MarkAsCompleted todo
+    else
+        MarkAsIncomplete todo
