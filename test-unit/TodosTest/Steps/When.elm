@@ -8,9 +8,12 @@ import Todos.Update
         , markAsCompleted
         , markAsIncomplete
         , delete
+        , startEditing
+        , updateTodo
+        , stopEditing
         , setFilter
         )
-import Todos.View exposing (handleKeyUp)
+import Todos.View exposing (handleNewTodoKeyUp)
 import TodosTest.Context exposing (Context, getModel)
 import GivenWhenThen.Helpers
     exposing
@@ -53,6 +56,15 @@ stepMap =
     , ( "the todo is deleted"
       , whenTheTodoIsDeleted
       )
+    , ( "editing the todo is started"
+      , whenEditingTheTodoIsStarted
+      )
+    , ( "the todo is updated"
+      , whenTheTodoIsUpdated
+      )
+    , ( "editing the todo is finished"
+      , whenEditingTheTodoIsFinished
+      )
     , ( "the todos are filtered by completed"
       , whenTheTodosAreFilteredByCompleted
       )
@@ -83,7 +95,7 @@ pressKey keyNumber oldCtx =
             confirmIsJust "currentText" oldCtx.currentText
     in
         { oldCtx
-            | messageAfter = Just <| handleKeyUp currentText keyNumber
+            | messageAfter = Just <| handleNewTodoKeyUp currentText keyNumber
         }
 
 
@@ -151,6 +163,48 @@ whenTheTodoIsDeleted oldCtx =
     in
         { oldCtx
             | model = Just (delete existingTodo oldModel)
+        }
+
+
+whenEditingTheTodoIsStarted : WhenStep Context
+whenEditingTheTodoIsStarted oldCtx =
+    let
+        existingTodo =
+            confirmIsJust "existingTodo" oldCtx.existingTodo
+
+        oldModel =
+            getModel oldCtx
+    in
+        { oldCtx
+            | model = Just (startEditing existingTodo oldModel)
+        }
+
+
+whenTheTodoIsUpdated : WhenStep Context
+whenTheTodoIsUpdated oldCtx =
+    let
+        existingTodo =
+            confirmIsJust "existingTodo" oldCtx.existingTodo
+
+        oldModel =
+            getModel oldCtx
+    in
+        { oldCtx
+            | model = Just (updateTodo existingTodo "Edited text" oldModel)
+        }
+
+
+whenEditingTheTodoIsFinished : WhenStep Context
+whenEditingTheTodoIsFinished oldCtx =
+    let
+        existingTodo =
+            confirmIsJust "existingTodo" oldCtx.existingTodo
+
+        oldModel =
+            getModel oldCtx
+    in
+        { oldCtx
+            | model = Just (stopEditing oldModel)
         }
 
 

@@ -8,8 +8,8 @@ import TodosTest.Steps.When exposing (when)
 import TodosTest.Steps.Then exposing (then')
 
 
-handleKeyUpSuite : List Test
-handleKeyUpSuite =
+handleNewTodoKeyUpSuite : List Test
+handleNewTodoKeyUpSuite =
     constructGWTSuite
         [ given "a current text"
             [ when "the ENTER key is pressed"
@@ -30,5 +30,5 @@ handleKeyUpSuite =
 testSuite : Test
 testSuite =
     suite "TodosTest.TodosTest"
-        [ suite "handleKeyUp" handleKeyUpSuite
+        [ suite "handleNewTodoKeyUp" handleNewTodoKeyUpSuite
         ]

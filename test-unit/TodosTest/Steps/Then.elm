@@ -62,6 +62,15 @@ stepMap =
     , ( "the other todo should remain"
       , thenTheOtherTodoShouldRemain
       )
+    , ( "the todo should be the currently edited todo"
+      , thenTheTodoShouldBeTheCurrentlyEditedTodo
+      )
+    , ( "the todo text should change"
+      , thenTheTodoTextShouldChange
+      )
+    , ( "there should be no currently edited todo"
+      , thenThereShouldBeNoCurrentlyEditedTodo
+      )
     , ( "the filter should be set to completed"
       , thenTheFilterShouldBeSetToCompleted
       )
@@ -173,6 +182,26 @@ thenTheOtherTodoShouldRemain ctx =
         <| List.isEmpty
         <| List.filter (\todo -> todo.id == .id (confirmIsJust "secondTodo" ctx.secondTodo))
         <| .todos (confirmIsJust "model" ctx.model)
+
+
+thenTheTodoShouldBeTheCurrentlyEditedTodo : ThenStep Context
+thenTheTodoShouldBeTheCurrentlyEditedTodo ctx =
+    expect ctx.existingTodo toBe
+        <| .currentlyEditing (confirmIsJust "model" ctx.model)
+
+
+thenTheTodoTextShouldChange : ThenStep Context
+thenTheTodoTextShouldChange ctx =
+    expect True toBe
+        <| List.isEmpty
+        <| List.filter (\todo -> todo.text == .text (confirmIsJust "existingTodo" ctx.existingTodo))
+        <| .todos (confirmIsJust "model" ctx.model)
+
+
+thenThereShouldBeNoCurrentlyEditedTodo : ThenStep Context
+thenThereShouldBeNoCurrentlyEditedTodo ctx =
+    expect Nothing toBe
+        <| .currentlyEditing (confirmIsJust "model" ctx.model)
 
 
 thenTheFilterShouldBeSetToCompleted : ThenStep Context

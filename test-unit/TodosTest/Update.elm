@@ -90,6 +90,22 @@ deleteSuite =
         initialContext
 
 
+editSuite : List Test
+editSuite =
+    constructGWTSuite
+        [ given "an existing todo"
+            [ when "editing the todo is started"
+                [ then' "the todo should be the currently edited todo"
+                , when "the todo is updated"
+                    [ then' "the todo text should change" ]
+                , when "editing the todo is finished"
+                    [ then' "there should be no currently edited todo" ]
+                ]
+            ]
+        ]
+        initialContext
+
+
 filterSuite : List Test
 filterSuite =
     constructGWTSuite
@@ -111,5 +127,6 @@ testSuite =
         , suite "markAsCompleted" markAsCompletedSuite
         , suite "markAsIncomplete" markAsIncompleteSuite
         , suite "delete" deleteSuite
+        , suite "edit" editSuite
         , suite "filter" filterSuite
         ]
