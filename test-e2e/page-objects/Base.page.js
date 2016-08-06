@@ -34,7 +34,7 @@ export default class BasePage {
     return new Promise((resolve, reject) => {
       this.browser
         .wait(selector)
-        .type(selector, null)
+        .insert(selector, null)
         .then(resolve, reject);
     });
   }
@@ -44,7 +44,7 @@ export default class BasePage {
       this.browser
         .wait(selector)
         .wait(50)
-        .type(selector, text)
+        .insert(selector, text)
         .wait(50)
         .type(selector, ENTER)
         .wait(200)
