@@ -12,6 +12,7 @@ type alias Model =
     , todos : List Todo
     , filterOption : FilterOption
     , currentText : String
+    , currentlyEditing : Maybe Todo
     }
 
 
@@ -34,5 +35,8 @@ type Msg
     | MarkAsCompleted Todo
     | MarkAsIncomplete Todo
     | Delete Todo
+    | StartEditing Todo
+    | UpdateTodo Todo String
+    | StopEditing
     | Filter FilterOption
     | NoOp

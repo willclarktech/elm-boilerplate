@@ -8,6 +8,9 @@ module Todos.Update
         , markAsCompleted
         , markAsIncomplete
         , delete
+        , startEditing
+        , updateTodo
+        , stopEditing
         , setFilter
         )
 
@@ -27,6 +30,7 @@ initialModel =
     , todos = []
     , filterOption = All
     , currentText = ""
+    , currentlyEditing = Nothing
     }
 
 
@@ -57,6 +61,15 @@ update action model =
 
         Delete todo ->
             ( delete todo model, Cmd.none )
+
+        StartEditing todo ->
+            ( startEditing todo model, Cmd.none )
+
+        UpdateTodo todo text ->
+            ( updateTodo todo text model, Cmd.none )
+
+        StopEditing ->
+            ( stopEditing model, Cmd.none )
 
         Filter filterOption ->
             ( setFilter filterOption model, Cmd.none )
@@ -92,14 +105,10 @@ findTodoAndSetStatus todos todo status =
             []
 
         firstTodo :: remainingTodos ->
-            let
-                isRelevantTodo =
-                    firstTodo.id == todo.id
-            in
-                if isRelevantTodo then
-                    { firstTodo | completed = status } :: remainingTodos
-                else
-                    firstTodo :: findTodoAndSetStatus remainingTodos todo status
+            if firstTodo.id == todo.id then
+                { firstTodo | completed = status } :: remainingTodos
+            else
+                firstTodo :: findTodoAndSetStatus remainingTodos todo status
 
 
 setCompleteStatusForTodoInModel : Todo -> Model -> Bool -> Model
@@ -128,6 +137,40 @@ delete todo model =
         { model
             | todos = newTodos
         }
+
+
+startEditing : Todo -> Model -> Model
+startEditing todo model =
+    { model
+        | currentlyEditing = Just todo
+    }
+
+
+findTodoAndSetText : List Todo -> Todo -> String -> List Todo
+findTodoAndSetText todos todo text =
+    case todos of
+        [] ->
+            []
+
+        firstTodo :: remainingTodos ->
+            if firstTodo.id == todo.id then
+                { firstTodo | text = text } :: remainingTodos
+            else
+                firstTodo :: findTodoAndSetText remainingTodos todo text
+
+
+updateTodo : Todo -> String -> Model -> Model
+updateTodo todo text model =
+    { model
+        | todos = findTodoAndSetText model.todos todo text
+    }
+
+
+stopEditing : Model -> Model
+stopEditing model =
+    { model
+        | currentlyEditing = Nothing
+    }
 
 
 setFilter : FilterOption -> Model -> Model

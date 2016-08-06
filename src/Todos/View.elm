@@ -1,4 +1,4 @@
-module Todos.View exposing (view, handleKeyUp)
+module Todos.View exposing (view, handleNewTodoKeyUp)
 
 import Json.Decode as Json
 import Markdown
@@ -32,7 +32,7 @@ import Todos.Copy
 
 
 view : Model -> Html Msg
-view { currentText, todos, filterOption } =
+view { currentText, todos, filterOption, currentlyEditing } =
     let
         baseComponents =
             [ viewHeading
@@ -43,7 +43,7 @@ view { currentText, todos, filterOption } =
             if List.length todos /= 0 then
                 List.append baseComponents
                     [ viewFilters filterOption
-                    , viewTodos todos filterOption
+                    , viewTodos todos filterOption currentlyEditing
                     ]
             else
                 baseComponents
@@ -57,7 +57,7 @@ view { currentText, todos, filterOption } =
 
 viewHeading : Html Msg
 viewHeading =
-    div [ class "ui raised attached inverted orange segment" ]
+    div [ class "ui attached inverted orange segment" ]
         [ h1 [ class "ui huge header" ]
             [ text headingText ]
         ]
@@ -71,7 +71,7 @@ viewNewTodoInput currentText =
                 [ id "new-todo"
                 , class "ui field"
                 , placeholder placeholderText
-                , on "keyup" <| Json.map (handleKeyUp currentText) keyCode
+                , on "keyup" <| Json.map (handleNewTodoKeyUp currentText) keyCode
                 , onInput UpdateText
                 , value currentText
                 ]
@@ -126,8 +126,8 @@ viewFilterButton activeOption filterOption =
             [ text <| getButtonText buttonId ]
 
 
-viewTodos : List Todo -> FilterOption -> Html Msg
-viewTodos todos filterOption =
+viewTodos : List Todo -> FilterOption -> Maybe Todo -> Html Msg
+viewTodos todos filterOption currentlyEditing =
     let
         relevantTodos =
             getTodosForFilterOption todos filterOption
@@ -138,9 +138,24 @@ viewTodos todos filterOption =
                     [ text "No todos to display..." ]
 
                 _ ->
-                    [ Html.Keyed.ol [ class "ui big list" ]
-                        <| List.map (\todo -> ( toString todo.id, viewTodo todo )) relevantTodos
-                    ]
+                    let
+                        isCurrentlyEditing { id } =
+                            case currentlyEditing of
+                                Nothing ->
+                                    False
+
+                                Just currentTodo ->
+                                    currentTodo.id == id
+                    in
+                        [ Html.Keyed.ol [ class "ui huge list" ]
+                            <| List.map
+                                (\todo ->
+                                    ( toString todo.id
+                                    , viewTodo todo (isCurrentlyEditing todo)
+                                    )
+                                )
+                                relevantTodos
+                        ]
 
 
 getTodosForFilterOption : List Todo -> FilterOption -> List Todo
@@ -156,8 +171,8 @@ getTodosForFilterOption todos filterOption =
             todos
 
 
-viewTodo : Todo -> Html Msg
-viewTodo todo =
+viewTodo : Todo -> Bool -> Html Msg
+viewTodo todo isCurrentlyEditing =
     let
         baseClass =
             "item "
@@ -167,13 +182,28 @@ viewTodo todo =
                 baseClass ++ "completed"
             else
                 baseClass
+
+        todoText =
+            if isCurrentlyEditing then
+                span [ class "ui mini input" ]
+                    [ input
+                        [ class "edit"
+                        , type' "text"
+                        , value todo.text
+                        , on "keyup" <| Json.map handleEditTodoKeyUp keyCode
+                        , onInput <| UpdateTodo todo
+                        ]
+                        []
+                    ]
+            else
+                label [ onClick <| handleClick todo ] [ text todo.text ]
     in
         li
             [ id ("todo-" ++ toString todo.id)
             , class todoClass
             ]
             [ viewCheckbox todo
-            , label [] [ text todo.text ]
+            , todoText
             , viewDeleteButton todo
             ]
 
@@ -200,10 +230,18 @@ viewDeleteButton todo =
         [ text "×" ]
 
 
-handleKeyUp : String -> Int -> Msg
-handleKeyUp currentText keyCode =
+handleNewTodoKeyUp : String -> Int -> Msg
+handleNewTodoKeyUp currentText keyCode =
     if currentText /= "" && isEnter keyCode then
         CreateTodo
+    else
+        NoOp
+
+
+handleEditTodoKeyUp : Int -> Msg
+handleEditTodoKeyUp keyCode =
+    if isEnter keyCode then
+        StopEditing
     else
         NoOp
 
@@ -214,3 +252,8 @@ handleCheck todo checked =
         MarkAsCompleted todo
     else
         MarkAsIncomplete todo
+
+
+handleClick : Todo -> Msg
+handleClick todo =
+    StartEditing todo
