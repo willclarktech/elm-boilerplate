@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <title>todos</title>
     <link rel="stylesheet" type="text/css" href="ui/semantic.min.css">
+    <script src="./static/env.js"></script>
   </head>
 
   <body>
+    <fb:login-button onlogin="checkLoginState();"></fb:login-button>
     <div id="app"></div>
     <script src="static/js/fb-login.js"></script>
-    <fb:login-button onlogin="checkLoginState();"></fb:login-button>
     <script src="app.js"></script>
     <script type="text/javascript">
       var node = document.getElementById('app');
