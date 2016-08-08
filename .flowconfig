@@ -1,0 +1,13 @@
+[ignore]
+<PROJECT_ROOT>/dev/.*
+<PROJECT_ROOT>/dist/.*
+<PROJECT_ROOT>/elm-stuff/.*
+<PROJECT_ROOT>/features/.*
+<PROJECT_ROOT>/src/.*
+<PROJECT_ROOT>/temp/.*
+<PROJECT_ROOT>/test-unit/.*
+<PROJECT_ROOT>/ui/.*
+<PROJECT_ROOT>/node_modules/.*
+
+[libs]
+type-declarations/

@@ -21,6 +21,7 @@
     "dev": "elm-server ./src/Main.elm --output ./dev/app.js",
     "lint": "eslint ./features ./scripts",
     "lint:fix": "npm run lint -- --fix",
+    "typecheck": "flow check",
     "test:e2e": "cucumber-js ./features --compiler js:babel-core/register -r ./test-e2e/support -r ./test-e2e/step-definitions || true",
     "test:e2e:now": "cucumber-js ./features --compiler js:babel-core/register -r ./test-e2e/support -r ./test-e2e/step-definitions --tags @now || true",
     "test:e2e:single": "npm run test:e2e",
