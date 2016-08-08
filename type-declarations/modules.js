@@ -1,4 +1,5 @@
 /* eslint-disable no-empty */
+import type { Browser } from './types';
 declare module 'bluebird' {}
 declare module 'chai' {
   declare function use(plugin: any): void
@@ -7,9 +8,6 @@ declare module 'chai' {
 declare module 'chai-as-promised' {}
 declare module 'nightmare' {
   declare var exports: {
-    (): {
-      baseUrl: ?string,
-      ctx: ?{},
-    }
+    (): Browser,
   }
 }

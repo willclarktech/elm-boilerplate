@@ -1,16 +1,29 @@
+// @flow
 import {
   getClassList,
   getText,
   getAllTexts,
-} from './helpers.js';
+} from './helpers';
+import type { Browser } from '../../type-declarations/types';
 
 const ENTER = '\u000d';
 
+type PageConstructorArgsType = {
+  browser: Browser,
+  path: string,
+  identifier: string,
+}
+
 export default class BasePage {
-  constructor({ browser, path, identifier }) {
-    [this.browser, this.identifier] = [browser, identifier];
+  constructor({ browser, path, identifier }: PageConstructorArgsType) {
+    this.browser = browser;
+    this.identifier = identifier;
     this.url = `${browser.baseUrl}${path}`;
   }
+
+  browser: Browser
+  identifier: string
+  url: string
 
   visit() {
     return new Promise((resolve, reject) => {
@@ -20,7 +33,7 @@ export default class BasePage {
     });
   }
 
-  clickElement(selector) {
+  clickElement(selector: string) {
     return new Promise((resolve, reject) => {
       this.browser
         .wait(selector)
@@ -30,7 +43,7 @@ export default class BasePage {
     });
   }
 
-  clearInput(selector) {
+  clearInput(selector: string) {
     return new Promise((resolve, reject) => {
       this.browser
         .wait(selector)
@@ -39,7 +52,7 @@ export default class BasePage {
     });
   }
 
-  typeTextIntoElementAndSubmit(text, selector) {
+  typeTextIntoElementAndSubmit(text: string, selector: string) {
     return new Promise((resolve, reject) => {
       this.browser
         .wait(selector)
@@ -61,7 +74,7 @@ export default class BasePage {
       .then(url => url === this.url);
   }
 
-  elementExists(selector) {
+  elementExists(selector: string) {
     return new Promise((resolve, reject) => {
       this.browser
         .wait(selector)
@@ -84,7 +97,7 @@ export default class BasePage {
     );
   }
 
-  getClassList(selector) {
+  getClassList(selector: string) {
     return new Promise((resolve, reject) => {
       this.browser
         .wait(selector)
@@ -94,7 +107,7 @@ export default class BasePage {
     });
   }
 
-  getElementText(selector) {
+  getElementText(selector: string) {
     return new Promise((resolve, reject) => {
       this.browser
         .wait(selector)
@@ -103,7 +116,7 @@ export default class BasePage {
     });
   }
 
-  getElementTextForEach(selector) {
+  getElementTextForEach(selector: string) {
     return new Promise((resolve, reject) => {
       this.browser
         .wait(selector)

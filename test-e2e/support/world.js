@@ -1,3 +1,4 @@
+// @flow
 import Browser from 'nightmare';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -8,11 +9,11 @@ require('../../scripts/pretty-error');
 global.Promise = require('bluebird');
 chai.use(chaiAsPromised);
 
-function World() {
+function World(): void {
   this.expect = chai.expect;
 }
 
-function Before() {
+function Before(): void {
   this.browser = Browser({
     waitTimeout: 2000,
   });
@@ -24,7 +25,7 @@ function Before() {
   });
 }
 
-module.exports = function createWorld() {
+module.exports = function createWorld(): void {
   this.World = World;
   this.Before(Before);
 };

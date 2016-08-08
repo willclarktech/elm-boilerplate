@@ -5,8 +5,13 @@ const FILTER_COMPLETED = 'completed';
 const FILTER_INCOMPLETE = 'incomplete';
 const FILTER_ALL = 'all';
 
+type FilterStatusType
+  = 'completed'
+  | 'incomplete'
+  | 'all'
+
 export default class TodosPage extends BasePage {
-  constructor({ browser }) {
+  constructor({ browser }: { browser: {} }) {
     const path = '/';
     const identifier = 'h1';
 
@@ -30,7 +35,7 @@ export default class TodosPage extends BasePage {
     };
   }
 
-  createTodo(text) {
+  createTodo(text: string) {
     const todoText = typeof text === 'string'
       ? text
       : 'Test';
@@ -39,7 +44,7 @@ export default class TodosPage extends BasePage {
       .typeTextIntoElementAndSubmit(todoText, this.selectors.newTodo);
   }
 
-  createTodos(numberOfTodos) {
+  createTodos(numberOfTodos: number) {
     const todoTexts = [];
     for (let i = 0; i < numberOfTodos; ++i) {
       todoTexts.push(`Test ${i}`);
@@ -53,17 +58,17 @@ export default class TodosPage extends BasePage {
       );
   }
 
-  markTodoAsComplete(selector = this.selectors.toggleTodo) {
+  markTodoAsComplete(selector: string = this.selectors.toggleTodo) {
     return this
       .clickElement(selector);
   }
 
-  markTodoAsIncomplete(selector = this.selectors.toggleTodo) {
+  markTodoAsIncomplete(selector: string = this.selectors.toggleTodo) {
     return this
       .clickElement(selector);
   }
 
-  markTodosAsComplete(numberOfTodos) {
+  markTodosAsComplete(numberOfTodos: number) {
     const todoTexts = [...this.browser.ctx.todoTexts];
     if (numberOfTodos > todoTexts.length) {
       throw new Error('You are trying to complete more todos than there are!');
@@ -93,7 +98,7 @@ export default class TodosPage extends BasePage {
     );
   }
 
-  editTodo(text) {
+  editTodo(text: string) {
     const newTodoText = typeof text === 'undefined'
       ? 'Edited'
       : text;
@@ -115,7 +120,7 @@ export default class TodosPage extends BasePage {
       .clickElement(this.selectors.deleteTodo);
   }
 
-  filter(status) {
+  filter(status: FilterStatusType) {
     switch (status) {
       case FILTER_COMPLETED:
         return this
