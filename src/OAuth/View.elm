@@ -9,15 +9,21 @@ view : Model -> Html a
 view model =
     case model.fbAccessToken of
         Just token ->
-            a
-                [ id "fb-status"
-                , class "ui inverted right floated button"
-                ]
-                [ text "Logged in" ]
+            let
+                fbProfilePictureUrl =
+                    "https://graph.facebook.com/me/picture"
+                        ++ "?access_token="
+                        ++ token
+            in
+                a
+                    [ id "fb-status"
+                    , class "ui middle aligned content inverted right floated circular image"
+                    ]
+                    [ img [ src fbProfilePictureUrl ] [] ]
 
         Nothing ->
             let
-                facebookOAuthLink =
+                fbOAuthLink =
                     "https://www.facebook.com/dialog/oauth"
                         ++ "?client_id=171280426615613"
                         ++ "&redirect_uri=http://localhost:3000/"
@@ -26,6 +32,7 @@ view model =
                 a
                     [ id "fb-login"
                     , class "ui inverted right floated button"
-                    , href facebookOAuthLink
+                    , style [ ( "margin-top", "5px" ) ]
+                    , href fbOAuthLink
                     ]
                     [ text "Login with Facebook" ]
