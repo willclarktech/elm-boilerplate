@@ -14,7 +14,8 @@ function World() {
 
 function Before() {
   this.browser = Browser({
-    waitTimeout: 2000,
+    waitTimeout: 2e3,
+    // show: true,
   });
   this.browser.ctx = {};
   this.browser.baseUrl = 'http://localhost:3000';
@@ -28,6 +29,7 @@ function Before() {
 }
 
 module.exports = function createWorld() {
+  this.setDefaultTimeout(5e3);
   this.World = World;
   this.Before(Before);
 };

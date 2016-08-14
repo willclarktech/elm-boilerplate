@@ -22,7 +22,8 @@ export default class FacebookLoginPage extends BasePage {
   login(email, password) {
     const { emailInput, passwordInput } = this.selectors;
     return this
-      .typeTextIntoElement(email, emailInput)
+      .clearInput(emailInput)
+      .then(() => this.typeTextIntoElement(email, emailInput))
       .then(() => this.typeTextIntoElementAndSubmit(password, passwordInput));
   }
 }

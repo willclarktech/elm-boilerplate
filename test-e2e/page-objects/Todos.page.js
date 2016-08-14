@@ -32,21 +32,12 @@ export default class TodosPage extends BasePage {
     };
   }
 
-  createTodo(text) {
-    const todoText = typeof text === 'string'
-      ? text
-      : 'Test';
-    this.browser.ctx.todoText = todoText;
+  createTodo(todoText = 'Test') {
     return this
       .typeTextIntoElementAndSubmit(todoText, this.selectors.newTodo);
   }
 
-  createTodos(numberOfTodos) {
-    const todoTexts = [];
-    for (let i = 0; i < numberOfTodos; ++i) {
-      todoTexts.push(`Test ${i}`);
-    }
-    this.browser.ctx.todoTexts = todoTexts;
+  createTodos(todoTexts) {
     return todoTexts
       .reduce((previousText, nextText) => previousText
         .then(() => this
@@ -65,43 +56,14 @@ export default class TodosPage extends BasePage {
       .clickElement(selector);
   }
 
-  markTodosAsComplete(numberOfTodos) {
-    const todoTexts = [...this.browser.ctx.todoTexts];
-    if (numberOfTodos > todoTexts.length) {
-      throw new Error('You are trying to complete more todos than there are!');
-    }
-
-    const completedIndices = [];
-
-    const completeRandomTodos = (incompleteTodos, numberToComplete, completedTodos = []) => {
-      if (numberToComplete > completedTodos.length) {
-        const index = parseInt(Math.random() * incompleteTodos.length, 10);
-        const todoToComplete = incompleteTodos[index];
-        completedIndices.push(todoTexts.indexOf(todoToComplete));
-        const newCompleteTodos = [...completedTodos, todoToComplete];
-        const newIncompleteTodos = incompleteTodos.filter((todo, i) => i !== index);
-        return completeRandomTodos(newIncompleteTodos, numberToComplete, newCompleteTodos);
-      }
-      return { completedTodos, incompleteTodos };
-    };
-
-    const { completedTodos, incompleteTodos } = completeRandomTodos(todoTexts, numberOfTodos);
-    this.browser.ctx.completedTodos = completedTodos;
-    this.browser.ctx.incompleteTodos = incompleteTodos;
-
+  markTodosAsComplete(completedIndices) {
     return Promise.map(
       completedIndices,
       index => this.markTodoAsComplete(`#todo-${index} .toggle`)
     );
   }
 
-  editTodo(text) {
-    const newTodoText = typeof text === 'undefined'
-      ? 'Edited'
-      : text;
-
-    this.browser.ctx.editedText = newTodoText;
-
+  editTodo(newTodoText = 'Edited') {
     return this
       .clickElement(this.selectors.todoText)
       .then(() => this
@@ -137,10 +99,10 @@ export default class TodosPage extends BasePage {
       .clickElement(this.selectors.loginButton);
   }
 
-  isTodoPresent() {
+  isTodoPresent(todoText) {
     return this
       .getElementText(this.selectors.todoText)
-      .then(text => text === this.browser.ctx.todoText)
+      .then(text => text === todoText)
       .catch(() => false);
   }
 
@@ -150,10 +112,10 @@ export default class TodosPage extends BasePage {
       .then(classList => classList.includes(COMPLETED_CLASS));
   }
 
-  isTodoUpdated() {
+  isTodoUpdated(editedText) {
     return this
       .getElementText(this.selectors.todoText)
-      .then(text => text === this.browser.ctx.editedText);
+      .then(text => text === editedText);
   }
 
   getTodos() {

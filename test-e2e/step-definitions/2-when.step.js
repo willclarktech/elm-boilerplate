@@ -4,7 +4,9 @@ module.exports = function whenSteps() {
   });
 
   this.When(/^I create a Todo$/, function () {
-    return this.todosPage.createTodo();
+    const todoText = 'Test';
+    this.browser.ctx.todoText = todoText;
+    return this.todosPage.createTodo(todoText);
   });
 
   this.When(/^I try to create a blank Todo$/, function () {
@@ -28,7 +30,9 @@ module.exports = function whenSteps() {
   });
 
   this.When(/^I edit the Todo$/, function () {
-    return this.todosPage.editTodo();
+    const newTodoText = 'Edited';
+    this.browser.ctx.editedText = newTodoText;
+    return this.todosPage.editTodo(newTodoText);
   });
 
   this.When(/^I log in with Facebook$/, function () {
