@@ -6,8 +6,9 @@ module.exports = function thenSteps() {
   });
 
   this.Then(/^I should see the Todo$/, function () {
+    const { todoText } = this.browser.ctx;
     return this
-      .expect(this.todosPage.isTodoPresent())
+      .expect(this.todosPage.isTodoPresent(todoText))
       .eventually.to.be.true;
   });
 
@@ -24,8 +25,9 @@ module.exports = function thenSteps() {
   });
 
   this.Then(/^I should not see the Todo$/, function () {
+    const { todoText } = this.browser.ctx;
     return this
-      .expect(this.todosPage.isTodoPresent())
+      .expect(this.todosPage.isTodoPresent(todoText))
       .eventually.to.be.false;
   });
 
@@ -71,8 +73,9 @@ module.exports = function thenSteps() {
   });
 
   this.Then(/^I should see that the Todo is updated$/, function () {
+    const { editedText } = this.browser.ctx;
     return this
-      .expect(this.todosPage.isTodoUpdated())
+      .expect(this.todosPage.isTodoUpdated(editedText))
       .eventually.to.be.true;
   });
 
