@@ -60,9 +60,13 @@ view { currentText, todos, filterOption, currentlyEditing } oauthModel =
 viewHeading : OAuth.Types.Model -> Html Msg
 viewHeading oauthModel =
     div [ class "ui attached inverted orange segment" ]
-        [ h1 [ class "ui huge header" ]
+        [ h1
+            [ class "ui huge header"
+            , style [ ( "font-size", "35px" ) ]
+            ]
             [ text headingText
-            , OAuth.View.view oauthModel
+            , span []
+                [ OAuth.View.view oauthModel ]
             ]
         ]
 
