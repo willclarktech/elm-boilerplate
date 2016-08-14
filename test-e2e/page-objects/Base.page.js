@@ -39,6 +39,17 @@ export default class BasePage {
     });
   }
 
+  typeTextIntoElement(text, selector) {
+    return new Promise((resolve, reject) => {
+      this.browser
+        .wait(selector)
+        .wait(50)
+        .insert(selector, text)
+        .wait(200)
+        .then(resolve, reject);
+    });
+  }
+
   typeTextIntoElementAndSubmit(text, selector) {
     return new Promise((resolve, reject) => {
       this.browser

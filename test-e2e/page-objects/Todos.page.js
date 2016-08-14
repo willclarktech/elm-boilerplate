@@ -27,6 +27,13 @@ export default class TodosPage extends BasePage {
       filterAll: '#filter-all',
       filterCompleted: '#filter-completed',
       filterIncomplete: '#filter-incomplete',
+      loginButton: '#fb-login',
+      fbStatus: '#fb-status',
+    };
+
+    this.fbSelectors = {
+      emailInput: '#email',
+      passwordInput: '#pass',
     };
   }
 
@@ -130,6 +137,15 @@ export default class TodosPage extends BasePage {
     }
   }
 
+  login(email, password) {
+    const { loginButton } = this.selectors;
+    const { emailInput, passwordInput } = this.fbSelectors;
+    return this
+      .clickElement(loginButton)
+      .then(() => this.typeTextIntoElement(email, emailInput))
+      .then(() => this.typeTextIntoElementAndSubmit(password, passwordInput));
+  }
+
   isTodoPresent() {
     return this
       .getElementText(this.selectors.todoText)
@@ -153,5 +169,10 @@ export default class TodosPage extends BasePage {
     return this
       .getElementTextForEach(this.selectors.todoText)
       .catch(() => []);
+  }
+
+  getLoginName() {
+    return this
+      .getElementText(this.selectors.fbStatus);
   }
 }

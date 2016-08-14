@@ -75,4 +75,10 @@ module.exports = function thenSteps() {
       .expect(this.todosPage.isTodoUpdated())
       .eventually.to.be.true;
   });
+
+  this.Then(/^I should be greeted by name$/, function () {
+    return this
+      .expect(this.todosPage.getLoginName())
+      .eventually.to.equal(this.browser.ctx.user.name);
+  });
 };

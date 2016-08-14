@@ -30,4 +30,9 @@ module.exports = function whenSteps() {
   this.When(/^I edit the Todo$/, function () {
     return this.todosPage.editTodo();
   });
+
+  this.When(/^I log in with Facebook$/, function () {
+    const { email, password } = this.browser.ctx.user;
+    return this.todosPage.login(email, password);
+  });
 };
