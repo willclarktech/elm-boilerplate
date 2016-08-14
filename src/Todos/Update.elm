@@ -34,48 +34,43 @@ initialModel =
     }
 
 
-noFx : Model -> ( Model, Cmd a )
-noFx model =
-    ( model, Cmd.none )
-
-
-init : ( Model, Cmd a )
+init : Model
 init =
-    noFx initialModel
+    initialModel
 
 
-update : Msg -> Model -> ( Model, Cmd a )
+update : Msg -> Model -> Model
 update action model =
     case action of
         CreateTodo ->
-            ( createTodo model, Cmd.none )
+            createTodo model
 
         UpdateText text ->
-            ( updateText text model, Cmd.none )
+            updateText text model
 
         MarkAsCompleted todo ->
-            ( markAsCompleted todo model, Cmd.none )
+            markAsCompleted todo model
 
         MarkAsIncomplete todo ->
-            ( markAsIncomplete todo model, Cmd.none )
+            markAsIncomplete todo model
 
         Delete todo ->
-            ( delete todo model, Cmd.none )
+            delete todo model
 
         StartEditing todo ->
-            ( startEditing todo model, Cmd.none )
+            startEditing todo model
 
         UpdateTodo todo text ->
-            ( updateTodo todo text model, Cmd.none )
+            updateTodo todo text model
 
         StopEditing ->
-            ( stopEditing model, Cmd.none )
+            stopEditing model
 
         Filter filterOption ->
-            ( setFilter filterOption model, Cmd.none )
+            setFilter filterOption model
 
         NoOp ->
-            noFx model
+            model
 
 
 updateText : String -> Model -> Model

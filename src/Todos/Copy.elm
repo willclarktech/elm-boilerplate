@@ -5,6 +5,8 @@ module Todos.Copy
         , getButtonText
         )
 
+import Todos.Types exposing (Error(..))
+
 
 headingText : String
 headingText =

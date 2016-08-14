@@ -29,13 +29,15 @@ import Todos.Copy
         , placeholderText
         , getButtonText
         )
+import OAuth.Types
+import OAuth.View
 
 
-view : Model -> Html Msg
-view { currentText, todos, filterOption, currentlyEditing } =
+view : Model -> OAuth.Types.Model -> Html Msg
+view { currentText, todos, filterOption, currentlyEditing } oauthModel =
     let
         baseComponents =
-            [ viewHeading
+            [ viewHeading oauthModel
             , viewNewTodoInput currentText
             ]
 
@@ -55,11 +57,13 @@ view { currentText, todos, filterOption, currentlyEditing } =
             components
 
 
-viewHeading : Html Msg
-viewHeading =
+viewHeading : OAuth.Types.Model -> Html Msg
+viewHeading oauthModel =
     div [ class "ui attached inverted orange segment" ]
         [ h1 [ class "ui huge header" ]
-            [ text headingText ]
+            [ text headingText
+            , OAuth.View.view oauthModel
+            ]
         ]
 
 
