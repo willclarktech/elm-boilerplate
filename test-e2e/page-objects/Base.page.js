@@ -7,9 +7,9 @@ import {
 const ENTER = '\u000d';
 
 export default class BasePage {
-  constructor({ browser, path, identifier }) {
+  constructor({ browser, baseUrl, path, identifier }) {
     [this.browser, this.identifier] = [browser, identifier];
-    this.url = `${browser.baseUrl}${path}`;
+    this.url = `${baseUrl || browser.baseUrl}${path}`;
   }
 
   visit() {

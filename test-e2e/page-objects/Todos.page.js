@@ -30,11 +30,6 @@ export default class TodosPage extends BasePage {
       loginButton: '#fb-login',
       fbStatus: '#fb-status',
     };
-
-    this.fbSelectors = {
-      emailInput: '#email',
-      passwordInput: '#pass',
-    };
   }
 
   createTodo(text) {
@@ -137,13 +132,9 @@ export default class TodosPage extends BasePage {
     }
   }
 
-  login(email, password) {
-    const { loginButton } = this.selectors;
-    const { emailInput, passwordInput } = this.fbSelectors;
+  login() {
     return this
-      .clickElement(loginButton)
-      .then(() => this.typeTextIntoElement(email, emailInput))
-      .then(() => this.typeTextIntoElementAndSubmit(password, passwordInput));
+      .clickElement(this.selectors.loginButton);
   }
 
   isTodoPresent() {
