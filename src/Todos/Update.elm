@@ -2,6 +2,7 @@ module Todos.Update
     exposing
         ( initialModel
         , init
+        , urlUpdate
         , update
         , updateText
         , createTodo
@@ -21,7 +22,16 @@ import Todos.Types
         , Msg(..)
         , FilterOption(..)
         )
+import OAuth.Types
+import OAuth.Update
+import OAuth.Helpers
+    exposing
+        ( getOAuthNameUrlForAccessToken
+        , decodeUserName
+        )
 import String exposing (trim)
+import Task
+import Http
 
 
 initialModel : Model
@@ -31,46 +41,102 @@ initialModel =
     , filterOption = All
     , currentText = ""
     , currentlyEditing = Nothing
+    , oauth = OAuth.Update.initialModel
     }
 
 
-init : Model
-init =
-    initialModel
+init : Result String String -> ( Model, Cmd Msg )
+init result =
+    urlUpdate result initialModel
 
 
-update : Msg -> Model -> Model
+urlUpdate : Result String String -> Model -> ( Model, Cmd Msg )
+urlUpdate result model =
+    case result of
+        Err _ ->
+            update NoOp model
+
+        Ok accessToken ->
+            update (UpdateOAuthAccessToken (Just accessToken)) model
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
     case action of
         CreateTodo ->
-            createTodo model
+            ( createTodo model, Cmd.none )
 
         UpdateText text ->
-            updateText text model
+            ( updateText text model, Cmd.none )
 
         MarkAsCompleted todo ->
-            markAsCompleted todo model
+            ( markAsCompleted todo model, Cmd.none )
 
         MarkAsIncomplete todo ->
-            markAsIncomplete todo model
+            ( markAsIncomplete todo model, Cmd.none )
 
         Delete todo ->
-            delete todo model
+            ( delete todo model, Cmd.none )
 
         StartEditing todo ->
-            startEditing todo model
+            ( startEditing todo model, Cmd.none )
 
         UpdateTodo todo text ->
-            updateTodo todo text model
+            ( updateTodo todo text model, Cmd.none )
 
         StopEditing ->
-            stopEditing model
+            ( stopEditing model, Cmd.none )
 
         Filter filterOption ->
-            setFilter filterOption model
+            ( setFilter filterOption model, Cmd.none )
+
+        GetOAuthNameFailed error ->
+            ( model, Cmd.none )
+
+        GetOAuthNameSucceeded name ->
+            ( updateOAuthName name model, Cmd.none )
+
+        UpdateOAuthAccessToken token ->
+            updateOAuthAccessToken token model
 
         NoOp ->
-            model
+            ( model, Cmd.none )
+
+
+getUserName : String -> Cmd Msg
+getUserName accessToken =
+    let
+        url =
+            getOAuthNameUrlForAccessToken accessToken
+    in
+        Task.perform GetOAuthNameFailed GetOAuthNameSucceeded
+            <| Http.get decodeUserName url
+
+
+updateOAuthAccessToken : Maybe String -> Model -> ( Model, Cmd Msg )
+updateOAuthAccessToken accessToken model =
+    let
+        newOAuth =
+            OAuth.Update.update (OAuth.Types.UpdateAccessToken accessToken) model.oauth
+
+        newModel =
+            { model
+                | oauth = newOAuth
+            }
+    in
+        case newOAuth.accessToken of
+            Nothing ->
+                ( newModel, Cmd.none )
+
+            Just accessToken ->
+                ( newModel, getUserName accessToken )
+
+
+updateOAuthName : String -> Model -> Model
+updateOAuthName name model =
+    { model
+        | oauth = OAuth.Update.update (OAuth.Types.UpdateUserName (Just name)) model.oauth
+    }
 
 
 updateText : String -> Model -> Model
