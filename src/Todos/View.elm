@@ -33,11 +33,11 @@ import OAuth.Types
 import OAuth.View
 
 
-view : Model -> OAuth.Types.Model -> Html Msg
-view { currentText, todos, filterOption, currentlyEditing } oauthModel =
+view : Model -> Html Msg
+view { currentText, todos, filterOption, currentlyEditing, oauth } =
     let
         baseComponents =
-            [ viewHeading oauthModel
+            [ viewHeading oauth
             , viewNewTodoInput currentText
             ]
 
@@ -59,10 +59,13 @@ view { currentText, todos, filterOption, currentlyEditing } oauthModel =
 
 viewHeading : OAuth.Types.Model -> Html Msg
 viewHeading oauthModel =
-    div [ class "ui attached inverted orange segment" ]
+    div
+        [ class "ui attached inverted orange segment"
+        , style [ ( "padding-top", "40px" ), ( "padding-bottom", "40px" ) ]
+        ]
         [ h1
             [ class "ui huge header"
-            , style [ ( "font-size", "35px" ) ]
+            , style [ ( "font-size", "50px" ) ]
             ]
             [ text headingText
             , span []

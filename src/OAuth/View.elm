@@ -6,33 +6,49 @@ import OAuth.Types exposing (Model)
 
 
 view : Model -> Html a
-view model =
-    case model.fbAccessToken of
-        Just token ->
-            let
-                fbProfilePictureUrl =
-                    "https://graph.facebook.com/me/picture"
-                        ++ "?access_token="
-                        ++ token
-            in
-                a
-                    [ id "fb-status"
-                    , class "ui middle aligned content inverted right floated circular image"
-                    ]
-                    [ img [ src fbProfilePictureUrl ] [] ]
+view { accessToken, userName } =
+    case ( accessToken, userName ) of
+        ( Just token, Just name ) ->
+            viewFbStatus token name
 
-        Nothing ->
-            let
-                fbOAuthLink =
-                    "https://www.facebook.com/dialog/oauth"
-                        ++ "?client_id=171280426615613"
-                        ++ "&redirect_uri=http://localhost:3000/"
-                        ++ "&response_type=token"
-            in
-                a
-                    [ id "fb-login"
-                    , class "ui inverted right floated button"
-                    , style [ ( "margin-top", "5px" ) ]
-                    , href fbOAuthLink
-                    ]
-                    [ text "Login with Facebook" ]
+        _ ->
+            viewFbLogin
+
+
+viewFbStatus : String -> String -> Html a
+viewFbStatus token name =
+    let
+        fbProfilePictureUrl =
+            "https://graph.facebook.com/me/picture"
+                ++ "?access_token="
+                ++ token
+    in
+        button
+            [ id "fb-status"
+            , class "ui large inverted right floated button"
+            ]
+            [ span [ style [ ( "margin-right", "10px" ) ] ]
+                [ text name ]
+            , img
+                [ src fbProfilePictureUrl
+                , class "ui middle aligned content inverted circular image"
+                ]
+                []
+            ]
+
+
+viewFbLogin : Html a
+viewFbLogin =
+    let
+        fbOAuthLink =
+            "https://www.facebook.com/dialog/oauth"
+                ++ "?client_id=171280426615613"
+                ++ "&redirect_uri=http://localhost:3000/"
+                ++ "&response_type=token"
+    in
+        a
+            [ id "fb-login"
+            , class "ui large inverted right floated button"
+            , href fbOAuthLink
+            ]
+            [ text "Login with Facebook" ]

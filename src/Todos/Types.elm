@@ -6,6 +6,9 @@ module Todos.Types
         , FilterOption(..)
         )
 
+import OAuth.Types
+import Http
+
 
 type alias Model =
     { counter : Int
@@ -13,6 +16,7 @@ type alias Model =
     , filterOption : FilterOption
     , currentText : String
     , currentlyEditing : Maybe Todo
+    , oauth : OAuth.Types.Model
     }
 
 
@@ -39,4 +43,7 @@ type Msg
     | UpdateTodo Todo String
     | StopEditing
     | Filter FilterOption
+    | GetOAuthNameSucceeded String
+    | GetOAuthNameFailed Http.Error
+    | UpdateOAuthAccessToken (Maybe String)
     | NoOp

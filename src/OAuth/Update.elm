@@ -1,36 +1,34 @@
 module OAuth.Update
     exposing
         ( initialModel
-        , init
         , update
         )
 
-import OAuth.Types exposing (Model)
+import OAuth.Types exposing (Model, Msg(..))
 
 
 initialModel : Model
 initialModel =
-    { fbAccessToken = Nothing
+    { accessToken = Nothing
+    , userName = Nothing
     }
 
 
-init : Result String String -> Model
-init result =
-    update result initialModel
+update : Msg -> Model -> Model
+update action model =
+    case action of
+        UpdateAccessToken token ->
+            updateFbAccessToken token model
+
+        UpdateUserName name ->
+            updateFbName name model
+
+
+updateFbName : Maybe String -> Model -> Model
+updateFbName userName model =
+    { model | userName = userName }
 
 
 updateFbAccessToken : Maybe String -> Model -> Model
-updateFbAccessToken fbAccessToken model =
-    { model
-        | fbAccessToken = fbAccessToken
-    }
-
-
-update : Result String String -> Model -> Model
-update result model =
-    case result of
-        Ok fbAccessToken ->
-            updateFbAccessToken (Just fbAccessToken) model
-
-        Err _ ->
-            model
+updateFbAccessToken accessToken model =
+    { model | accessToken = accessToken }

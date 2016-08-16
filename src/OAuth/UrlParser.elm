@@ -8,11 +8,11 @@ import OAuth.Copy exposing (getErrorText)
 
 urlParser : Navigation.Parser (Result String String)
 urlParser =
-    Navigation.makeParser (fromUrl << .hash)
+    Navigation.makeParser (getFbAccessTokenFromUrl << .hash)
 
 
-fromUrl : String -> Result String String
-fromUrl url =
+getFbAccessTokenFromUrl : String -> Result String String
+getFbAccessTokenFromUrl url =
     case trimLeftOfAccessToken url of
         Ok trimmedUrl ->
             Ok <| trimRightOfAccessToken trimmedUrl
@@ -27,15 +27,12 @@ trimLeftOfAccessToken url =
         accessTokenString =
             "access_token="
 
-        accessTokenStringLength =
-            String.length accessTokenString
-
         accessTokenIndex =
             String.indices accessTokenString url
     in
         case accessTokenIndex of
             i :: is ->
-                Ok <| String.dropLeft (i + accessTokenStringLength) url
+                Ok <| String.dropLeft (i + String.length accessTokenString) url
 
             _ ->
                 Err <| getErrorText FbAccessTokenNotFound
