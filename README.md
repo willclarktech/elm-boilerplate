@@ -32,9 +32,9 @@ npm run test:unit:watch
 ## Development process
 
 1. Add a feature file in `features`.
-1. Cucumber will give you boilerplate code to put as your step definitions in `test-e2e/step-definitions`. Double check the regular expressions, then implement the steps. End-to-end tests should fail.
-1. Add an elm test suite for the feature in `test-unit/[AppName]Test`. Write tests which will help you pass the currently failing aspect of the end-to-end tests. Tests should fail.
-1. Write elm code in `elm/[AppName]` to pass the tests.
+1. Cucumber will give you boilerplate code to put as your step definitions in `./test-e2e/step-definitions`. Double check the regular expressions, then implement the steps. End-to-end tests should fail.
+1. Add an elm test suite for the feature in `./test-unit/[AppName]Test`. Write tests which will help you pass the currently failing aspect of the end-to-end tests. Tests should fail.
+1. Write elm code in ./`elm/[AppName]` to pass the tests.
 
 ### Features
 
@@ -58,7 +58,7 @@ There should be one for each different page. Page objects extend a Base page cla
 
 ## Deployment
 
-When you’re ready to deploy what you have in `./dev`, run this script:
+When you’re ready to deploy what you have in `./dev`, change `./src/Env/Current.elm` to import from `Env.Production` instead of `Env.Development`, then run this script:
 
 ```
 npm run deploy:straight
