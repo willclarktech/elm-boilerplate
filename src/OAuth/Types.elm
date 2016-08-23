@@ -7,7 +7,9 @@ module OAuth.Types
 
 
 type alias Model =
-    { accessToken : Maybe String
+    { clientId : String
+    , redirectUri : String
+    , accessToken : Maybe String
     , userName : Maybe String
     }
 

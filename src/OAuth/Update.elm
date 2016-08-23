@@ -9,7 +9,9 @@ import OAuth.Types exposing (Model, Msg(..))
 
 initialModel : Model
 initialModel =
-    { accessToken = Nothing
+    { clientId = "171280426615613"
+    , redirectUri = "http://localhost:3000/"
+    , accessToken = Nothing
     , userName = Nothing
     }
 
