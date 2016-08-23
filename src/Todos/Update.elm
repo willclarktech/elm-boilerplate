@@ -20,7 +20,9 @@ import Todos.Types
         ( Model
         , Todo
         , Msg(..)
+        , Tab(..)
         , FilterOption(..)
+        , ProcessedLocation
         )
 import OAuth.Types
 import OAuth.Update
@@ -32,6 +34,7 @@ import OAuth.Helpers
 import String exposing (trim)
 import Task
 import Http
+import Navigation exposing (modifyUrl)
 
 
 initialModel : Model
@@ -42,22 +45,45 @@ initialModel =
     , currentText = ""
     , currentlyEditing = Nothing
     , oauth = OAuth.Update.initialModel
+    , tab = Todos
     }
 
 
-init : Result String String -> ( Model, Cmd Msg )
+init : Result String ProcessedLocation -> ( Model, Cmd Msg )
 init result =
     urlUpdate result initialModel
 
 
-urlUpdate : Result String String -> Model -> ( Model, Cmd Msg )
+urlUpdate : Result String ProcessedLocation -> Model -> ( Model, Cmd Msg )
 urlUpdate result model =
     case result of
         Err _ ->
             update NoOp model
 
-        Ok accessToken ->
-            update (UpdateOAuthAccessToken (Just accessToken)) model
+        Ok { path, accessToken } ->
+            updatePathAndAccessToken path accessToken model
+
+
+updatePathAndAccessToken : String -> Result String String -> Model -> ( Model, Cmd Msg )
+updatePathAndAccessToken path accessToken model =
+    let
+        modelUpdatedForPath =
+            case path of
+                "" ->
+                    { model | tab = Todos }
+
+                "info" ->
+                    { model | tab = Info }
+
+                _ ->
+                    model
+    in
+        case accessToken of
+            Err _ ->
+                ( model, Cmd.none )
+
+            Ok token ->
+                update (UpdateOAuthAccessToken <| Just token) model
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -99,8 +125,25 @@ update action model =
         UpdateOAuthAccessToken token ->
             updateOAuthAccessToken token model
 
+        SwitchTab tab ->
+            switchTab tab model
+
         NoOp ->
             ( model, Cmd.none )
+
+
+switchTab : Tab -> Model -> ( Model, Cmd Msg )
+switchTab tab model =
+    let
+        newModel =
+            { model | tab = tab }
+    in
+        case tab of
+            Todos ->
+                ( newModel, modifyUrl "/" )
+
+            Info ->
+                ( newModel, modifyUrl "/info" )
 
 
 getUserName : String -> Cmd Msg
@@ -129,7 +172,12 @@ updateOAuthAccessToken accessToken model =
                 ( newModel, Cmd.none )
 
             Just accessToken ->
-                ( newModel, getUserName accessToken )
+                case accessToken of
+                    "" ->
+                        ( newModel, Cmd.none )
+
+                    _ ->
+                        ( newModel, getUserName accessToken )
 
 
 updateOAuthName : String -> Model -> Model

@@ -1,4 +1,4 @@
-module OAuth.UrlParser exposing (urlParser)
+module OAuth.UrlParser exposing (getDataFromLocation)
 
 import String
 import Navigation
@@ -6,41 +6,41 @@ import OAuth.Types exposing (Error(..))
 import OAuth.Copy exposing (getErrorText)
 
 
-urlParser : Navigation.Parser (Result String String)
-urlParser =
-    Navigation.makeParser (getFbAccessTokenFromUrl << .hash)
+getDataFromLocation : Navigation.Location -> Result String String
+getDataFromLocation =
+    getFbAccessTokenFromHash << .hash
 
 
-getFbAccessTokenFromUrl : String -> Result String String
-getFbAccessTokenFromUrl url =
-    case trimLeftOfAccessToken url of
-        Ok trimmedUrl ->
-            Ok <| trimRightOfAccessToken trimmedUrl
+getFbAccessTokenFromHash : String -> Result String String
+getFbAccessTokenFromHash hash =
+    case trimLeftOfAccessToken hash of
+        Ok trimmedHash ->
+            Ok <| trimRightOfAccessToken trimmedHash
 
         err ->
             err
 
 
 trimLeftOfAccessToken : String -> Result String String
-trimLeftOfAccessToken url =
+trimLeftOfAccessToken hash =
     let
         accessTokenString =
             "access_token="
 
         accessTokenIndex =
-            String.indices accessTokenString url
+            String.indices accessTokenString hash
     in
         case accessTokenIndex of
             i :: is ->
-                Ok <| String.dropLeft (i + String.length accessTokenString) url
+                Ok <| String.dropLeft (i + String.length accessTokenString) hash
 
             _ ->
                 Err <| getErrorText FbAccessTokenNotFound
 
 
 trimRightOfAccessToken : String -> String
-trimRightOfAccessToken url =
-    case String.uncons url of
+trimRightOfAccessToken hash =
+    case String.uncons hash of
         Nothing ->
             ""
 

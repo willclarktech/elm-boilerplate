@@ -3,7 +3,9 @@ module Todos.Types
         ( Model
         , Todo
         , Msg(..)
+        , Tab(..)
         , FilterOption(..)
+        , ProcessedLocation
         )
 
 import OAuth.Types
@@ -17,6 +19,7 @@ type alias Model =
     , currentText : String
     , currentlyEditing : Maybe Todo
     , oauth : OAuth.Types.Model
+    , tab : Tab
     }
 
 
@@ -33,6 +36,17 @@ type FilterOption
     | Incomplete
 
 
+type Tab
+    = Todos
+    | Info
+
+
+type alias ProcessedLocation =
+    { path : String
+    , accessToken : Result String String
+    }
+
+
 type Msg
     = CreateTodo
     | UpdateText String
@@ -46,4 +60,5 @@ type Msg
     | GetOAuthNameSucceeded String
     | GetOAuthNameFailed Http.Error
     | UpdateOAuthAccessToken (Maybe String)
+    | SwitchTab Tab
     | NoOp

@@ -1,7 +1,6 @@
 module Todos.View exposing (view, handleNewTodoKeyUp)
 
 import Json.Decode as Json
-import Markdown
 import Html exposing (..)
 import Html.Keyed exposing (ol)
 import Html.Attributes exposing (..)
@@ -14,36 +13,51 @@ import Html.Events
         , keyCode
         , targetChecked
         )
+import Markdown
 import Helpers exposing (isEnter)
 import Todos.Types
     exposing
         ( Model
         , Todo
         , Msg(..)
+        , Tab(..)
         , FilterOption(..)
         )
-import Todos.Update exposing (..)
 import Todos.Copy
     exposing
-        ( headingText
+        ( tabText
         , placeholderText
         , getButtonText
+        , infoMD
         )
-import Todos.Style exposing (headingStyle, headerStyle)
+import Todos.Style
+    exposing
+        ( headingStyle
+        , headerStyle
+        , tabLinkStyle
+        , activeTabLinkStyle
+        )
 import OAuth.Types
 import OAuth.View
 
 
 view : Model -> Html Msg
-view { currentText, todos, filterOption, currentlyEditing, oauth } =
+view { tab, currentText, todos, filterOption, currentlyEditing, oauth } =
     let
         baseComponents =
-            [ viewHeading oauth
-            , viewNewTodoInput currentText
-            ]
+            case tab of
+                Todos ->
+                    [ viewHeading oauth tab
+                    , viewNewTodoInput currentText
+                    ]
+
+                Info ->
+                    [ viewHeading oauth tab
+                    , viewInfo
+                    ]
 
         components =
-            if List.length todos /= 0 then
+            if tab == Todos && List.length todos /= 0 then
                 List.append baseComponents
                     [ viewFilters filterOption
                     , viewTodos todos filterOption currentlyEditing
@@ -58,8 +72,8 @@ view { currentText, todos, filterOption, currentlyEditing, oauth } =
             components
 
 
-viewHeading : OAuth.Types.Model -> Html Msg
-viewHeading oauthModel =
+viewHeading : OAuth.Types.Model -> Tab -> Html Msg
+viewHeading oauthModel tab =
     div
         [ class "ui attached inverted orange segment"
         , style headingStyle
@@ -68,7 +82,29 @@ viewHeading oauthModel =
             [ class "ui huge header"
             , style headerStyle
             ]
-            [ text headingText
+            [ span
+                [ id "tab-todos"
+                , style
+                    (if tab == Todos then
+                        activeTabLinkStyle
+                     else
+                        tabLinkStyle
+                    )
+                , onClick <| SwitchTab Todos
+                ]
+                [ text <| tabText Todos ]
+            , text " / "
+            , span
+                [ id "tab-info"
+                , style
+                    (if tab == Info then
+                        activeTabLinkStyle
+                     else
+                        tabLinkStyle
+                    )
+                , onClick <| SwitchTab Info
+                ]
+                [ text <| tabText Info ]
             , span []
                 [ OAuth.View.view oauthModel ]
             ]
@@ -240,6 +276,16 @@ viewDeleteButton todo =
         , onClick <| Delete todo
         ]
         [ text "×" ]
+
+
+viewInfo : Html Msg
+viewInfo =
+    div
+        [ id "info"
+        , class "ui compact attached segment"
+        ]
+        [ Markdown.toHtml [] infoMD
+        ]
 
 
 handleNewTodoKeyUp : String -> Int -> Msg
