@@ -1,3 +1,4 @@
+@external
 Feature: Login with Facebook
   As a social creature
   I want to login
