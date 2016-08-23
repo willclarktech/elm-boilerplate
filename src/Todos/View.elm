@@ -29,6 +29,7 @@ import Todos.Copy
         , placeholderText
         , getButtonText
         )
+import Todos.Style exposing (headingStyle, headerStyle)
 import OAuth.Types
 import OAuth.View
 
@@ -61,11 +62,11 @@ viewHeading : OAuth.Types.Model -> Html Msg
 viewHeading oauthModel =
     div
         [ class "ui attached inverted orange segment"
-        , style [ ( "padding-top", "40px" ), ( "padding-bottom", "40px" ) ]
+        , style headingStyle
         ]
         [ h1
             [ class "ui huge header"
-            , style [ ( "font-size", "50px" ) ]
+            , style headerStyle
             ]
             [ text headingText
             , span []

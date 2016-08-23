@@ -22,12 +22,15 @@ viewFbStatus token name =
         fbProfilePictureUrl =
             Http.url "https://graph.facebook.com/me/picture"
                 [ ( "access_token", token ) ]
+
+        spanStyle =
+            [ ( "margin-right", "10px" ) ]
     in
         button
             [ id "fb-status"
             , class "ui large inverted right floated button"
             ]
-            [ span [ style [ ( "margin-right", "10px" ) ] ]
+            [ span [ style spanStyle ]
                 [ text name ]
             , img
                 [ src fbProfilePictureUrl
