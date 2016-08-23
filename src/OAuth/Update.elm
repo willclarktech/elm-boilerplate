@@ -4,13 +4,14 @@ module OAuth.Update
         , update
         )
 
+import Env.Current exposing (clientId, redirectUri)
 import OAuth.Types exposing (Model, Msg(..))
 
 
 initialModel : Model
 initialModel =
-    { clientId = "171280426615613"
-    , redirectUri = "http://localhost:3000/"
+    { clientId = clientId
+    , redirectUri = redirectUri
     , accessToken = Nothing
     , userName = Nothing
     }
