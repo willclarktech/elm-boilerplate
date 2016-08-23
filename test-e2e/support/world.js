@@ -2,7 +2,7 @@ import Browser from 'nightmare';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-import { TodosPage, FacebookLoginPage } from '../page-objects';
+import { TodosPage, InfoPage, FacebookLoginPage } from '../page-objects';
 
 require('../../scripts/pretty-error');
 global.Promise = require('bluebird');
@@ -22,6 +22,9 @@ function Before() {
   this.browser.baseUrl = 'http://localhost:3000';
 
   this.todosPage = new TodosPage({
+    browser: this.browser,
+  });
+  this.infoPage = new InfoPage({
     browser: this.browser,
   });
   this.facebookLoginPage = new FacebookLoginPage({

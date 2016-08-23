@@ -10,12 +10,24 @@ export default class BasePage {
   constructor({ browser, baseUrl, path, identifier }) {
     [this.browser, this.identifier] = [browser, identifier];
     this.url = `${baseUrl || browser.baseUrl}${path}`;
+    this.tabs = {
+      info: '#tab-info',
+      todos: '#tab-todos',
+    };
   }
 
   visit() {
     return new Promise((resolve, reject) => {
       this.browser
         .goto(this.url)
+        .then(resolve, reject);
+    });
+  }
+
+  visitTab(tab) {
+    return new Promise((resolve, reject) => {
+      this.browser
+        .click(this.tabs[tab])
         .then(resolve, reject);
     });
   }

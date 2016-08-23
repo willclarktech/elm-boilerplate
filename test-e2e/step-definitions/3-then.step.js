@@ -84,4 +84,10 @@ module.exports = function thenSteps() {
       .expect(this.todosPage.getLoginName())
       .eventually.to.equal(this.browser.ctx.user.name);
   });
+
+  this.Then(/^I should get some info$/, function () {
+    return this
+      .expect(this.infoPage.identifierIsPresent())
+      .eventually.to.be.true;
+  });
 };

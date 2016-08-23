@@ -8,7 +8,7 @@ const FILTER_ALL = 'all';
 export default class TodosPage extends BasePage {
   constructor({ browser }) {
     const path = '/';
-    const identifier = 'h1';
+    const identifier = '#new-todo';
 
     super({
       browser,

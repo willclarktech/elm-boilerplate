@@ -40,4 +40,8 @@ module.exports = function whenSteps() {
     return this.todosPage.login()
       .then(() => this.facebookLoginPage.login(email, password));
   });
+
+  this.When(/^I visit the info tab$/, function () {
+    return this.todosPage.visitTab('info');
+  });
 };
