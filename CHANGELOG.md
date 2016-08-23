@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## v0.4.0
+
+- feature: Facebook login
+
 ## v0.3.0
 
 - feature: edit todos
