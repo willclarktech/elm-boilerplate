@@ -15,6 +15,7 @@ function World() {
 function Before() {
   this.browser = Browser({
     waitTimeout: 2e3,
+    webPreferences: { partition: 'test' }, // Store session in memory
     // show: true,
   });
   this.browser.ctx = {};
