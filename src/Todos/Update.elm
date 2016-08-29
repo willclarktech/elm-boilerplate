@@ -15,6 +15,18 @@ module Todos.Update
         , setFilter
         )
 
+import String exposing (trim)
+import Task
+import Http
+import Navigation exposing (modifyUrl)
+import Env.Current exposing (basePath)
+import OAuth.Types
+import OAuth.Update
+import OAuth.Helpers
+    exposing
+        ( getOAuthNameUrlForAccessToken
+        , decodeUserName
+        )
 import Todos.Types
     exposing
         ( Model
@@ -24,17 +36,6 @@ import Todos.Types
         , FilterOption(..)
         , ProcessedLocation
         )
-import OAuth.Types
-import OAuth.Update
-import OAuth.Helpers
-    exposing
-        ( getOAuthNameUrlForAccessToken
-        , decodeUserName
-        )
-import String exposing (trim)
-import Task
-import Http
-import Navigation exposing (modifyUrl)
 
 
 initialModel : Model
@@ -140,10 +141,10 @@ switchTab tab model =
     in
         case tab of
             Todos ->
-                ( newModel, modifyUrl "/" )
+                ( newModel, modifyUrl <| basePath ++ "/" )
 
             Info ->
-                ( newModel, modifyUrl "/info" )
+                ( newModel, modifyUrl <| basePath ++ "/info" )
 
 
 getUserName : String -> Cmd Msg

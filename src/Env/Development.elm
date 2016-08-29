@@ -1,4 +1,4 @@
-module Env.Development exposing (clientId, redirectUri)
+module Env.Development exposing (basePath, clientId, redirectUri)
 
 -- Test app
 --
@@ -6,11 +6,21 @@ module Env.Development exposing (clientId, redirectUri)
 -- https://developers.facebook.com/apps/171280426615613/dashboard/
 
 
-clientId : String
-clientId =
-    "171280426615613"
+baseUrl : String
+baseUrl =
+    "http://localhost:3000"
+
+
+basePath : String
+basePath =
+    ""
 
 
 redirectUri : String
 redirectUri =
-    "http://localhost:3000/"
+    baseUrl ++ basePath ++ "/"
+
+
+clientId : String
+clientId =
+    "171280426615613"

@@ -1,6 +1,11 @@
-module Env.Current exposing (clientId, redirectUri)
+module Env.Current exposing (basePath, clientId, redirectUri)
 
 import Env.Development as Env
+
+
+basePath : String
+basePath =
+    Env.basePath
 
 
 clientId : String
