@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+##v0.5.0
+
+- feature: info route
+
 ## v0.4.0
 
 - feature: Facebook login
