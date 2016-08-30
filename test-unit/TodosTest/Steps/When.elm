@@ -208,6 +208,7 @@ whenEditingTheTodoIsFinished oldCtx =
         }
 
 
+setFilterOnModelForContext : FilterOption -> Context -> Context
 setFilterOnModelForContext filterOption ctx =
     let
         oldModel =
