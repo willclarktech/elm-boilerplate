@@ -1,11 +1,26 @@
-module Env.Current exposing (basePath, clientId, redirectUri)
+module Env.Current exposing (baseUrl, basePath, siteUrl, baseApiUrl, clientId, redirectUri)
 
 import Env.Development as Env
+
+
+baseUrl : String
+baseUrl =
+    Env.baseUrl
 
 
 basePath : String
 basePath =
     Env.basePath
+
+
+siteUrl : String
+siteUrl =
+    baseUrl ++ basePath
+
+
+baseApiUrl : String
+baseApiUrl =
+    Env.baseApiUrl
 
 
 clientId : String
@@ -15,4 +30,4 @@ clientId =
 
 redirectUri : String
 redirectUri =
-    Env.redirectUri
+    siteUrl ++ "/"

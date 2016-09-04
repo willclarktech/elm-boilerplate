@@ -1,4 +1,4 @@
-module Env.Development exposing (basePath, clientId, redirectUri)
+module Env.Development exposing (baseUrl, basePath, baseApiUrl, clientId)
 
 -- Test app
 --
@@ -16,9 +16,9 @@ basePath =
     ""
 
 
-redirectUri : String
-redirectUri =
-    baseUrl ++ basePath ++ "/"
+baseApiUrl : String
+baseApiUrl =
+    "http://localhost:3030/api"
 
 
 clientId : String

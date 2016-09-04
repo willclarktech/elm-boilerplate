@@ -1,4 +1,4 @@
-module Env.Production exposing (basePath, clientId, redirectUri)
+module Env.Production exposing (baseUrl, basePath, baseApiUrl, clientId)
 
 -- Production app
 --
@@ -16,9 +16,9 @@ basePath =
     "/elm-boilerplate"
 
 
-redirectUri : String
-redirectUri =
-    baseUrl ++ basePath ++ "/"
+baseApiUrl : String
+baseApiUrl =
+    baseUrl ++ basePath ++ "/api"
 
 
 clientId : String
