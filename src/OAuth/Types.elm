@@ -3,6 +3,9 @@ module OAuth.Types
         ( Model
         , Msg(..)
         , Error(..)
+        , AccessToken
+        , UserName
+        , UserId
         )
 
 
@@ -11,12 +14,25 @@ type alias Model =
     , redirectUri : String
     , accessToken : Maybe String
     , userName : Maybe String
+    , userId : Maybe String
     }
 
 
+type alias AccessToken =
+    Maybe String
+
+
+type alias UserName =
+    Maybe String
+
+
+type alias UserId =
+    Maybe String
+
+
 type Msg
-    = UpdateAccessToken (Maybe String)
-    | UpdateUserName (Maybe String)
+    = UpdateAccessToken AccessToken
+    | UpdateUserDetails UserName UserId
 
 
 type Error

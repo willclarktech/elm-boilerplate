@@ -5,7 +5,14 @@ module OAuth.Update
         )
 
 import Env.Current exposing (clientId, redirectUri)
-import OAuth.Types exposing (Model, Msg(..))
+import OAuth.Types
+    exposing
+        ( Model
+        , Msg(..)
+        , AccessToken
+        , UserName
+        , UserId
+        )
 
 
 initialModel : Model
@@ -14,6 +21,7 @@ initialModel =
     , redirectUri = redirectUri
     , accessToken = Nothing
     , userName = Nothing
+    , userId = Nothing
     }
 
 
@@ -23,15 +31,15 @@ update action model =
         UpdateAccessToken token ->
             updateFbAccessToken token model
 
-        UpdateUserName name ->
-            updateFbName name model
+        UpdateUserDetails userName userId ->
+            updateFbDetails ( userName, userId ) model
 
 
-updateFbName : Maybe String -> Model -> Model
-updateFbName userName model =
-    { model | userName = userName }
+updateFbDetails : ( UserName, UserId ) -> Model -> Model
+updateFbDetails ( userName, userId ) model =
+    { model | userName = userName, userId = userId }
 
 
-updateFbAccessToken : Maybe String -> Model -> Model
+updateFbAccessToken : AccessToken -> Model -> Model
 updateFbAccessToken accessToken model =
     { model | accessToken = accessToken }

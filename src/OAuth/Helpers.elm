@@ -1,17 +1,19 @@
-module OAuth.Helpers exposing (decodeUserName, getOAuthNameUrlForAccessToken)
+module OAuth.Helpers exposing (decodeUserDetails, getOAuthDetailsUrlForAccessToken)
 
 import Json.Decode exposing (..)
 import Http
 
 
-getOAuthNameUrlForAccessToken : String -> String
-getOAuthNameUrlForAccessToken accessToken =
+getOAuthDetailsUrlForAccessToken : String -> String
+getOAuthDetailsUrlForAccessToken accessToken =
     Http.url "https://graph.facebook.com/me"
         [ ( "fields", "name" )
         , ( "access_token", accessToken )
         ]
 
 
-decodeUserName : Decoder String
-decodeUserName =
-    "name" := Json.Decode.string
+decodeUserDetails : Decoder ( String, String )
+decodeUserDetails =
+    Json.Decode.object2 (,)
+        ("name" := Json.Decode.string)
+        ("id" := Json.Decode.string)

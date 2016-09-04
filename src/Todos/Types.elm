@@ -2,6 +2,7 @@ module Todos.Types
     exposing
         ( Model
         , Todo
+        , User
         , Msg(..)
         , Tab(..)
         , FilterOption(..)
@@ -27,6 +28,12 @@ type alias Todo =
     { id : Int
     , text : String
     , completed : Bool
+    }
+
+
+type alias User =
+    { id : Int
+    , todos : List Todo
     }
 
 
@@ -59,9 +66,12 @@ type Msg
     | Filter FilterOption
     | Save
     | SaveFail Http.Error
-    | SaveSuccess String
-    | GetOAuthNameSucceeded String
-    | GetOAuthNameFailed Http.Error
+    | SaveSuccess Int
+    | Load
+    | LoadFail Http.Error
+    | LoadSuccess User
+    | GetOAuthDetailsSucceeded ( String, String )
+    | GetOAuthDetailsFailed Http.Error
     | UpdateOAuthAccessToken (Maybe String)
     | SwitchTab Tab
     | NoOp

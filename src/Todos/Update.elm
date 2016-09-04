@@ -18,6 +18,7 @@ module Todos.Update
 import String exposing (trim)
 import Task
 import Http
+import Json.Encode exposing (..)
 import Json.Decode exposing (..)
 import Navigation exposing (modifyUrl)
 import Env.Current exposing (basePath, baseApiUrl)
@@ -25,13 +26,14 @@ import OAuth.Types
 import OAuth.Update
 import OAuth.Helpers
     exposing
-        ( getOAuthNameUrlForAccessToken
-        , decodeUserName
+        ( getOAuthDetailsUrlForAccessToken
+        , decodeUserDetails
         )
 import Todos.Types
     exposing
         ( Model
         , Todo
+        , User
         , Msg(..)
         , Tab(..)
         , FilterOption(..)
@@ -132,11 +134,20 @@ update action model =
         SaveSuccess _ ->
             noFx model
 
-        GetOAuthNameFailed error ->
+        Load ->
+            sendLoadRequest model
+
+        LoadFail err ->
             noFx model
 
-        GetOAuthNameSucceeded name ->
-            noFx <| updateOAuthName name model
+        LoadSuccess user ->
+            noFx <| updateUser user model
+
+        GetOAuthDetailsFailed error ->
+            noFx model
+
+        GetOAuthDetailsSucceeded details ->
+            updateOAuthDetails details model
 
         UpdateOAuthAccessToken token ->
             updateOAuthAccessToken token model
@@ -148,23 +159,106 @@ update action model =
             noFx model
 
 
+updateUser : User -> Model -> Model
+updateUser user model =
+    { model | todos = user.todos }
+
+
+encodeTodo : Todo -> Json.Encode.Value
+encodeTodo todo =
+    Json.Encode.object
+        [ ( "id", Json.Encode.int todo.id )
+        , ( "text", Json.Encode.string todo.text )
+        , ( "completed", Json.Encode.bool todo.completed )
+        ]
+
+
+encodeTodos : List Todo -> Json.Encode.Value
+encodeTodos todos =
+    Json.Encode.list <| List.map encodeTodo todos
+
+
+encodeUser : String -> List Todo -> Json.Encode.Value
+encodeUser userId todos =
+    let
+        user =
+            [ ( "id", Json.Encode.string userId )
+            , ( "todos", encodeTodos todos )
+            ]
+    in
+        Json.Encode.object user
+
+
 sendSaveRequest : Model -> ( Model, Cmd Msg )
 sendSaveRequest model =
-    let
-        body =
-            Http.empty
+    case model.oauth.userId of
+        Nothing ->
+            ( model, Cmd.none )
 
-        cmd =
-            Task.perform SaveFail
-                SaveSuccess
-                (Http.post Json.Decode.string (Env.Current.baseApiUrl ++ "/todos") body)
-    in
-        ( model, cmd )
+        Just userId ->
+            let
+                body =
+                    Http.string
+                        <| Json.Encode.encode 0
+                        <| encodeUser userId model.todos
+
+                request =
+                    { verb = "POST"
+                    , headers = [ ( "Content-type", "application/json" ) ]
+                    , url = Env.Current.baseApiUrl ++ "/users"
+                    , body = body
+                    }
+
+                httpRequest =
+                    Http.send Http.defaultSettings request
+
+                responseJson =
+                    Http.fromJson decodeSaveResponse httpRequest
+
+                cmd =
+                    Task.perform SaveFail SaveSuccess responseJson
+            in
+                ( model, cmd )
 
 
-decodeSaveResponse : Json.Decode.Decoder String
+decodeSaveResponse : Json.Decode.Decoder Int
 decodeSaveResponse =
-    "message" := Json.Decode.string
+    "id" := Json.Decode.int
+
+
+decodeTodo : Json.Decode.Decoder Todo
+decodeTodo =
+    Json.Decode.object3 Todo
+        ("id" := Json.Decode.int)
+        ("text" := Json.Decode.string)
+        ("completed" := Json.Decode.bool)
+
+
+decodeUser : Json.Decode.Decoder User
+decodeUser =
+    Json.Decode.object2 User
+        ("id" := Json.Decode.int)
+        ("todos" := Json.Decode.list decodeTodo)
+
+
+sendLoadRequest : Model -> ( Model, Cmd Msg )
+sendLoadRequest model =
+    case model.oauth.userId of
+        Nothing ->
+            ( model, Cmd.none )
+
+        Just userId ->
+            let
+                httpRequest =
+                    Http.get decodeUser
+                        <| Env.Current.baseApiUrl
+                        ++ "/users/"
+                        ++ userId
+
+                cmd =
+                    Task.perform LoadFail LoadSuccess httpRequest
+            in
+                ( model, cmd )
 
 
 switchTab : Tab -> Model -> ( Model, Cmd Msg )
@@ -181,14 +275,14 @@ switchTab tab model =
                 ( newModel, modifyUrl <| basePath ++ "/#info" )
 
 
-getUserName : String -> Cmd Msg
-getUserName accessToken =
+getUserDetails : String -> Cmd Msg
+getUserDetails accessToken =
     let
         url =
-            getOAuthNameUrlForAccessToken accessToken
+            getOAuthDetailsUrlForAccessToken accessToken
     in
-        Task.perform GetOAuthNameFailed GetOAuthNameSucceeded
-            <| Http.get decodeUserName url
+        Task.perform GetOAuthDetailsFailed GetOAuthDetailsSucceeded
+            <| Http.get decodeUserDetails url
 
 
 updateOAuthAccessToken : Maybe String -> Model -> ( Model, Cmd Msg )
@@ -212,14 +306,18 @@ updateOAuthAccessToken accessToken model =
                         noFx newModel
 
                     _ ->
-                        ( newModel, getUserName accessToken )
+                        ( newModel, getUserDetails accessToken )
 
 
-updateOAuthName : String -> Model -> Model
-updateOAuthName name model =
-    { model
-        | oauth = OAuth.Update.update (OAuth.Types.UpdateUserName (Just name)) model.oauth
-    }
+updateOAuthDetails : ( String, String ) -> Model -> ( Model, Cmd Msg )
+updateOAuthDetails ( userName, userId ) model =
+    let
+        newModel =
+            { model
+                | oauth = OAuth.Update.update (OAuth.Types.UpdateUserDetails (Just userName) (Just userId)) model.oauth
+            }
+    in
+        update Load newModel
 
 
 updateText : String -> Model -> Model
