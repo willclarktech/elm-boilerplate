@@ -39,7 +39,7 @@
     "dev:prepare:ui": "npm run build:ui",
     "ncu": "ncu",
     "postinstall": "elm package install -y",
-    "commitmsg": "babel-node ./scripts/validate-commit-msg.js"
+    "commitmsg": "node ./scripts/validate-commit-msg.js"
   },
   "devDependencies": {
     "babel-cli": "^6.10.1",
