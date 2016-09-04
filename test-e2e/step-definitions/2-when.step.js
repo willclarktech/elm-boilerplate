@@ -44,4 +44,12 @@ module.exports = function whenSteps() {
   this.When(/^I visit the info route$/, function () {
     return this.todosPage.visitTab('info');
   });
+
+  this.When(/^I save my Todos$/, function () {
+    return this.todosPage.save();
+  });
+
+  this.When(/^I leave the site$/, function () {
+    return this.browser.cookies.clearAll();
+  });
 };

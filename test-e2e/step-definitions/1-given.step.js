@@ -61,4 +61,10 @@ module.exports = function givenSteps() {
     };
     callback();
   });
+
+  this.Given(/^I have logged in with Facebook$/, function () {
+    const { email, password } = this.browser.ctx.user;
+    return this.todosPage.login()
+      .then(() => this.facebookLoginPage.login(email, password));
+  });
 };

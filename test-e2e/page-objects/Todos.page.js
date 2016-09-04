@@ -29,6 +29,7 @@ export default class TodosPage extends BasePage {
       filterIncomplete: '#filter-incomplete',
       loginButton: '#fb-login',
       fbStatus: '#fb-status',
+      saveButton: '#save',
     };
   }
 
@@ -97,6 +98,11 @@ export default class TodosPage extends BasePage {
   login() {
     return this
       .clickElement(this.selectors.loginButton);
+  }
+
+  save() {
+    return this
+      .clickElement(this.selectors.saveButton);
   }
 
   isTodoPresent(todoText) {
