@@ -1,0 +1,5 @@
+{
+  "port": 3030,
+  "routes": "./mock-api/routes.json",
+  "watch": true
+}
