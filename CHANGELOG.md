@@ -4,6 +4,10 @@
 
 - feature: info route
 
+###v0.5.1
+
+- refactor: hash-based routes
+
 ## v0.4.0
 
 - feature: Facebook login
