@@ -55,6 +55,11 @@ init result =
     urlUpdate result initialModel
 
 
+noFx : Model -> ( Model, Cmd Msg )
+noFx model =
+    ( model, Cmd.none )
+
+
 urlUpdate : Result String ProcessedLocation -> Model -> ( Model, Cmd Msg )
 urlUpdate result model =
     case result of
@@ -81,7 +86,7 @@ updatePathAndAccessToken path accessToken model =
     in
         case accessToken of
             Err _ ->
-                ( modelUpdatedForPath, Cmd.none )
+                noFx modelUpdatedForPath
 
             Ok token ->
                 update (UpdateOAuthAccessToken <| Just token) modelUpdatedForPath
@@ -91,37 +96,37 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
     case action of
         CreateTodo ->
-            ( createTodo model, Cmd.none )
+            noFx <| createTodo model
 
         UpdateText text ->
-            ( updateText text model, Cmd.none )
+            noFx <| updateText text model
 
         MarkAsCompleted todo ->
-            ( markAsCompleted todo model, Cmd.none )
+            noFx <| markAsCompleted todo model
 
         MarkAsIncomplete todo ->
-            ( markAsIncomplete todo model, Cmd.none )
+            noFx <| markAsIncomplete todo model
 
         Delete todo ->
-            ( delete todo model, Cmd.none )
+            noFx <| delete todo model
 
         StartEditing todo ->
-            ( startEditing todo model, Cmd.none )
+            noFx <| startEditing todo model
 
         UpdateTodo todo text ->
-            ( updateTodo todo text model, Cmd.none )
+            noFx <| updateTodo todo text model
 
         StopEditing ->
-            ( stopEditing model, Cmd.none )
+            noFx <| stopEditing model
 
         Filter filterOption ->
-            ( setFilter filterOption model, Cmd.none )
+            noFx <| setFilter filterOption model
 
         GetOAuthNameFailed error ->
-            ( model, Cmd.none )
+            noFx model
 
         GetOAuthNameSucceeded name ->
-            ( updateOAuthName name model, Cmd.none )
+            noFx <| updateOAuthName name model
 
         UpdateOAuthAccessToken token ->
             updateOAuthAccessToken token model
@@ -130,7 +135,7 @@ update action model =
             switchTab tab model
 
         NoOp ->
-            ( model, Cmd.none )
+            noFx model
 
 
 switchTab : Tab -> Model -> ( Model, Cmd Msg )
@@ -170,12 +175,12 @@ updateOAuthAccessToken accessToken model =
     in
         case newOAuth.accessToken of
             Nothing ->
-                ( newModel, Cmd.none )
+                noFx newModel
 
             Just accessToken ->
                 case accessToken of
                     "" ->
-                        ( newModel, Cmd.none )
+                        noFx newModel
 
                     _ ->
                         ( newModel, getUserName accessToken )
