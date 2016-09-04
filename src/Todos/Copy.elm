@@ -36,6 +36,9 @@ getButtonText buttonId =
         "filter-incomplete" ->
             "Incomplete"
 
+        "save" ->
+            "Save"
+
         _ ->
             "OK"
 

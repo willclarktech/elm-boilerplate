@@ -59,7 +59,7 @@ view { tab, currentText, todos, filterOption, currentlyEditing, oauth } =
         components =
             if tab == Todos && List.length todos /= 0 then
                 List.append baseComponents
-                    [ viewFilters filterOption
+                    [ viewFilters filterOption oauth.userName
                     , viewTodos todos filterOption currentlyEditing
                     ]
             else
@@ -128,16 +128,27 @@ viewNewTodoInput currentText =
         ]
 
 
-viewFilters : FilterOption -> Html Msg
-viewFilters activeOption =
-    footer
-        [ id "filters"
-        , class "ui tiny segment attached center aligned"
-        ]
-        [ div [ class "ui buttons" ]
-            <| List.map (viewFilterButton activeOption)
-                [ All, Completed, Incomplete ]
-        ]
+viewFilters : FilterOption -> Maybe String -> Html Msg
+viewFilters activeOption userName =
+    let
+        filterButtons =
+            div [ class "ui buttons" ]
+                <| List.map (viewFilterButton activeOption)
+                    [ All, Completed, Incomplete ]
+
+        children =
+            case userName of
+                Nothing ->
+                    [ filterButtons ]
+
+                Just _ ->
+                    [ filterButtons, viewSaveButton ]
+    in
+        div
+            [ id "filters"
+            , class "ui tiny segment attached center aligned"
+            ]
+            children
 
 
 viewFilterButton : FilterOption -> FilterOption -> Html Msg
@@ -162,7 +173,7 @@ viewFilterButton activeOption filterOption =
 
         buttonClass =
             if activeOption == filterOption then
-                baseClass ++ "active positive "
+                baseClass ++ "active orange "
             else
                 baseClass
     in
@@ -170,6 +181,19 @@ viewFilterButton activeOption filterOption =
             [ id buttonId
             , onClick <| Filter filterOption
             , class buttonClass
+            ]
+            [ text <| getButtonText buttonId ]
+
+
+viewSaveButton : Html Msg
+viewSaveButton =
+    let
+        buttonId =
+            "save"
+    in
+        button
+            [ id buttonId
+            , class "ui button positive right floated"
             ]
             [ text <| getButtonText buttonId ]
 
