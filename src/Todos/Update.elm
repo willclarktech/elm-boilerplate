@@ -18,8 +18,9 @@ module Todos.Update
 import String exposing (trim)
 import Task
 import Http
+import Json.Decode exposing (..)
 import Navigation exposing (modifyUrl)
-import Env.Current exposing (basePath)
+import Env.Current exposing (basePath, baseApiUrl)
 import OAuth.Types
 import OAuth.Update
 import OAuth.Helpers
@@ -122,6 +123,15 @@ update action model =
         Filter filterOption ->
             noFx <| setFilter filterOption model
 
+        Save ->
+            sendSaveRequest model
+
+        SaveFail _ ->
+            noFx model
+
+        SaveSuccess _ ->
+            noFx model
+
         GetOAuthNameFailed error ->
             noFx model
 
@@ -136,6 +146,25 @@ update action model =
 
         NoOp ->
             noFx model
+
+
+sendSaveRequest : Model -> ( Model, Cmd Msg )
+sendSaveRequest model =
+    let
+        body =
+            Http.empty
+
+        cmd =
+            Task.perform SaveFail
+                SaveSuccess
+                (Http.post Json.Decode.string (Env.Current.baseApiUrl ++ "/todos") body)
+    in
+        ( model, cmd )
+
+
+decodeSaveResponse : Json.Decode.Decoder String
+decodeSaveResponse =
+    "message" := Json.Decode.string
 
 
 switchTab : Tab -> Model -> ( Model, Cmd Msg )

@@ -193,6 +193,7 @@ viewSaveButton =
     in
         button
             [ id buttonId
+            , onClick <| Save
             , class "ui button positive right floated"
             ]
             [ text <| getButtonText buttonId ]

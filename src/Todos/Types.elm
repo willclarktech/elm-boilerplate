@@ -57,6 +57,9 @@ type Msg
     | UpdateTodo Todo String
     | StopEditing
     | Filter FilterOption
+    | Save
+    | SaveFail Http.Error
+    | SaveSuccess String
     | GetOAuthNameSucceeded String
     | GetOAuthNameFailed Http.Error
     | UpdateOAuthAccessToken (Maybe String)
