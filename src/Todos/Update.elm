@@ -81,10 +81,10 @@ updatePathAndAccessToken path accessToken model =
     in
         case accessToken of
             Err _ ->
-                ( model, Cmd.none )
+                ( modelUpdatedForPath, Cmd.none )
 
             Ok token ->
-                update (UpdateOAuthAccessToken <| Just token) model
+                update (UpdateOAuthAccessToken <| Just token) modelUpdatedForPath
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -144,7 +144,7 @@ switchTab tab model =
                 ( newModel, modifyUrl <| basePath ++ "/" )
 
             Info ->
-                ( newModel, modifyUrl <| basePath ++ "/info" )
+                ( newModel, modifyUrl <| basePath ++ "/#info" )
 
 
 getUserName : String -> Cmd Msg
