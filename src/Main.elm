@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Navigation
 import Todos.Update exposing (init, update, urlUpdate)
-import Todos.View exposing (view)
+import Todos.View.Index exposing (view)
 import Todos.UrlParser exposing (urlParser)
 
 

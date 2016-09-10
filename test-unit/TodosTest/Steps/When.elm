@@ -13,7 +13,7 @@ import Todos.Update
         , stopEditing
         , setFilter
         )
-import Todos.View exposing (handleNewTodoKeyUp)
+import Todos.View.NewTodoInput exposing (handleNewTodoKeyUp)
 import TodosTest.Context exposing (Context, getModel)
 import GivenWhenThen.Helpers
     exposing
