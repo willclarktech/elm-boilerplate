@@ -6,9 +6,7 @@ module Todos.Style
         , activeTabLinkStyle
         )
 
-
-type alias Style =
-    List ( String, String )
+import Todos.Types exposing (Style)
 
 
 headingStyle : Style

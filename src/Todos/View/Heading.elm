@@ -5,7 +5,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import OAuth.Types
 import OAuth.View
-import Todos.Types exposing (Tab(..), Msg(..))
+import Todos.Types exposing (Tab(..), Msg(..), Style)
 import Todos.Style
     exposing
         ( headingStyle
@@ -17,7 +17,7 @@ import Todos.Copy exposing (tabText)
 
 
 viewHeading : OAuth.Types.Model -> Tab -> Html Msg
-viewHeading oauthModel tab =
+viewHeading oauthModel activeTab =
     div
         [ class "ui attached inverted orange segment"
         , style headingStyle
@@ -28,24 +28,14 @@ viewHeading oauthModel tab =
             ]
             [ span
                 [ id "tab-todos"
-                , style
-                    (if tab == Todos then
-                        activeTabLinkStyle
-                     else
-                        tabLinkStyle
-                    )
+                , style <| getTabLinkStyle (activeTab == Todos)
                 , onClick <| SwitchTab Todos
                 ]
                 [ text <| tabText Todos ]
             , text " / "
             , span
                 [ id "tab-info"
-                , style
-                    (if tab == Info then
-                        activeTabLinkStyle
-                     else
-                        tabLinkStyle
-                    )
+                , style <| getTabLinkStyle (activeTab == Info)
                 , onClick <| SwitchTab Info
                 ]
                 [ text <| tabText Info ]
@@ -53,3 +43,11 @@ viewHeading oauthModel tab =
                 [ OAuth.View.view oauthModel ]
             ]
         ]
+
+
+getTabLinkStyle : Bool -> Style
+getTabLinkStyle isActive =
+    if isActive then
+        activeTabLinkStyle
+    else
+        tabLinkStyle

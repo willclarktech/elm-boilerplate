@@ -7,6 +7,7 @@ module Todos.Types
         , Tab(..)
         , FilterOption(..)
         , ProcessedLocation
+        , Style
         )
 
 import OAuth.Types
@@ -75,3 +76,7 @@ type Msg
     | UpdateOAuthAccessToken (Maybe String)
     | SwitchTab Tab
     | NoOp
+
+
+type alias Style =
+    List ( String, String )
