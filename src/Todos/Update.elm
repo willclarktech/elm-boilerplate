@@ -18,8 +18,6 @@ module Todos.Update
 import String exposing (trim)
 import Task
 import Http
-import Json.Encode exposing (..)
-import Json.Decode exposing (..)
 import Navigation exposing (modifyUrl)
 import Env.Current exposing (basePath, baseApiUrl)
 import OAuth.Types
@@ -39,6 +37,8 @@ import Todos.Types
         , FilterOption(..)
         , ProcessedLocation
         )
+import Todos.Encoders exposing (encodeSaveRequest, encodeUser)
+import Todos.Decoders exposing (decodeSaveResponse, decodeUser)
 
 
 initialModel : Model
@@ -159,36 +159,6 @@ update action model =
             noFx model
 
 
-updateUser : User -> Model -> Model
-updateUser user model =
-    { model | todos = user.todos }
-
-
-encodeTodo : Todo -> Json.Encode.Value
-encodeTodo todo =
-    Json.Encode.object
-        [ ( "id", Json.Encode.int todo.id )
-        , ( "text", Json.Encode.string todo.text )
-        , ( "completed", Json.Encode.bool todo.completed )
-        ]
-
-
-encodeTodos : List Todo -> Json.Encode.Value
-encodeTodos todos =
-    Json.Encode.list <| List.map encodeTodo todos
-
-
-encodeUser : String -> List Todo -> Json.Encode.Value
-encodeUser userId todos =
-    let
-        user =
-            [ ( "id", Json.Encode.string userId )
-            , ( "todos", encodeTodos todos )
-            ]
-    in
-        Json.Encode.object user
-
-
 sendSaveRequest : Model -> ( Model, Cmd Msg )
 sendSaveRequest model =
     case model.oauth.userId of
@@ -199,8 +169,7 @@ sendSaveRequest model =
             let
                 body =
                     Http.string
-                        <| Json.Encode.encode 0
-                        <| encodeUser userId model.todos
+                        <| encodeSaveRequest userId model.todos
 
                 request =
                     { verb = "POST"
@@ -221,26 +190,6 @@ sendSaveRequest model =
                 ( model, cmd )
 
 
-decodeSaveResponse : Json.Decode.Decoder Int
-decodeSaveResponse =
-    "id" := Json.Decode.int
-
-
-decodeTodo : Json.Decode.Decoder Todo
-decodeTodo =
-    Json.Decode.object3 Todo
-        ("id" := Json.Decode.int)
-        ("text" := Json.Decode.string)
-        ("completed" := Json.Decode.bool)
-
-
-decodeUser : Json.Decode.Decoder User
-decodeUser =
-    Json.Decode.object2 User
-        ("id" := Json.Decode.int)
-        ("todos" := Json.Decode.list decodeTodo)
-
-
 sendLoadRequest : Model -> ( Model, Cmd Msg )
 sendLoadRequest model =
     case model.oauth.userId of
@@ -259,6 +208,11 @@ sendLoadRequest model =
                     Task.perform LoadFail LoadSuccess httpRequest
             in
                 ( model, cmd )
+
+
+updateUser : User -> Model -> Model
+updateUser user model =
+    { model | todos = user.todos }
 
 
 switchTab : Tab -> Model -> ( Model, Cmd Msg )
