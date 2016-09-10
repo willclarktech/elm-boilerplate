@@ -7,21 +7,19 @@ import Todos.Types exposing (FilterOption(..), Msg(..))
 import Todos.Copy exposing (getButtonText)
 
 
-viewFilters : FilterOption -> Maybe String -> Html Msg
-viewFilters activeOption userName =
+viewFilters : FilterOption -> Bool -> Html Msg
+viewFilters activeOption showSaveButton =
     let
         filterButtons =
             div [ class "ui buttons" ]
-                <| List.map (viewFilterButton activeOption)
+                <| List.map (\option -> viewFilterButton option (option == activeOption))
                     [ All, Completed, Incomplete ]
 
         children =
-            case userName of
-                Nothing ->
-                    [ filterButtons ]
-
-                Just _ ->
-                    [ filterButtons, viewSaveButton ]
+            if showSaveButton then
+                [ filterButtons, viewSaveButton ]
+            else
+                [ filterButtons ]
     in
         div
             [ id "filters"
@@ -30,8 +28,8 @@ viewFilters activeOption userName =
             children
 
 
-viewFilterButton : FilterOption -> FilterOption -> Html Msg
-viewFilterButton activeOption filterOption =
+viewFilterButton : FilterOption -> Bool -> Html Msg
+viewFilterButton filterOption isActive =
     let
         idSuffix =
             case filterOption of
@@ -51,7 +49,7 @@ viewFilterButton activeOption filterOption =
             "ui button "
 
         buttonClass =
-            if activeOption == filterOption then
+            if isActive then
                 baseClass ++ "active orange "
             else
                 baseClass

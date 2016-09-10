@@ -20,6 +20,9 @@ import Todos.View.Todos exposing (viewTodos)
 view : Model -> Html Msg
 view { tab, currentText, todos, filterOption, currentlyEditing, oauth } =
     let
+        relevantTodos =
+            getTodosForFilterOption todos filterOption
+
         baseComponents =
             case tab of
                 Todos ->
@@ -32,11 +35,19 @@ view { tab, currentText, todos, filterOption, currentlyEditing, oauth } =
                     , viewInfo
                     ]
 
+        showSaveButton =
+            case oauth.userName of
+                Nothing ->
+                    False
+
+                Just _ ->
+                    True
+
         components =
             if tab == Todos && List.length todos /= 0 then
                 List.append baseComponents
-                    [ viewFilters filterOption oauth.userName
-                    , viewTodos todos filterOption currentlyEditing
+                    [ viewFilters filterOption showSaveButton
+                    , viewTodos relevantTodos currentlyEditing
                     ]
             else
                 baseComponents
@@ -46,3 +57,16 @@ view { tab, currentText, todos, filterOption, currentlyEditing, oauth } =
             , class "ui segments container"
             ]
             components
+
+
+getTodosForFilterOption : List Todo -> FilterOption -> List Todo
+getTodosForFilterOption todos filterOption =
+    case filterOption of
+        Completed ->
+            List.filter (\todo -> todo.completed) todos
+
+        Incomplete ->
+            List.filter (\todo -> todo.completed /= True) todos
+
+        All ->
+            todos
