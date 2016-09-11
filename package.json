@@ -19,7 +19,7 @@
     "predeploy:mangle": "npm run predeploy:straight -- --mangle",
     "deploy:mangle": "npm run deploy",
     "dev": "elm-server ./src/Main.elm --output ./dev/app.js",
-    "lint": "eslint ./features ./scripts",
+    "lint": "eslint ./test-e2e ./scripts",
     "lint:fix": "npm run lint -- --fix",
     "api:mock": "json-server --config ./mock-api/config.json ./mock-api/db.js",
     "test:e2e": "cucumber-js ./features --compiler js:babel-core/register -r ./test-e2e/support -r ./test-e2e/step-definitions || true",
