@@ -53,7 +53,7 @@ const validateMessage = function validateMessage(message) {
 
   const match = PATTERN.exec(message);
 
-  if (! match) {
+  if (!match) {
     error(`does not match "<type> <scope>: <subject>" ! was: ${message}`);
     return false;
   }
@@ -63,7 +63,7 @@ const validateMessage = function validateMessage(message) {
   // const scope = match[3];
   // const subject = match[4];
 
-  if (! TYPES.hasOwnProperty(type) && EMOJIS.indexOf(emoji) === -1) {
+  if (!TYPES.hasOwnProperty(type) && EMOJIS.indexOf(emoji) === -1) {
     error('"%s" is not an allowed type!', type || emoji);
     return false;
   }
@@ -97,7 +97,7 @@ const incorrectLogFile = commitMsgFile.replace('COMMIT_EDITMSG', 'logs/incorrect
 fs.readFile(commitMsgFile, (err, buffer) => {
   const msg = firstLineFromBuffer(buffer);
 
-  if (! validateMessage(msg)) {
+  if (!validateMessage(msg)) {
     fs.appendFile(incorrectLogFile, `${msg}\n`, () => {
       process.exit(1);
     });
