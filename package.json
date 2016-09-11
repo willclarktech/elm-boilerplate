@@ -38,7 +38,7 @@
     "dev:prepare": "mkdir ./dev && npm run dev:prepare:html && npm run dev:prepare:ui",
     "dev:prepare:html": "cp ./skeleton.html ./dev/index.html",
     "dev:prepare:ui": "npm run build:ui",
-    "ncu": "ncu",
+    "ncu": "ncu -u",
     "postinstall": "elm package install -y",
     "commitmsg": "node ./scripts/validate-commit-msg.js"
   },
