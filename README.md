@@ -6,7 +6,7 @@
 
 This project incorporates ideas from https://github.com/gkubisa/elm-app-boilerplate and https://github.com/xolvio/automated-testing-best-practices to provide an elm app boilerplate intended for development in conformity with Konstantin Kudryashov’s [Modelling by Example](http://stakeholderwhisperer.com/posts/2014/10/introducing-modelling-by-example) BDD/DDD methodology.
 
-The broader project will incorporate a purely static site hosted on GitHub Pages (this repo) plus a serverless microservices backend, yet to be developed.
+The broader project will incorporate a purely static site hosted on GitHub Pages (this repo) plus a backend (yet to be developed).
 
 ## Setup
 
