@@ -71,33 +71,3 @@ npm run deploy:straight
 ```
 
 This will copy your `./dev` directory into `./dist`, apply some compression, and push to your `gh-pages` branch. You can also use `npm run deploy:mangle` to make your scripts less readable, although there’s no point if you’re pushing the source code to a public repo as in this example.
-
-## Helper scripts
-
-### `validate-commit-message.js`
-
-This project uses [husky](https://github.com/typicode/husky) to enforce certain requirements on git commit messages. Commit messages should be 76 characters or less, and conform the following structure:
-```
-<type> <scope>: <subject>
-```
-where `<subject>` begins with a lowercase imperative verb, and `<type>` is one of the following:
-
-- `chore` for setup-like tasks, e.g. adding dependencies
-- `test` for tests, including specs
-- `feat` for work on new features
-- `refactor` for refactors
-- `fix` for bug fixes
-- `style` for changes to code style
-- `docs` for stuff like this document
-
-The validation script converts these to emoji as follows:
-
-- `chore` -> :house_with_garden:
-- `test` -> :vertical_traffic_light:
-- `feat` -> :seedling:
-- `refactor` -> :scissors:
-- `fix` -> :wrench:
-- `style` -> :lipstick:
-- `docs` -> :books:
-
-So it looks nice in GitHub, and on your command line if you use something like [emojify](https://github.com/mrowa44/emojify).
