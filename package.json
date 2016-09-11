@@ -13,10 +13,10 @@
     "url": "https://github.com/LikeJasper/elm-boilerplate/issues"
   },
   "scripts": {
-    "predeploy:straight": "npm run clean:dist && cp -a ./dev ./dist && uglifyjs ./dist/app.js --compress --output ./dist/app.js",
-    "predeploy:mangle": "npm run predeploy:straight -- --mangle",
     "deploy": "git-directory-deploy --directory ./dist --repo origin --branch gh-pages",
+    "predeploy:straight": "npm run clean:dist && cp -a ./dev ./dist && uglifyjs ./dist/app.js --compress --output ./dist/app.js",
     "deploy:straight": "npm run deploy",
+    "predeploy:mangle": "npm run predeploy:straight -- --mangle",
     "deploy:mangle": "npm run deploy",
     "dev": "elm-server ./src/Main.elm --output ./dev/app.js",
     "lint": "eslint ./features ./scripts",
@@ -40,7 +40,7 @@
     "dev:prepare:ui": "npm run build:ui",
     "ncu": "ncu --upgrade",
     "ncu:all": "ncu --upgradeAll",
-    "postinstall": "elm package install -y",
+    "postinstall": "elm package install -y && npm run dev:prepare",
     "commitmsg": "node ./scripts/validate-commit-msg.js"
   },
   "devDependencies": {
