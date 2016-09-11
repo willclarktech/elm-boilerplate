@@ -16,11 +16,15 @@ The broader project will incorporate a purely static site hosted on GitHub Pages
 ```
 npm run dev
 ```
-2\. Start the end-to-end tests
+2\. Start the mock json server
+```
+npm run api:mock
+```
+3\. Start the end-to-end tests
 ```
 npm run test:e2e:watch
 ```
-3\. Start the unit tests
+4\. Start the unit tests
 ```
 npm run test:unit:watch
 ```
