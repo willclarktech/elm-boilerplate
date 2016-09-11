@@ -68,7 +68,11 @@ There should be one for each different page. Page objects extend a Base page cla
 
 ## Deployment
 
-When you’re ready to deploy what you have in `./dev`, change `./src/Env/Current.elm` to import from `Env.Production` instead of `Env.Development`, then run this script:
+When you’re ready to deploy what you have in `./dev`:
+
+1. Switch your environment: change `./src/Env/Current.elm` to import from `Env.Production` instead of `Env.Development`.
+1. Recompile with production environment: rerun `npm run dev` if it isn’t already running.
+1. Deploy by running this script:
 
 ```
 npm run deploy:straight
