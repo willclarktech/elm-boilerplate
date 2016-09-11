@@ -29,6 +29,10 @@ npm run test:e2e:watch
 npm run test:unit:watch
 ```
 
+### Mock server
+
+This uses [json-server](https://github.com/typicode/json-server) to provide a simple, discardable json backend which can store and return data sent to/fetched from predictable endpoints.
+
 ### Browser arrangement
 
 1. When the development server is started, a browser window should open at `localhost:3000` showing the app.
