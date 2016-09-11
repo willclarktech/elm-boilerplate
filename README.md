@@ -1,5 +1,7 @@
 # elm-boilerplate
 
+![devDependency Status](https://david-dm.org/LikeJasper/elm-boilerplate/dev-status.svg)
+
 ## About
 
 This project incorporates ideas from https://github.com/gkubisa/elm-app-boilerplate and https://github.com/xolvio/automated-testing-best-practices to provide an elm app boilerplate intended for development in conformity with Konstantin Kudryashov’s [Modelling by Example](http://stakeholderwhisperer.com/posts/2014/10/introducing-modelling-by-example) BDD/DDD methodology.
