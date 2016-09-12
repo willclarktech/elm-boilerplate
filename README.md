@@ -1,6 +1,6 @@
 # elm-boilerplate
 
-![devDependency Status](https://david-dm.org/LikeJasper/elm-boilerplate/dev-status.svg)
+[![devDependency Status](https://david-dm.org/LikeJasper/elm-boilerplate/dev-status.svg)](https://david-dm.org/LikeJasper/elm-boilerplate)
 
 ## About
 
