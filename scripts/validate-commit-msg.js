@@ -63,7 +63,7 @@ const validateMessage = function validateMessage(message) {
   // const scope = match[3];
   // const subject = match[4];
 
-  if (!TYPES.hasOwnProperty(type) && EMOJIS.indexOf(emoji) === -1) {
+  if (!Object.keys(TYPES).includes(type) && EMOJIS.indexOf(emoji) === -1) {
     error('"%s" is not an allowed type!', type || emoji);
     return false;
   }
