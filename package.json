@@ -42,6 +42,7 @@
     "ncu:all": "ncu --upgradeAll",
     "postinstall": "elm package install -y && npm run dev:prepare",
     "precommit": "npm run lint",
+    "prepush": "npm run lint",
     "commitmsg": "node ./scripts/validate-commit-msg.js"
   },
   "devDependencies": {
