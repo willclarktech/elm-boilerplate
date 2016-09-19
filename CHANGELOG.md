@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+##v0.6.0
+
+- feature: save/load todos from a REST api
+
 ##v0.5.0
 
 - feature: info route

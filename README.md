@@ -31,7 +31,9 @@ npm run test:unit:watch
 
 ### Mock server
 
-This uses [json-server](https://github.com/typicode/json-server) to provide a simple, discardable json backend which can store and return data sent to/fetched from predictable endpoints.
+This uses [json-server](https://github.com/typicode/json-server) to provide a simple, discardable json backend which can store and return data sent to/fetched from predictable REST API endpoints.
+
+The live version of the site sends requests to a REST API, but until a backend is provided there will obviously be no save/load functionality.
 
 ### Browser arrangement
 
