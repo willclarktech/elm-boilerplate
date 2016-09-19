@@ -4,6 +4,7 @@
   "rules": {
     "func-names": 0,
     "new-cap": 0,
-    "no-console": ["error", { "allow": ["info", "warn", "error"] }]
+    "no-console": ["error", { "allow": ["info", "warn", "error"] }],
+    "import/no-extraneous-dependencies": 0
   }
 }
