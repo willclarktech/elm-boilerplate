@@ -6,6 +6,7 @@ import { TodosPage, InfoPage, FacebookLoginPage } from '../page-objects';
 
 require('../../scripts/pretty-error');
 global.Promise = require('bluebird');
+
 chai.use(chaiAsPromised);
 
 function World() {
@@ -33,7 +34,7 @@ function Before() {
 }
 
 module.exports = function createWorld() {
-  this.setDefaultTimeout(10e3);
+  this.setDefaultTimeout(15e3);
   this.World = World;
   this.Before(Before);
 };
