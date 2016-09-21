@@ -62,7 +62,7 @@
     "eslint-plugin-jsx-a11y": "^2.2.1",
     "eslint-plugin-react": "^6.2.2",
     "git-directory-deploy": "^1.5.1",
-    "husky": "^0.11.7",
+    "husky": "^0.11.8",
     "json-server": "^0.8.21",
     "less": "^2.7.1",
     "nightmare": "^2.7.0",
