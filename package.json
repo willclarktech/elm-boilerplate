@@ -57,7 +57,7 @@
     "elm": "^0.17.1",
     "elm-server": "^1.0.0",
     "eslint": "^3.5.0",
-    "eslint-config-airbnb": "^11.0.0",
+    "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-import": "^1.15.0",
     "eslint-plugin-jsx-a11y": "^2.2.1",
     "eslint-plugin-react": "^6.2.2",
