@@ -33,8 +33,8 @@ function Before() {
   });
 }
 
-module.exports = function createWorld() {
+export default function createWorld() {
   this.setDefaultTimeout(15e3);
   this.World = World;
   this.Before(Before);
-};
+}

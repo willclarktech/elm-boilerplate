@@ -1,4 +1,4 @@
-module.exports = function thenSteps() {
+export default function thenSteps() {
   this.Then(/^The page should load$/, function () {
     return this
       .expect(this.todosPage.isLoaded())
@@ -90,4 +90,4 @@ module.exports = function thenSteps() {
       .expect(this.infoPage.identifierIsPresent())
       .eventually.to.be.true;
   });
-};
+}

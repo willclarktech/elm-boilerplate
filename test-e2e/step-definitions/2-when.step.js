@@ -1,4 +1,4 @@
-module.exports = function whenSteps() {
+export default function whenSteps() {
   this.When(/^I visit the Todos page$/, function () {
     return this.todosPage.visit();
   });
@@ -52,4 +52,4 @@ module.exports = function whenSteps() {
   this.When(/^I leave the site$/, function () {
     return this.browser.cookies.clearAll();
   });
-};
+}

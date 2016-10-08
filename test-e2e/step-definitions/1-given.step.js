@@ -1,4 +1,4 @@
-module.exports = function givenSteps() {
+export default function givenSteps() {
   this.Given(/^I am on the Todos page$/, function () {
     return this.todosPage.visit();
   });
@@ -67,4 +67,4 @@ module.exports = function givenSteps() {
     return this.todosPage.login()
       .then(() => this.facebookLoginPage.login(email, password));
   });
-};
+}
