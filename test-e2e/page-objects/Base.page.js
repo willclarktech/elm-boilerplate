@@ -2,7 +2,7 @@ import {
   getClassList,
   getText,
   getAllTexts,
-} from './helpers.js';
+} from './helpers';
 
 const ENTER = '\u000d';
 
