@@ -13,6 +13,7 @@
     "url": "https://github.com/LikeJasper/elm-boilerplate/issues"
   },
   "scripts": {
+    "start": "npm run dev",
     "deploy": "git-directory-deploy --directory ./dist --repo origin --branch gh-pages",
     "predeploy:straight": "npm run clean:dist && cp -a ./dev ./dist && uglifyjs ./dist/app.js --compress --output ./dist/app.js",
     "deploy:straight": "npm run deploy",
