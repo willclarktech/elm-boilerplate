@@ -1,11 +1,12 @@
 import Browser from 'nightmare';
+import Bluebird from 'bluebird';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-
-import { TodosPage, InfoPage, FacebookLoginPage } from '../page-objects';
+import * as pageObjects from '../page-objects';
 
 require('../../scripts/pretty-error');
-global.Promise = require('bluebird');
+
+global.Promise = Bluebird;
 
 chai.use(chaiAsPromised);
 
@@ -22,15 +23,9 @@ function Before() {
   this.browser.ctx = {};
   this.browser.baseUrl = 'http://localhost:3000';
 
-  this.todosPage = new TodosPage({
-    browser: this.browser,
-  });
-  this.infoPage = new InfoPage({
-    browser: this.browser,
-  });
-  this.facebookLoginPage = new FacebookLoginPage({
-    browser: this.browser,
-  });
+  for (const [key, PageObject] of Object.entries(pageObjects)) {
+    this[key] = new PageObject({ browser: this.browser });
+  }
 }
 
 export default function createWorld() {

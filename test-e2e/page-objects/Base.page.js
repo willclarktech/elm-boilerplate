@@ -8,7 +8,8 @@ const ENTER = '\u000d';
 
 export default class BasePage {
   constructor({ browser, baseUrl, path, identifier }) {
-    [this.browser, this.identifier] = [browser, identifier];
+    this.browser = browser;
+    this.identifier = identifier;
     this.url = `${baseUrl || browser.baseUrl}${path}`;
     this.tabs = {
       info: '#tab-info',

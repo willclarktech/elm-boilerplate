@@ -2,15 +2,11 @@ import BasePage from './Base.page';
 
 export default class FacebookLoginPage extends BasePage {
   constructor({ browser }) {
-    const baseUrl = 'https://www.facebook.com';
-    const path = '/login.php';
-    const identifier = 'html#facebook';
-
     super({
       browser,
-      baseUrl,
-      path,
-      identifier,
+      baseUrl: 'https://www.facebook.com',
+      path: '/login.php',
+      identifier: 'html#facebook',
     });
 
     this.selectors = {

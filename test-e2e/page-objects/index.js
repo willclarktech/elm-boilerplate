@@ -1,3 +1,3 @@
-export TodosPage from './Todos.page';
-export InfoPage from './Info.page';
-export FacebookLoginPage from './FacebookLogin.page';
+export todosPage from './Todos.page';
+export infoPage from './Info.page';
+export facebookLoginPage from './FacebookLogin.page';

@@ -7,12 +7,11 @@ const FILTER_ALL = 'all';
 
 export default class TodosPage extends BasePage {
   constructor({ browser }) {
-    const path = '/';
     const identifier = '#new-todo';
 
     super({
       browser,
-      path,
+      path: '/',
       identifier,
     });
 
