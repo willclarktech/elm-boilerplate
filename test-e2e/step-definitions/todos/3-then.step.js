@@ -79,12 +79,6 @@ export default function thenSteps() {
       .eventually.to.be.true;
   });
 
-  this.Then(/^I should be greeted by name$/, function () {
-    return this
-      .expect(this.todosPage.getLoginName())
-      .eventually.to.equal(this.browser.ctx.user.name);
-  });
-
   this.Then(/^I should get some info$/, function () {
     return this
       .expect(this.infoPage.identifierIsPresent())

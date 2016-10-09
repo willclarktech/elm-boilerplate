@@ -35,12 +35,6 @@ export default function whenSteps() {
     return this.todosPage.editTodo(newTodoText);
   });
 
-  this.When(/^I log in with Facebook$/, function () {
-    const { email, password } = this.browser.ctx.user;
-    return this.todosPage.login()
-      .then(() => this.facebookLoginPage.login(email, password));
-  });
-
   this.When(/^I visit the info route$/, function () {
     return this.todosPage.visitTab('info');
   });
