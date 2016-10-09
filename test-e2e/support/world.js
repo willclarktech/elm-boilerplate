@@ -5,8 +5,7 @@ import chaiAsPromised from 'chai-as-promised';
 import * as pageObjects from '../page-objects';
 
 require('../../scripts/pretty-error');
-
-global.Promise = Bluebird;
+require('babel-runtime/core-js/promise').default = Bluebird;
 
 chai.use(chaiAsPromised);
 
