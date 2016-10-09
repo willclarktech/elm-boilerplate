@@ -1,4 +1,7 @@
 {
   "presets": ["latest"],
-  "plugins": ["transform-export-extensions"]
+  "plugins": [
+    "transform-runtime",
+    "transform-export-extensions"
+  ]
 }
