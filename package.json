@@ -23,6 +23,7 @@
     "lint": "eslint ./test-e2e ./scripts",
     "lint:fix": "npm run lint -- --fix",
     "api:mock": "json-server --config ./mock-api/config.json ./mock-api/db.js",
+    "test": "npm run test:unit:single && npm run test:e2e:single",
     "test:e2e": "cucumber-js ./features --compiler js:babel-core/register -r ./test-e2e/support -r ./test-e2e/step-definitions || true",
     "test:e2e:now": "cucumber-js ./features --compiler js:babel-core/register -r ./test-e2e/support -r ./test-e2e/step-definitions --tags @now || true",
     "test:e2e:single": "npm run test:e2e",
