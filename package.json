@@ -20,9 +20,10 @@
     "predeploy:mangle": "npm run predeploy:straight -- --mangle",
     "deploy:mangle": "npm run deploy",
     "dev": "elm-server ./src/Main.elm --output ./dev/app.js",
+    "api:mock": "json-server --config ./mock-api/config.json ./mock-api/db.js",
+    "check": "npm run lint && npm run test",
     "lint": "eslint ./test-e2e ./scripts",
     "lint:fix": "npm run lint -- --fix",
-    "api:mock": "json-server --config ./mock-api/config.json ./mock-api/db.js",
     "test": "npm run test:unit:single && npm run test:e2e:single",
     "test:e2e": "cucumber-js ./features --compiler js:babel-core/register -r ./test-e2e/support -r ./test-e2e/step-definitions || true",
     "test:e2e:now": "cucumber-js ./features --compiler js:babel-core/register -r ./test-e2e/support -r ./test-e2e/step-definitions --tags @now || true",
@@ -44,7 +45,7 @@
     "ncu:all": "ncu --upgradeAll",
     "postinstall": "elm package install -y && npm run dev:prepare",
     "precommit": "npm run lint",
-    "prepush": "npm run lint",
+    "prepush": "npm run check",
     "commitmsg": "node ./scripts/validate-commit-msg.js"
   },
   "devDependencies": {
