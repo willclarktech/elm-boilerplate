@@ -11,6 +11,6 @@ Feature: Create Todo
     When I create a Todo
     Then I should see the Todo
 
-  Scenario: New user tries to create an empty todo
+  Scenario: New user tries to create a blank todo
     When I try to create a blank Todo
     Then I should not see the Todo
