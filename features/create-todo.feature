@@ -8,7 +8,7 @@ Feature: Create Todo
 
   @critical
   Scenario: New user creates a Todo
-    When I create a Todo
+    When I create a Todo with text "Go shopping"
     Then I should see the Todo
 
   Scenario: New user tries to create a blank todo

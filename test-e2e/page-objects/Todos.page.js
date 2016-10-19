@@ -32,7 +32,7 @@ export default class TodosPage extends BasePage {
     };
   }
 
-  createTodo(todoText = 'Test') {
+  createTodoWithText(todoText = 'Test') {
     return this
       .typeTextIntoElementAndSubmit(todoText, this.selectors.newTodo);
   }

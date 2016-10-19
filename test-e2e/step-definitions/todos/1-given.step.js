@@ -3,17 +3,16 @@ export default function givenSteps() {
     return this.todosPage.visit();
   });
 
-  this.Given(/^I have created a todo$/, function () {
-    const todoText = 'Test';
+  this.Given(/^I have created a todo with text "([^"]*)"$/, function (todoText) {
     this.browser.ctx.todoText = todoText;
-    return this.todosPage.createTodo(todoText);
+    return this.todosPage.createTodoWithText(todoText);
   });
 
-  this.Given(/^I have created (\d+) Todos$/, function (numberOfTodos) {
-    const todoTexts = [];
-    for (let i = 0; i < numberOfTodos; ++i) {
-      todoTexts.push(`Test ${i}`);
-    }
+  this.Given(/^I have created (\d+) Todos$/, function (n) {
+    const numberOfTodos = parseInt(n, 10);
+    const todoTexts = [...Array(numberOfTodos)]
+      .map((_, i) => `Test ${i}`);
+
     this.browser.ctx.todoTexts = todoTexts;
     return this.todosPage.createTodos(todoTexts);
   });
@@ -25,7 +24,7 @@ export default function givenSteps() {
   this.Given(/^I have completed (\d+) Todos$/, function (numberOfTodos) {
     const todoTexts = [...this.browser.ctx.todoTexts];
     if (numberOfTodos > todoTexts.length) {
-      throw new Error('You are trying to complete more todos than there are!');
+      throw new Error(`You are trying to complete ${numberOfTodos} todos but there are only ${todoTexts.length}!`);
     }
 
     const completedIndices = [];

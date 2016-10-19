@@ -5,7 +5,7 @@ Feature: Delete Todo
 
   Background:
     Given I am on the Todos page
-    And I have created a todo
+    And I have created a todo with text "Go shopping"
 
   @critical
   Scenario: New user deletes a Todo

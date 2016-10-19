@@ -3,14 +3,13 @@ export default function whenSteps() {
     return this.todosPage.visit();
   });
 
-  this.When(/^I create a Todo$/, function () {
-    const todoText = 'Test';
+  this.When(/^I create a Todo with text "([^"]*)"$/, function (todoText) {
     this.browser.ctx.todoText = todoText;
-    return this.todosPage.createTodo(todoText);
+    return this.todosPage.createTodoWithText(todoText);
   });
 
   this.When(/^I try to create a blank Todo$/, function () {
-    return this.todosPage.createTodo('');
+    return this.todosPage.createTodoWithText('');
   });
 
   this.When(/^I mark the Todo as complete$/, function () {
