@@ -50,7 +50,7 @@ viewFilterButton filterOption isActive =
 
         buttonClass =
             if isActive then
-                baseClass ++ "active orange "
+                baseClass ++ "active primary "
             else
                 baseClass
     in
@@ -71,6 +71,6 @@ viewSaveButton =
         button
             [ id buttonId
             , onClick <| Save
-            , class "ui button positive right floated"
+            , class "ui button secondary right floated"
             ]
             [ text <| getButtonText buttonId ]

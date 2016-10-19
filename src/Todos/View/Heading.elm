@@ -19,7 +19,7 @@ import Todos.Copy exposing (tabText)
 viewHeading : OAuth.Types.Model -> Tab -> Html Msg
 viewHeading oauthModel activeTab =
     div
-        [ class "ui attached inverted orange segment"
+        [ class "ui attached inverted segment"
         , style headingStyle
         ]
         [ h1
