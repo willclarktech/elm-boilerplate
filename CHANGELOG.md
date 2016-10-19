@@ -4,6 +4,10 @@
 
 - feature: save/load todos from a REST api
 
+##v0.6.1
+
+- now in blue!
+
 ##v0.5.0
 
 - feature: info route
