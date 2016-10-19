@@ -13,7 +13,7 @@
              Page
 *******************************/
 
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic&subset=latin');
+@import url('https://fonts.googleapis.com/css?family=Lato:300,700,300italic,700italic&subset=latin');
 html,
 body {
   height: 100%;
@@ -27,7 +27,7 @@ body {
   overflow-x: hidden;
   min-width: 320px;
   background: #F9F9F9;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 13px;
   line-height: 1.33;
   color: #212121;
@@ -44,7 +44,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   line-height: 1.33em;
   margin: calc(2rem -  0.165em ) 0em 1rem;
   font-weight: 400;
