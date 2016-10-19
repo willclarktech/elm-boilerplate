@@ -2,15 +2,15 @@
   "name": "elm-boilerplate",
   "description": "A boilerplate for elm apps",
   "version": "0.6.1",
-  "author": "LikeJasper <will@willclark.tech>",
+  "author": "willclarktech <will@willclark.tech>",
   "license": "MIT",
-  "homepage": "https://github.com/LikeJasper/elm-boilerplate#readme",
+  "homepage": "https://github.com/willclarktech/elm-boilerplate#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LikeJasper/elm-boilerplate.git"
+    "url": "git+https://github.com/willclarktech/elm-boilerplate.git"
   },
   "bugs": {
-    "url": "https://github.com/LikeJasper/elm-boilerplate/issues"
+    "url": "https://github.com/willclarktech/elm-boilerplate/issues"
   },
   "scripts": {
     "start": "npm run dev",
