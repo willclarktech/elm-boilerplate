@@ -8,6 +8,7 @@
     "func-names": 0,
     "import/no-extraneous-dependencies": 0,
     "new-cap": 0,
+    "no-confusing-arrow": 0,
     "no-console": ["error", { "allow": ["info", "warn", "error"] }],
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }]
   }
