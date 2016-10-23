@@ -1,6 +1,7 @@
 import App from 'koa';
 import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
+import cors from 'kcors';
 import { graphqlKoa, graphiqlKoa } from 'graphql-server-koa';
 import schema from './schema';
 
@@ -13,6 +14,7 @@ const app = new App();
 const router = new Router();
 
 app.use(bodyParser());
+app.use(cors());
 
 router.post(API_ROUTE, graphqlKoa({ schema }));
 router.get(GRAPHIQL_ROUTE, graphiqlKoa({ endpointURL: API_ROUTE }));
