@@ -1,14 +1,14 @@
-import { user, todos } from './fixtures';
+import { user as userFixture, todos } from './fixtures';
 
 const resolvers = {
   Query: {
     user(root, { id }) {
-      return { ...user, id };
+      return { ...userFixture, id, todos };
     },
   },
-  User: {
-    todos() {
-      return todos;
+  Mutation: {
+    updateUserTodos(root, { user }) {
+      return user;
     },
   },
 };

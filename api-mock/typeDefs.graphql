@@ -13,6 +13,22 @@ type Query {
   user(id: String!): User!
 }
 
+input TodoInput {
+  id: Int!
+  text: String!
+  completed: Boolean!
+}
+
+input UserInput {
+  id: String
+  todos: [TodoInput]
+}
+
+type Mutation {
+  updateUserTodos(user: UserInput): User
+}
+
 schema {
   query: Query
+  mutation: Mutation
 }
