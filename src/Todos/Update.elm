@@ -173,8 +173,8 @@ sendSaveRequest model =
 
                 request =
                     { verb = "POST"
-                    , headers = [ ( "Content-type", "application/json" ) ]
                     , url = Env.Current.baseApiUrl ++ "/users"
+                    , headers = [ ( "Content-type", "application/json" ) ]
                     , body = body
                     }
 
@@ -198,14 +198,24 @@ sendLoadRequest model =
 
         Just userId ->
             let
-                httpRequest =
-                    Http.get decodeUser
-                        <| Env.Current.baseApiUrl
-                        ++ "/users/"
-                        ++ userId
+                body =
+                    Http.string """{"query": "query queryUser { user { id } }" }"""
+
+                request =
+                    { verb = "POST"
+                    , url = Env.Current.baseApiUrl
+                    , headers = [ ( "Content-type", "application/json" ) ]
+                    , body = body
+                    }
+
+                graphqlRequest =
+                    Http.send Http.defaultSettings request
+
+                responseJson =
+                    Http.fromJson decodeUser graphqlRequest
 
                 cmd =
-                    Task.perform LoadFail LoadSuccess httpRequest
+                    Task.perform LoadFail LoadSuccess responseJson
             in
                 ( model, cmd )
 
