@@ -198,8 +198,14 @@ sendLoadRequest model =
 
         Just userId ->
             let
+                query =
+                    """ "query queryUser($userId: String!) { user(id: $userId) { id todos { id text completed } } }" """
+
+                variables =
+                    """{ "userId": """ ++ userId ++ """}"""
+
                 body =
-                    Http.string """{"query": "query queryUser { user { id todos { id text completed } } }" }"""
+                    Http.string ("""{"query":""" ++ query ++ """, "variables":""" ++ variables ++ """}""")
 
                 request =
                     { verb = "POST"
@@ -222,11 +228,7 @@ sendLoadRequest model =
 
 updateUser : User -> Model -> Model
 updateUser user model =
-    let
-        a =
-            Debug.log "user" user
-    in
-        { model | todos = user.todos }
+    { model | todos = user.todos }
 
 
 switchTab : Tab -> Model -> ( Model, Cmd Msg )

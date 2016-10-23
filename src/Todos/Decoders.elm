@@ -20,7 +20,7 @@ decodeTodo =
 decodeUser : Decoder User
 decodeUser =
     object2 User
-        ("id" := int)
+        ("id" := string)
         ("todos" := list decodeTodo)
 
 

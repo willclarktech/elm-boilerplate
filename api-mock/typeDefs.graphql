@@ -5,12 +5,12 @@ type Todo {
 }
 
 type User {
-  id: Int!
+  id: String!
   todos: [Todo]
 }
 
 type Query {
-  user: User!
+  user(id: String!): User!
 }
 
 schema {

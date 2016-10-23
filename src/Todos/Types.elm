@@ -35,7 +35,7 @@ type alias Todo =
 
 
 type alias User =
-    { id : Int
+    { id : String
     , todos : List Todo
     }
 

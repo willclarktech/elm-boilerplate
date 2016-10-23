@@ -2,8 +2,8 @@ import { user, todos } from './fixtures';
 
 const resolvers = {
   Query: {
-    user() {
-      return user;
+    user(root, { id }) {
+      return { ...user, id };
     },
   },
   User: {
