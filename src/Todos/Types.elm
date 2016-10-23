@@ -8,7 +8,7 @@ module Todos.Types
         , FilterOption(..)
         , ProcessedLocation
         , Style
-        , QueryUserResponse
+        , UserGraphResponse
         , UserGraph
         )
 
@@ -61,7 +61,7 @@ type alias UserGraph =
     { user : User }
 
 
-type alias QueryUserResponse =
+type alias UserGraphResponse =
     { data : UserGraph
     }
 
@@ -78,10 +78,10 @@ type Msg
     | Filter FilterOption
     | Save
     | SaveFail Http.Error
-    | SaveSuccess Int
+    | SaveSuccess UserGraphResponse
     | Load
     | LoadFail Http.Error
-    | LoadSuccess QueryUserResponse
+    | LoadSuccess UserGraphResponse
     | GetOAuthDetailsSucceeded ( String, String )
     | GetOAuthDetailsFailed Http.Error
     | UpdateOAuthAccessToken (Maybe String)

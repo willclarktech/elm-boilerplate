@@ -40,12 +40,12 @@ import Todos.Types
         )
 import Todos.Encoders
     exposing
-        ( encodeSaveRequest
+        ( encodeUpdateUserTodosRequestBody
         , encodeQueryUserRequestBody
         )
 import Todos.Decoders
     exposing
-        ( decodeSaveResponse
+        ( decodeUpdateUserTodosResponse
         , decodeQueryUserResponse
         )
 
@@ -176,22 +176,16 @@ sendSaveRequest model =
 
         Just userId ->
             let
-                body =
-                    Http.string
-                        <| encodeSaveRequest userId model.todos
-
-                request =
-                    { verb = "POST"
-                    , url = Env.Current.baseApiUrl ++ "/users"
-                    , headers = [ ( "Content-type", "application/json" ) ]
-                    , body = body
+                user =
+                    { id = userId
+                    , todos = model.todos
                     }
 
-                httpRequest =
-                    Http.send Http.defaultSettings request
+                body =
+                    encodeUpdateUserTodosRequestBody user
 
                 responseJson =
-                    Http.fromJson decodeSaveResponse httpRequest
+                    Http.fromJson decodeUpdateUserTodosResponse <| sendRequest body
 
                 cmd =
                     Task.perform SaveFail SaveSuccess responseJson

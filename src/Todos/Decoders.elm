@@ -1,12 +1,7 @@
-module Todos.Decoders exposing (decodeSaveResponse, decodeQueryUserResponse)
+module Todos.Decoders exposing (decodeUpdateUserTodosResponse, decodeQueryUserResponse)
 
 import Json.Decode exposing (..)
-import Todos.Types exposing (Todo, User, UserGraph, QueryUserResponse)
-
-
-decodeSaveResponse : Decoder Int
-decodeSaveResponse =
-    "id" := int
+import Todos.Types exposing (Todo, User, UserGraph, UserGraphResponse)
 
 
 decodeTodo : Decoder Todo
@@ -30,7 +25,13 @@ decodeUserGraph =
         ("user" := decodeUser)
 
 
-decodeQueryUserResponse : Decoder QueryUserResponse
+decodeQueryUserResponse : Decoder UserGraphResponse
 decodeQueryUserResponse =
-    object1 QueryUserResponse
+    object1 UserGraphResponse
+        ("data" := decodeUserGraph)
+
+
+decodeUpdateUserTodosResponse : Decoder UserGraphResponse
+decodeUpdateUserTodosResponse =
+    object1 UserGraphResponse
         ("data" := decodeUserGraph)

@@ -1,8 +1,8 @@
-module Todos.Encoders exposing (encodeSaveRequest, encodeQueryUserRequestBody)
+module Todos.Encoders exposing (encodeUpdateUserTodosRequestBody, encodeQueryUserRequestBody)
 
 import Http
 import Json.Encode exposing (..)
-import Todos.Types exposing (Todo)
+import Todos.Types exposing (User, Todo)
 import Helpers exposing (constructRequestBody)
 
 
@@ -18,16 +18,22 @@ encodeQueryUserRequestBody userId =
         constructRequestBody query variables
 
 
-encodeSaveRequest : String -> List Todo -> String
-encodeSaveRequest userId todos =
-    encode 0
-        <| encodeUser userId todos
+encodeUpdateUserTodosRequestBody : User -> Http.Body
+encodeUpdateUserTodosRequestBody user =
+    let
+        query =
+            string "mutation updateUserTodos($user: UserInput!) { updateUserTodos(user: $user) { id todos { id text completed } } }"
+
+        variables =
+            object [ ( "user", encodeUser user ) ]
+    in
+        constructRequestBody query variables
 
 
-encodeUser : String -> List Todo -> Value
-encodeUser userId todos =
+encodeUser : User -> Value
+encodeUser { id, todos } =
     object
-        [ ( "id", string userId )
+        [ ( "id", string id )
         , ( "todos", encodeTodos todos )
         ]
 
