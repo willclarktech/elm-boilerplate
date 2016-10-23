@@ -19,6 +19,7 @@
     "deploy:straight": "npm run deploy",
     "predeploy:mangle": "npm run predeploy:straight -- --mangle",
     "deploy:mangle": "npm run deploy",
+    "api:mock": "nodemon --watch ./api-mock --exec 'babel-node ./api-mock/api.js'",
     "dev": "elm-server ./src/Main.elm --output ./dev/app.js",
     "check": "npm run lint && npm run test",
     "lint": "eslint ./test-e2e ./scripts",
