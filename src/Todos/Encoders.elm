@@ -4,13 +4,14 @@ import Http
 import Json.Encode exposing (..)
 import Todos.Types exposing (User, Todo)
 import Helpers exposing (constructRequestBody)
+import Todos.Queries exposing (queryUser, updateUserTodos)
 
 
 encodeQueryUserRequestBody : String -> Http.Body
 encodeQueryUserRequestBody userId =
     let
         query =
-            string "query queryUser($userId: String!) { user(id: $userId) { id todos { id text completed } } }"
+            string queryUser
 
         variables =
             object [ ( "userId", string userId ) ]
@@ -22,7 +23,7 @@ encodeUpdateUserTodosRequestBody : User -> Http.Body
 encodeUpdateUserTodosRequestBody user =
     let
         query =
-            string "mutation updateUserTodos($user: UserInput!) { updateUserTodos(user: $user) { id todos { id text completed } } }"
+            string updateUserTodos
 
         variables =
             object [ ( "user", encodeUser user ) ]
