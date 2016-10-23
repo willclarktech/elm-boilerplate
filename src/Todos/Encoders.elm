@@ -1,7 +1,21 @@
-module Todos.Encoders exposing (encodeSaveRequest, encodeUser)
+module Todos.Encoders exposing (encodeSaveRequest, encodeQueryUserRequestBody)
 
+import Http
 import Json.Encode exposing (..)
 import Todos.Types exposing (Todo)
+import Helpers exposing (constructRequestBody)
+
+
+encodeQueryUserRequestBody : String -> Http.Body
+encodeQueryUserRequestBody userId =
+    let
+        query =
+            string "query queryUser($userId: String!) { user(id: $userId) { id todos { id text completed } } }"
+
+        variables =
+            object [ ( "userId", string userId ) ]
+    in
+        constructRequestBody query variables
 
 
 encodeSaveRequest : String -> List Todo -> String

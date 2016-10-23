@@ -20,6 +20,7 @@ import Task
 import Http
 import Navigation exposing (modifyUrl)
 import Env.Current exposing (basePath, baseApiUrl)
+import Helpers exposing (sendRequest)
 import OAuth.Types
 import OAuth.Update
 import OAuth.Helpers
@@ -37,8 +38,16 @@ import Todos.Types
         , FilterOption(..)
         , ProcessedLocation
         )
-import Todos.Encoders exposing (encodeSaveRequest, encodeUser)
-import Todos.Decoders exposing (decodeSaveResponse, decodeQueryUserResponse)
+import Todos.Encoders
+    exposing
+        ( encodeSaveRequest
+        , encodeQueryUserRequestBody
+        )
+import Todos.Decoders
+    exposing
+        ( decodeSaveResponse
+        , decodeQueryUserResponse
+        )
 
 
 initialModel : Model
@@ -198,27 +207,11 @@ sendLoadRequest model =
 
         Just userId ->
             let
-                query =
-                    """ "query queryUser($userId: String!) { user(id: $userId) { id todos { id text completed } } }" """
-
-                variables =
-                    """{ "userId": """ ++ userId ++ """}"""
-
                 body =
-                    Http.string ("""{"query":""" ++ query ++ """, "variables":""" ++ variables ++ """}""")
-
-                request =
-                    { verb = "POST"
-                    , url = Env.Current.baseApiUrl
-                    , headers = [ ( "Content-type", "application/json" ) ]
-                    , body = body
-                    }
-
-                graphqlRequest =
-                    Http.send Http.defaultSettings request
+                    encodeQueryUserRequestBody userId
 
                 responseJson =
-                    Http.fromJson decodeQueryUserResponse graphqlRequest
+                    Http.fromJson decodeQueryUserResponse <| sendRequest body
 
                 cmd =
                     Task.perform LoadFail LoadSuccess responseJson
