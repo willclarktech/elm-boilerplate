@@ -38,7 +38,7 @@ import Todos.Types
         , ProcessedLocation
         )
 import Todos.Encoders exposing (encodeSaveRequest, encodeUser)
-import Todos.Decoders exposing (decodeSaveResponse, decodeUser)
+import Todos.Decoders exposing (decodeSaveResponse, decodeQueryUserResponse)
 
 
 initialModel : Model
@@ -140,8 +140,8 @@ update action model =
         LoadFail err ->
             noFx model
 
-        LoadSuccess user ->
-            noFx <| updateUser user model
+        LoadSuccess response ->
+            noFx <| updateUser response.data.user model
 
         GetOAuthDetailsFailed error ->
             noFx model
@@ -199,7 +199,7 @@ sendLoadRequest model =
         Just userId ->
             let
                 body =
-                    Http.string """{"query": "query queryUser { user { id } }" }"""
+                    Http.string """{"query": "query queryUser { user { id todos { id text completed } } }" }"""
 
                 request =
                     { verb = "POST"
@@ -212,7 +212,7 @@ sendLoadRequest model =
                     Http.send Http.defaultSettings request
 
                 responseJson =
-                    Http.fromJson decodeUser graphqlRequest
+                    Http.fromJson decodeQueryUserResponse graphqlRequest
 
                 cmd =
                     Task.perform LoadFail LoadSuccess responseJson
@@ -222,7 +222,11 @@ sendLoadRequest model =
 
 updateUser : User -> Model -> Model
 updateUser user model =
-    { model | todos = user.todos }
+    let
+        a =
+            Debug.log "user" user
+    in
+        { model | todos = user.todos }
 
 
 switchTab : Tab -> Model -> ( Model, Cmd Msg )

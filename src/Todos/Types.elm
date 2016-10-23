@@ -8,6 +8,8 @@ module Todos.Types
         , FilterOption(..)
         , ProcessedLocation
         , Style
+        , QueryUserResponse
+        , UserGraph
         )
 
 import OAuth.Types
@@ -55,6 +57,15 @@ type alias ProcessedLocation =
     }
 
 
+type alias UserGraph =
+    { user : User }
+
+
+type alias QueryUserResponse =
+    { data : UserGraph
+    }
+
+
 type Msg
     = CreateTodo
     | UpdateText String
@@ -70,7 +81,7 @@ type Msg
     | SaveSuccess Int
     | Load
     | LoadFail Http.Error
-    | LoadSuccess User
+    | LoadSuccess QueryUserResponse
     | GetOAuthDetailsSucceeded ( String, String )
     | GetOAuthDetailsFailed Http.Error
     | UpdateOAuthAccessToken (Maybe String)
