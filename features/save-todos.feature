@@ -9,10 +9,9 @@ Feature: Save Todos
     And I have logged in with Facebook
     And I have created 5 Todos
 
-  Scenario: New user saves and loads Todos
+  Scenario: User saves and loads Todos
     When I save my Todos
     And I leave the site
     And I visit the Todos page
     And I log in with Facebook
-
     Then I should see all of the Todos

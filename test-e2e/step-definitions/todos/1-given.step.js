@@ -1,3 +1,5 @@
+import { todos } from '../../../fixtures';
+
 export default function givenSteps() {
   this.Given(/^I am on the Todos page$/, function () {
     return this.todosPage.visit();
@@ -10,8 +12,9 @@ export default function givenSteps() {
 
   this.Given(/^I have created (\d+) Todos$/, function (n) {
     const numberOfTodos = parseInt(n, 10);
-    const todoTexts = [...Array(numberOfTodos)]
-      .map((_, i) => `Test ${i}`);
+    const todoTexts = todos
+      .slice(0, numberOfTodos)
+      .map(({ text }) => text);
 
     this.browser.ctx.todoTexts = todoTexts;
     return this.todosPage.createTodos(todoTexts);
