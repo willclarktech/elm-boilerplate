@@ -1,7 +1,7 @@
 {
   "name": "elm-boilerplate",
   "description": "A boilerplate for elm apps",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "author": "willclarktech <will@willclark.tech>",
   "license": "MIT",
   "homepage": "https://github.com/willclarktech/elm-boilerplate#readme",

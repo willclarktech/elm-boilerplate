@@ -16,7 +16,7 @@ The broader project will incorporate a purely static site hosted on GitHub Pages
 ```
 npm run dev
 ```
-2\. Start the mock json server
+2\. Start the mock GraphQL server
 ```
 npm run api:mock
 ```
@@ -31,9 +31,9 @@ npm run test:unit:watch
 
 ### Mock server
 
-This uses [json-server](https://github.com/typicode/json-server) to provide a simple, discardable json backend which can store and return data sent to/fetched from predictable REST API endpoints.
+This uses [Apollo’s graphql-server](https://github.com/apollostack/graphql-server) to provide a simple GraphQL backend which returns static data for queries/mutations.
 
-The live version of the site sends requests to a REST API, but until a backend is provided there will obviously be no save/load functionality.
+The live version of the site sends requests to a GraphQL API, but until a backend is provided there will obviously be no save/load functionality.
 
 ### Browser arrangement
 

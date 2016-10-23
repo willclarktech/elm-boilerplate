@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+##v0.7.0
+
+- refactor: save/load todos now uses GraphQL
+
 ##v0.6.0
 
 - feature: save/load todos from a REST api
