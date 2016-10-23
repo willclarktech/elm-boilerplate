@@ -1,4 +1,4 @@
-import { user as userFixture, todos } from './fixtures';
+import { user as userFixture, todos } from '../fixtures';
 
 const resolvers = {
   Query: {
