@@ -72,10 +72,6 @@ export default class BasePage {
         .wait(50)
         .type(selector, ENTER)
         .wait(200)
-        .catch(
-          e => e.message === 'Cannot read property \'blur\' of null',
-          e => console.error(`Swallowed error - see issue #3:\n${e}`)
-        )
         .then(resolve, reject);
     });
   }
