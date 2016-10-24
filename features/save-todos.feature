@@ -1,3 +1,4 @@
+@external
 Feature: Save Todos
   As a persistent being
   I want to save my todos
