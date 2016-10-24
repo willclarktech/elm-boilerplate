@@ -43,6 +43,8 @@
     "dev:prepare:ui": "npm run build:ui",
     "ncu": "ncu --upgrade",
     "ncu:all": "ncu --upgradeAll",
+    "yarn": "yarn",
+    "postyarn": "npm run postinstall",
     "postinstall": "elm package install -y && npm run dev:prepare",
     "precommit": "npm run lint",
     "prepush": "npm run lint",
@@ -81,6 +83,7 @@
     "nodemon": "^1.11.0",
     "npm-check-updates": "^2.8.6",
     "pretty-error": "^2.0.2",
-    "semantic-ui": "^2.2.4"
+    "semantic-ui": "^2.2.4",
+    "yarn": "^0.16.1"
   }
 }
