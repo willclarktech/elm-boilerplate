@@ -1,7 +1,6 @@
 module Todos.View.NewTodoInput exposing (viewNewTodoInput, handleNewTodoKeyUp)
 
 import Html exposing (..)
-import Html.Attributes exposing (..)
 import Html.Events exposing (on, onInput, keyCode)
 import Json.Decode
 import Material
@@ -14,8 +13,8 @@ import Todos.Copy exposing (placeholderText)
 
 viewNewTodoInput : Material.Model -> String -> Html Msg
 viewNewTodoInput uiModel currentText =
-    div [ class "ui compact attached segment" ]
-        [ div [ class "ui huge form" ]
+    div []
+        [ div []
             [ Textfield.render UI
                 [ 0 ]
                 uiModel

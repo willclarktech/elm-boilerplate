@@ -36,7 +36,7 @@ viewMain { tab, currentText, todos, filterOption, currentlyEditing, oauth, mdl }
         components =
             if tab == Todos && List.length todos /= 0 then
                 List.append baseComponents
-                    [ viewFilters filterOption showSaveButton
+                    [ viewFilters mdl filterOption showSaveButton
                     , viewTodos relevantTodos currentlyEditing
                     ]
             else

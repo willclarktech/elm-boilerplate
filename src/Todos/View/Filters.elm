@@ -2,75 +2,84 @@ module Todos.View.Filters exposing (viewFilters)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
+import Material
+import Material.Button as Button
 import Todos.Types exposing (FilterOption(..), Msg(..))
 import Todos.Copy exposing (getButtonText)
 
 
-viewFilters : FilterOption -> Bool -> Html Msg
-viewFilters activeOption showSaveButton =
+viewFilters : Material.Model -> FilterOption -> Bool -> Html Msg
+viewFilters uiModel activeOption showSaveButton =
     let
         filterButtons =
-            div [ class "ui buttons" ]
-                <| List.map (\option -> viewFilterButton option (option == activeOption))
+            div []
+                <| List.map (\option -> viewFilterButton uiModel option (option == activeOption))
                     [ All, Completed, Incomplete ]
 
         children =
             if showSaveButton then
-                [ filterButtons, viewSaveButton ]
+                [ filterButtons, viewSaveButton uiModel ]
             else
                 [ filterButtons ]
     in
         div
             [ id "filters"
-            , class "ui tiny segment attached center aligned"
             ]
             children
 
 
-viewFilterButton : FilterOption -> Bool -> Html Msg
-viewFilterButton filterOption isActive =
+viewFilterButton : Material.Model -> FilterOption -> Bool -> Html Msg
+viewFilterButton uiModel filterOption isActive =
     let
-        idSuffix =
+        ( index, idSuffix ) =
             case filterOption of
                 All ->
-                    "all"
+                    ( 0, "all" )
 
                 Completed ->
-                    "completed"
+                    ( 1, "completed" )
 
                 Incomplete ->
-                    "incomplete"
+                    ( 2, "incomplete" )
 
         buttonId =
             "filter-" ++ idSuffix
 
-        baseClass =
-            "ui button "
-
-        buttonClass =
+        buttonColor =
             if isActive then
-                baseClass ++ "active primary "
+                Button.accent
             else
-                baseClass
+                Button.primary
     in
-        button
-            [ id buttonId
-            , onClick <| Filter filterOption
-            , class buttonClass
+        Button.render UI
+            [ 0, index ]
+            uiModel
+            [ Button.raised
+            , Button.onClick <| Filter filterOption
+            , Button.colored
+            , buttonColor
+            , Button.ripple
             ]
-            [ text <| getButtonText buttonId ]
+            [ span [ id buttonId ]
+                [ text <| getButtonText buttonId ]
+            ]
 
 
-viewSaveButton : Html Msg
-viewSaveButton =
+viewSaveButton : Material.Model -> Html Msg
+viewSaveButton uiModel =
     let
         buttonId =
             "save"
     in
-        button
-            [ id buttonId
-            , onClick <| Save
-            , class "ui button secondary right floated"
+        Button.render UI
+            [ 1 ]
+            uiModel
+            [ Button.raised
+            , Button.onClick <| Save
+            , Button.colored
+            , Button.accent
+            , Button.ripple
             ]
-            [ text <| getButtonText buttonId ]
+            [ span [ id buttonId ]
+                [ text <| getButtonText buttonId ]
+            ]
