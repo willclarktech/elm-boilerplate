@@ -2,52 +2,20 @@ module Todos.View.Heading exposing (viewHeading)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
-import OAuth.Types
 import OAuth.View
-import Todos.Types exposing (Tab(..), Msg(..), Style)
-import Todos.Style
-    exposing
-        ( headingStyle
-        , headerStyle
-        , tabLinkStyle
-        , activeTabLinkStyle
-        )
-import Todos.Copy exposing (tabText)
+import Todos.Types exposing (Model, Msg)
+import Todos.Style exposing (headerStyle)
+import Todos.Copy exposing (titleText)
 
 
-viewHeading : OAuth.Types.Model -> Tab -> Html Msg
-viewHeading oauthModel activeTab =
-    div
-        [ class "ui attached inverted segment"
-        , style headingStyle
-        ]
+viewHeading : Model -> Html Msg
+viewHeading { oauth, tab } =
+    div []
         [ h1
-            [ class "ui huge header"
-            , style headerStyle
+            [ style headerStyle
             ]
-            [ span
-                [ id "tab-todos"
-                , style <| getTabLinkStyle (activeTab == Todos)
-                , onClick <| SwitchTab Todos
-                ]
-                [ text <| tabText Todos ]
-            , text " / "
-            , span
-                [ id "tab-info"
-                , style <| getTabLinkStyle (activeTab == Info)
-                , onClick <| SwitchTab Info
-                ]
-                [ text <| tabText Info ]
+            [ text <| titleText
             , span []
-                [ OAuth.View.view oauthModel ]
+                [ OAuth.View.view oauth ]
             ]
         ]
-
-
-getTabLinkStyle : Bool -> Style
-getTabLinkStyle isActive =
-    if isActive then
-        activeTabLinkStyle
-    else
-        tabLinkStyle

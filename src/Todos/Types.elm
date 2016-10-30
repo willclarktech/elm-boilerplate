@@ -87,7 +87,7 @@ type Msg
     | GetOAuthDetailsSucceeded ( String, String )
     | GetOAuthDetailsFailed Http.Error
     | UpdateOAuthAccessToken (Maybe String)
-    | SwitchTab Tab
+    | SwitchTab Int
     | UI (Material.Msg Msg)
     | NoOp
 

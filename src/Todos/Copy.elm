@@ -1,12 +1,18 @@
 module Todos.Copy
     exposing
-        ( tabText
+        ( titleText
+        , tabText
         , placeholderText
         , getButtonText
         , infoMD
         )
 
 import Todos.Types exposing (Tab(..))
+
+
+titleText : String
+titleText =
+    "todos"
 
 
 tabText : Tab -> String

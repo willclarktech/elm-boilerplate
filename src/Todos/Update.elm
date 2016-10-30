@@ -163,8 +163,8 @@ update action model =
         UpdateOAuthAccessToken token ->
             updateOAuthAccessToken token model
 
-        SwitchTab tab ->
-            switchTab tab model
+        SwitchTab tabIndex ->
+            switchTab tabIndex model
 
         UI uiMsg ->
             Material.update uiMsg model
@@ -223,9 +223,17 @@ updateUser user model =
     { model | todos = user.todos }
 
 
-switchTab : Tab -> Model -> ( Model, Cmd Msg )
-switchTab tab model =
+switchTab : Int -> Model -> ( Model, Cmd Msg )
+switchTab tabIndex model =
     let
+        tab =
+            case tabIndex of
+                1 ->
+                    Info
+
+                _ ->
+                    Todos
+
         newModel =
             { model | tab = tab }
     in
