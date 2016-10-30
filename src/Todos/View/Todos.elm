@@ -3,12 +3,13 @@ module Todos.View.Todos exposing (viewTodos)
 import Html exposing (..)
 import Html.Keyed
 import Html.Attributes exposing (..)
+import Material
 import Todos.Types exposing (Todo, FilterOption(..), Msg)
 import Todos.View.Todo exposing (viewTodo)
 
 
-viewTodos : List Todo -> Maybe Todo -> Html Msg
-viewTodos todos currentlyEditing =
+viewTodos : Material.Model -> List Todo -> Maybe Todo -> Html Msg
+viewTodos uiModel todos currentlyEditing =
     div [ class "ui attached segment" ]
         <| case todos of
             [] ->
@@ -28,7 +29,7 @@ viewTodos todos currentlyEditing =
                         <| List.map
                             (\todo ->
                                 ( toString todo.id
-                                , viewTodo todo (isCurrentlyEditing todo)
+                                , viewTodo uiModel todo (isCurrentlyEditing todo)
                                 )
                             )
                             todos

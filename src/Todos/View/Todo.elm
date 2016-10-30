@@ -4,12 +4,16 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (on, onClick, onInput, onCheck, keyCode)
 import Json.Decode
+import Material
+import Material.Button as Button
+import Material.Toggles as Toggles
+import Material.Icon as Icon
 import Helpers exposing (isEnter)
 import Todos.Types exposing (Todo, Msg(..))
 
 
-viewTodo : Todo -> Bool -> Html Msg
-viewTodo todo isCurrentlyEditing =
+viewTodo : Material.Model -> Todo -> Bool -> Html Msg
+viewTodo uiModel todo isCurrentlyEditing =
     let
         baseClass =
             "item "
@@ -24,23 +28,21 @@ viewTodo todo isCurrentlyEditing =
             [ id ("todo-" ++ toString todo.id)
             , class todoClass
             ]
-            [ viewCheckbox todo
+            [ viewCheckbox uiModel todo
             , viewTodoText todo isCurrentlyEditing
-            , viewDeleteButton todo
+            , viewDeleteButton uiModel todo
             ]
 
 
-viewCheckbox : Todo -> Html Msg
-viewCheckbox todo =
-    span [ class "ui right spaced image" ]
-        [ input
-            [ class "toggle"
-            , type' "checkbox"
-            , onCheck <| handleCheck todo
-            , checked todo.completed
-            ]
-            []
+viewCheckbox : Material.Model -> Todo -> Html Msg
+viewCheckbox uiModel todo =
+    Toggles.checkbox UI
+        [ 0, todo.id ]
+        uiModel
+        [ Toggles.value todo.completed
+        , Toggles.onClick <| handleCheck todo (not todo.completed)
         ]
+        []
 
 
 viewTodoText : Todo -> Bool -> Html Msg
@@ -60,13 +62,15 @@ viewTodoText todo isCurrentlyEditing =
         label [ onClick <| handleClick todo ] [ text todo.text ]
 
 
-viewDeleteButton : Todo -> Html Msg
-viewDeleteButton todo =
-    button
-        [ class "delete ui compact icon negative button right floated"
-        , onClick <| Delete todo
+viewDeleteButton : Material.Model -> Todo -> Html Msg
+viewDeleteButton uiModel todo =
+    Button.render UI
+        [ 2, todo.id ]
+        uiModel
+        [ Button.icon
+        , Button.onClick <| Delete todo
         ]
-        [ text "×" ]
+        [ Icon.i "delete" ]
 
 
 handleEditTodoKeyUp : Int -> Msg
