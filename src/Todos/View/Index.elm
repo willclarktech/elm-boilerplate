@@ -18,7 +18,7 @@ import Todos.View.Todos exposing (viewTodos)
 
 
 view : Model -> Html Msg
-view { tab, currentText, todos, filterOption, currentlyEditing, oauth } =
+view { tab, currentText, todos, filterOption, currentlyEditing, oauth, mdl } =
     let
         relevantTodos =
             getTodosForFilterOption todos filterOption
@@ -27,7 +27,7 @@ view { tab, currentText, todos, filterOption, currentlyEditing, oauth } =
             case tab of
                 Todos ->
                     [ viewHeading oauth tab
-                    , viewNewTodoInput currentText
+                    , viewNewTodoInput mdl currentText
                     ]
 
                 Info ->
