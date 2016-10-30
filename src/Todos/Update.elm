@@ -19,6 +19,7 @@ import String exposing (trim)
 import Task
 import Http
 import Navigation exposing (modifyUrl)
+import Material
 import Env.Current exposing (basePath, baseApiUrl)
 import Helpers exposing (sendRequest)
 import OAuth.Types
@@ -59,6 +60,7 @@ initialModel =
     , currentlyEditing = Nothing
     , oauth = OAuth.Update.initialModel
     , tab = Todos
+    , mdl = Material.model
     }
 
 
@@ -163,6 +165,9 @@ update action model =
 
         SwitchTab tab ->
             switchTab tab model
+
+        UI uiMsg ->
+            Material.update uiMsg model
 
         NoOp ->
             noFx model

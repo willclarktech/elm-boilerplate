@@ -14,6 +14,7 @@ module Todos.Types
 
 import OAuth.Types
 import Http
+import Material
 
 
 type alias Model =
@@ -24,6 +25,7 @@ type alias Model =
     , currentlyEditing : Maybe Todo
     , oauth : OAuth.Types.Model
     , tab : Tab
+    , mdl : Material.Model
     }
 
 
@@ -86,6 +88,7 @@ type Msg
     | GetOAuthDetailsFailed Http.Error
     | UpdateOAuthAccessToken (Maybe String)
     | SwitchTab Tab
+    | UI (Material.Msg Msg)
     | NoOp
 
 
